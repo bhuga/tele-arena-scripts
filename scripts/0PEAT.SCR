@@ -1,0 +1,39 @@
+string a,b,c,d,e,f,g
+integer peat
+peat=0
+input a
+input b
+input c
+input d
+input e
+input f
+input g
+
+procedure dr
+repeat
+peat=peat+1
+put a           
+put
+put a,b
+put
+put a,b,c
+put
+put a,b,c,d
+put
+put a,b,c,d,e
+put
+put a,b,c,d,e,f
+put
+put a,b,c,d,e,f,g 
+put
+temp=a
+a=b
+b=c
+c=d
+d=e
+e=f
+f=g
+g=temp
+until peat=7
+endproc
+dr

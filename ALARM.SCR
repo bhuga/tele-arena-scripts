@@ -1,0 +1,4 @@
+while not connected 
+delay 20
+alarm "hi"
+endwhile

@@ -1,0 +1,314 @@
+; BeavisSoft (c) March 26, 1996
+; 
+; This script RULES.  All other scripts suck.
+;
+;                           
+
+#include "toolbox3.scr"
+
+Integer Vit,Low,High
+String H1,H2,H3,H4,H5,H6,H7,H8,H9,H10,H11,H12,H13,H14,H15,H16,H17,H18,H19,H20,H21,H22,H23,H24,H25,H26,H27,H28,H29,H30,H31,H32,H33
+String Warr,Wol,Hel,Mage,Gian,Ske,Spir,Gol,Min,Tig,Guar,Wil,Cul,Mer,Cap,Sen,Bod,Pal,Spid,Pri,Cle,Wor,Gob,Sli,Sha,Abo,Ass,Tri,Warl,Ooz,Hor,Dog,Ele,Cub,Ser,Nom,Orc,Bat,Magm,Roc,Sla,Mou,Dem,Arc,Jel,Yet,Sor,Tre,Fle,Cra,R1,R2,R3,R4,R5
+when "moves to attack you","^*"
+;when "slanter has entered","^*"
+when "Diamond just hung up!","hide^m"
+when "ranger sits down","x^M"
+when "ranger just hung up","^*"
+when "Diamond sits down","x^m"
+when "You are dismissed","^*^M"
+when "stops to rest","rest^M"
+when "(Resting) mend","rest^M"
+when "Diamond has inv","fol dia^m"
+when "Crazed has inv","fol cra^m"
+when "Stranger has","fo ran^M"
+;------------------------------;
+When "Report!",".Crazed reporting for duty, Sir!^m" 
+
+;----------------------------------------------------------------;
+;When "You are now following","backrank^M"                        ; 
+;When " bows deeply","+AAAA^Mfo ranger^M"                       ; Relogon
+                             ;
+
+;--------------------------------------------;
+;when "[HP=6","^*^m"
+;When "[HP=5","^*^M"                ;
+;When "[HP=4","^*^m"                          ;
+;when "You feel ill","anti^Ma^M" 
+;when "HP=2/","^*"                         ; Low Health Whens
+;When "[HP=29/","^*^m"                        ;
+;When "[HP=28/","^*^m"                        ;
+;When "[HP=27/","^*^m"                        ;
+;When "[HP=26/","^*^m"                        ;
+;when "[HP=25/","^*^m"                        ;
+;when "[HP=24/","^*^m"                        ;
+;when "[HP=23/","^*^m"                        ;
+;when "[HP=22/","^*^m"                        ;
+;when "[HP=21/","^*^m"                        ;
+;When "[HP=20/","^*^m"                        ;
+;When "[HP=19/","^*^m"                        ;
+;When "[HP=18/","^*^m"                        ;
+;When "[HP=17/","^*^m"                        ;
+;When "[HP=16/","^*^m"                        ;
+;when "[HP=15/","^*^m"                        ;
+;when "[HP=14/","^*^m"                        ;
+;when "[HP=13/","^*^m"                        ;
+;when "[HP=12/","^*^m"                        ;
+;when "[HP=11/","^*^m"                        ;
+;when "[HP=10/","^*^m"                        ;
+;when "[HP=9/","^*^m"                         ;
+;when "[HP=8/","^*^m"                         ;
+;when "[HP=7/","^*^m"                         ;
+;when "[HP=6/","^*^m"                         ;
+;when "[HP=5/","^*^m"                         ;
+;when "[HP=4/","^*^m"                         ;
+;when "[HP=3/","^*^m"                         ;
+;when "[HP=2/","^*^m"                         ;
+;when "[HP=1/","^*^m"                         ;
+;;when "[HP=0","^*^m"                          ;
+;;when "[HP=-","^*^m" 
+when "You gain","sn^M"
+when "drop","get oak^Mget gold^M"  
+when "Tree thunder","bs tree^M"
+when "bush moves","bs archer^mbs rose^m" 
+when "elemental shambles","bs earth^M"
+when "druid strides","bs druid^M"
+when "you gain","sn^M"
+when "longer following Ranger.","^*"
+
+; ************************* WHEN STATEMENTS END *************************
+
+Procedure Health
+Put "He"
+Waitfor H1,H2,H3,H4,H5,H6,H7,H8,H9,H10,H11,H12,H13,H14,H15,H16,H17,H18,H19,H20,H21,H22,H23,H24,H25,H26,H27,H28,H29,H30,H31,H32,H33
+Switch Found
+Case 1:  Vit=10
+Case 2:  Vit=20
+Case 3:  Vit=30
+Case 4:  Vit=40
+Case 5:  Vit=50
+Case 6:  Vit=60
+Case 7:  Vit=70
+Case 8:  Vit=80
+Case 9:  Vit=90
+Case 10: Vit=100
+Case 11: Vit=110
+Case 12: Vit=120
+Case 13: Vit=130
+Case 14: Vit=140
+Case 15: Vit=150
+Case 16: Vit=160
+Case 17: Vit=170
+Case 18: Vit=180
+Case 19: Vit=190
+Case 20: Vit=200
+Case 21: Vit=210
+Case 22: Vit=220
+Case 23: Vit=230
+Case 24: Vit=240
+Case 25: Vit=250
+Case 26: Vit=260
+Case 27: Vit=270
+Case 28: Vit=280
+Case 29: Vit=290
+Case 30: Vit=300  
+Case 31: Vit=310
+Case 32: Vit=320
+Case 33: Vit=330
+Endswitch           
+print "-------------> ",Vit
+If Vit <= LOW 
+  Put "mahe"         
+  put "a"        
+endif
+Endproc
+
+Procedure Attack String Monster     
+Put "Bs ",monster
+Waitfor "You gain","Your Command","following",12
+switch found
+case 1,2:
+Health
+Put           
+return
+case 3: return
+endswitch
+Endproc
+
+Procedure Montest
+Put
+Waitfor Warr,Wol,Hel,Mage,Gian,Ske,Spir,Gol,Min,Tig,Guar,Wil,Cul,Mer,Cap,Sen,Bod,Pal,Spid,Pri,Cle,Wor,Gob,Sli,Sha,Abo,Ass,Tri,Warl,Ooz,Hor,Dog,Ele,Cub,Ser,Nom,Orc,Bat,Magm,Roc,Sla,Mou,Dem,Arc,Jel,Yet,Sor,Tre,Fle,Cra,R1,R2,R3,R4,R5,1
+  Switch Found                                                                                                                                                                                         
+       Case 1: Attack Warr
+       Case 2: Attack Wol
+       Case 3: Attack Hel
+       Case 4: Attack Mage
+       Case 5: Attack Gian
+       Case 6: Attack Ske
+       Case 7: Attack Spir
+       Case 8: Attack Gol
+       Case 9: Attack Min
+      Case 10: Attack Tig
+      Case 11: Attack Guar
+      Case 12: Attack Wil
+      Case 13: Attack Cul
+      Case 14: Attack Mer
+      Case 15: Attack Cap
+      Case 16: Attack Sen
+      Case 17: Attack Bod
+      Case 18: Attack Pal
+      Case 19: Attack Spid
+      Case 20: Attack Pri
+      Case 21: Attack Cle
+      Case 22: Attack Wor
+      Case 23: Attack Gob
+      Case 24: Attack Sli
+      Case 25: Attack Sha
+      Case 26: Attack Abo
+      Case 27: Attack Ass
+      Case 28: Attack Tri
+      Case 29: Attack Warl
+      Case 30: Attack Ooz
+      Case 31: Attack Hor
+      Case 32: Attack Dog
+      Case 33: Attack Ele
+      Case 34: Attack Cub
+      Case 35: Attack Ser
+      Case 36: Attack Nom
+      Case 37: Attack Orc
+      Case 38: Attack Bat
+      Case 39: Attack Magm
+      Case 40: Attack Roc
+      Case 41: Attack Sla
+      Case 42: Attack Mou 
+      Case 43: Attack Dem
+      Case 44: Attack Arc
+      Case 45: Attack Jel
+      Case 46: Attack Yet
+      
+
+Case 47: Attack Sor
+      case 48: Attack Tre              
+      Case 49: Attack Fle
+      Case 50: Attack Cra
+   Case 51,52,53,54,55: Hangup 
+                        Script "Logon3"
+  Endswitch
+Endproc
+
+Procedure M String Dir
+Delay 2
+Put Dir                                
+Waitfor "Entrance","Lava","Crypt","Cave","Tunnel","Cavern","Passage","Slum","Laby","Forest",10
+Montest
+Endproc               
+
+; ******************** STRING DECLARATION ******************* 
+
+;-----------------------;
+Warr="Warrior"          ;
+Wol=" Wolf"              ;
+Hel="Hellhound"         ;
+Mage=" Plant"            ;     Mob Strings
+Gian=" Giant"            ;
+Ske="Tree"      ;
+Spir="Spirit"           ;
+Gol="Golem"             ;
+Min="Minotaur"          ;
+Tig="Rosebush"            ;
+Guar="Druid"            ;
+Wil="vampire"              ;
+Cul="cultist"           ;
+Mer="mercenary"         ;
+Cap="Captain"           ;
+Sen="Mermex"            ;
+Bod="bodyguard"         ;                     
+Pal="paladin"           ;
+Spid="spider"           ;
+Pri="priest"            ;
+Cle="cleric"            ;
+Wor="worm"              ;
+Gob="Goblin"            ;
+Sli="Hellion"       ;
+Sha="Shaman"            ;
+Abo="Tentacled"         ;     
+Ass="Assass"            ;
+Tri="Tribe"             ;
+Warl="Warlock"          ;
+Ooz="Ooze"              ;
+Hor="Horror"            ;
+Dog="Dog"               ;
+Ele="Umber"         ;
+Cub="Cube"              ;
+Ser="Serpent"           ;
+Nom="Nomadic"           ;
+Orc="Orc"               ;
+Bat=" Bat"              ;
+Magm="Magma"            ;
+Roc=" Roc"              ;
+Sla="Slave"             ;
+Mou="Mound"             ;            
+Dem="Demon"             ;
+Arc="Beetle"            ;
+Jel="Jelly"             ;
+Yet="Yeti"              ;
+Sor="Ankheg"
+tre=" tree"   
+Fle="Elemental" 
+Cra="Crawler"          ;
+;-----------------------;
+
+;-------------------------------------------;
+R1="bRanger sits down and med"              ; Relogon Strings
+R2="bRanger just left the Realm."           ;
+R3="bYou are no longer following Ranger"    ;                     
+R4="1 minute for the nightly"               ; 
+R5="Crazed, You are dismissed."        ;
+;-------------------------------------------;
+
+;--------------------------------------------;
+H33="Health:   33"
+H32="Health:   32"
+H31="Health:   31"
+H30="Health:   30"
+H29="Health:   29"
+H28="Health:   28"                           ;
+H27="Health:   27"                           ;
+H26="Health:   26"                           ;
+H25="Health:   25"                           ;
+H24="Health:   24"                           ; 
+H23="Health:   23"                           ;
+H22="Health:   22"                           ;
+H21="Health:   21"                           ; 
+H20="Health:   20"                           ;
+H19="Health:   19"                           ;  Health Strings
+H18="Health:   18"                           ;
+H17="Health:   17"                           ;
+H16="Health:   16"                           ;
+H15="Health:   15"                           ;
+H14="Health:   14"                           ;
+H13="Health:   13"                           ;
+H12="Health:   12"                           ;
+H11="Health:   11"                           ;
+H10="Health:   10"                           ;
+H9="Health:    9"                            ;
+H8="Health:    8"                            ;
+H7="Health:    7"                            ;
+H6="Health:    6"                            ;
+H5="Health:    5"                            ;
+H4="Health:    4"                            ;
+H3="Health:    3"                            ;
+H2="Health:    2"                            ;
+H1="Health:    1"                            ;
+;--------------------------------------------; 
+
+;   ************************ MAIN PROGRAM **********************
+
+LOW=215
+put "set warn on"
+put "sn"
+While Connected
+Montest        
+Endwhile
+
+
+

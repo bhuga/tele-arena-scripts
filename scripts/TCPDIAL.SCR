@@ -1,0 +1,22 @@
+# Lines that start with a '#' sign are comments.
+# This script is called automatically once we get a "connect" string
+# from the slip dialing modem.
+# Commands supported are:
+#               DBUG  - Will record more script information in audit
+#                       trail
+#               SEND  - Send the following text to the remote end
+#                       automatically sends a CR at the end.
+#                       SEND alone will just send a CR.
+#               WAIT  - wait for specified string. CASE INSENSITIVE.
+#                       if string is not received within 60 seconds
+#                       script is aborted, else script proceed to next
+#                       line when string is received.
+#
+#   Script is considered completed when we reach the end of this file.
+#
+SEND
+WAIT user:
+SEND demouserid
+WAIT password:
+SEND demopassword
+WAIT slip server mode:

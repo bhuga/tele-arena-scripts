@@ -1,0 +1,182 @@
+;when "your intelligence returns to normal","cast brill^mrest^m"
+;when "the effects of valour wear off","cast valou^mrest^m"
+;when "troglar moves to attack you!","set warn off^mbs troglar^m"
+;when "scarlett is paging you ",".grin scarlett^m"
+;when "alexai is paging you ",".kiss ale^m"
+;when "vigilante is paging you",".slap vig^m"
+;when "please invite India","invite india^m"
+;when "give india gold","give 10 gold to india^m"
+when "please finish up ","x^m"  
+when "you're just about all out of ","x^m"
+when "your command had no effect","rest^m"
+when "drops to the ground",". Heeelp someones hurt bad!^M"
+when "gold drop","get gold^M"
+when "silver drop","get silv^M"
+when "moves to attack you!",". Fuck YOU!^m^*^M"
+when "surprise          you",". FUCK!^M^*^M"
+when "Combat off","Rest^M"
+whenidle 5,"^M"
+
+Procedure Health
+put "rest"
+waitfor "HP=96","you for",96
+put "sn"
+Endproc     
+
+Procedure Montest
+  waitfor "zombie","skeleton","shade","ghoul","wight","mummy","merc"," captain","half-ogre ",26
+  switch found                                                                              
+  case 1: put "bs zombie"
+          waitfor "combat off","your command had no effect",96
+          put "rest^m"
+          
+Montest
+Health
+  case 2: put "bs skeleton"
+          waitfor "combat off","your command had no effect",96
+          put "rest^m"
+Montest
+Health
+  case 3: put "bs shade"
+          waitfor "combat off","your command had no effect",96
+          put "rest^m"
+Montest
+Health
+  case 4: put "bs ghoul"
+          waitfor "combat off","your command had no effect",96
+          put "rest^m"        
+Montest
+Health
+  case 5: put "bs wight"
+          waitfor "combat off","your command had no effect",96
+          put "rest"
+Montest
+Health
+  case 6: put "bs mummy"
+          waitfor "combat off","your command had no effect",96
+          put "rest"
+Montest
+Health
+  case 7: put "bs merc"
+          waitfor "combat off","your command had no effect",96 
+          put "rest"
+Montest
+Health
+  case 8: put "bs captain"
+          waitfor "combat off","Your command had no effect",96
+          put "rest"                               
+Montest
+Health
+  case 9: put "bs half-ogr"
+          waitfor "your command had no effect","combat off",96
+          put "rest"
+Montest
+Health
+ otherwise: put "sn"
+          
+endswitch
+endproc
+
+         
+Procedure Move1
+        put "n"
+;        put "rest"
+        montest
+        put "n"
+;        put "rest"
+        montest
+        put "n"
+;        put "rest"
+        montest
+        put "n"
+;        put "rest"
+        montest
+        put "e"
+;        put "rest"
+        montest
+        put "e"
+;        put "rest"
+        montest
+        put "e"
+;        put "rest"
+        montest
+        put "e"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        put "w"
+;        put "rest"
+        montest
+        put "w"
+;        put "rest"
+        montest
+        put "w"
+;        put "rest"
+        montest
+        put "n"
+;        put "rest"
+        montest
+        put "n"
+;        put "rest"
+        montest    
+        put "n"
+;        put "rest"
+        montest
+        put "e"
+;        put "rest"
+        montest
+        put "e"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        put "w"
+;        put "rest"
+        montest
+        put "w"
+;        put "rest"
+        montest
+        put "w"
+;        put "rest"
+        montest
+        put "s"
+;        put "rest"
+        montest
+        endproc        
+        
+      
+
+; *** MAIN PROGRAM ***
+put
+repeat
+montest
+move1
+montest
+move1
+montest
+move1
+montest
+move1
+montest
+
+until not connected
+
+
+
+
+

@@ -1,0 +1,270 @@
+when "As the final blow strikes your body you fall unconscious.","x^M^*^*"
+when "You awaken after an unknown amount of time...","*^*^*"
+when "nemo is asking to join your group","add nemo^M"
+when "darmok is asking to join your group","add darmok^M"
+when "obi-wan is asking to join your group","add obi^M"
+when "tomahawk is asking to join your group","add toma^M"
+when "nemo-2 is asking to join your group","add nemo^M"
+when "cabal is asking to join your group","add cabal^M"
+when "You can't afford","^*^*^*"
+when "attacked you with a","x^M^*^*"
+when "you caught","x^M^*^*"
+when "pinky","x^M^*^*"
+when "demonseed","x^M^*^*^*"
+
+integer hitpoints,counter,seth,maxh,zars,food
+string mana
+
+procedure soulcheck
+put "i^Mu soul"
+waitfor "Sorry, but you don't","to have one.","Sorry, that object","used in that manner",3
+switch found
+   case 1,2:hangup
+            stop
+   case 3,4:
+   otherwise:hangup
+             stop
+endswitch
+endproc
+
+Procedure M String Dir, Place  ; Curtesy Jacqueline
+  whenidle 15,"^*^*^*HUNG UP^M"
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+          EndSwitch
+          If Xit = 1
+             delay 30
+          EndIf
+    until OK = 1
+    delay 10
+EndProc
+
+procedure statcheck
+put "st"
+waitfor "Physique:     26","Agility:      15","Armor Rating: 2",3
+switch found
+   case 1,2: m "se","plaza"
+             m "se","square"
+             m "se","plaza"
+             m "se","shop"
+             put "buy row^Mbuy hyssop"
+             delay 20
+             put "drink row^Mdrink hyssop"
+             m "nw","plaza"
+             m "nw","square"
+             m "nw","plaza"
+             m "nw","tavern"
+   case 3:
+   otherwise: alarm "RLOGIN LAG!"
+              delay 20
+              hangup
+              stop
+endswitch
+endproc
+
+procedure restock
+put "ne"
+waitfor "Sorry, there's","exit in that direction","Sorry, you'll","before you can move.",3
+switch found
+   case 1,2:delay 20
+            clear com
+            m "sw","plaza"
+            m "nw","tavern"
+            put "buy drink^Mbuy meal"
+            food=0
+            statcheck
+            m "se","plaza"
+            soulcheck
+            m "ne","arena"
+            soulcheck
+   case 3,4:
+   otherwise: alarm "RLOGIN LAG!"
+              delay 20
+              hangup
+              stop
+endswitch
+endproc
+    
+procedure escape
+put "ne"
+waitfor "Sorry, there's","exit in that direction","Sorry, you'll","before you can move.",3
+switch found
+ case 1,2: delay 20
+           clear com
+           m "sw","plaza"
+           delay 50
+           m "se","square"
+           m "ne","plaza"
+           m "e","temple"
+           put "buy healing"
+           m "w","plaza"
+           m "sw","square"
+           m "nw","plaza"
+           soulcheck
+           m "ne","arena"
+           soulcheck
+ case 3,4: put "drink zar^Mdrink zar"
+           zars=1
+ otherwise: alarm "RLOGIN LAG!"
+            hangup
+            stop
+endswitch
+endproc
+
+procedure nemo
+   put
+   waitfor "nemo","floor"
+   switch found
+     case 1:put "/nemo healme"
+            waitfor "Nemo just intoned a very powerful",3
+            if not found
+              put "/nemo healme"
+              waitfor "Nemo just intoned a very powerful",3
+                if not found 
+                    escape
+                endif 
+            endif
+     case 2:  escape
+   endswitch
+endproc
+ 
+Procedure Health
+   Integer vit3,back,pos
+   String vit1,vit2
+   Vit1="none"
+   Vit2="none"
+   Vit3=0
+   Pos=0
+   Back=0
+   delay 5
+   clear com
+   Put "He"
+   Waitfor "Vit",mana,5         ;"needs changing every level!"
+     If found
+       Get vit1
+     else
+        hangup
+        stop
+     endif
+   waitfor "Status:       Healthy","Hungry","Status:       Thirsty",4
+   switch found
+      case 1:food=0
+      case 2,3:food=1
+   endswitch
+
+   Strpos vit1,"/",pos
+   Back=(pos-4)
+   Substr vit1,back,4,vit2
+   Atoi vit2,vit3     
+   if vit3 < (maxh-5) and vit3 >= seth
+      put "c fadi magic"
+   elseif vit3 < seth and vit3 > 0
+      nemo
+   Elseif vit3 <= 0
+      Print "Bad Health Check! <Retrying>"
+      Delay 20                            
+      Clear Com 
+      delay 20
+      health
+   Endif
+     hitpoints=vit3
+     delay 5
+     print "health: ",vit3
+     delay 5
+Endproc
+
+procedure ZarRun
+put "ne"
+waitfor "Sorry, there's","exit in that direction","Sorry, you'll","before you can move.",3
+switch found
+   case 1,2:delay 20
+            clear com
+            m "sw","plaza"
+            m "se","square"
+            m "se","plaza"
+            m "se","shop"
+            put "buy zar^Mbuy zar"
+            m "nw","plaza"
+            m "nw","square"
+            m "nw","plaza"
+            soulcheck
+            m "ne","arena"
+            soulcheck
+            zars=0
+    case 3,4:
+    otherwise: alarm "RLOGIN LAG!"
+               delay 20
+               hangup
+               stop
+endswitch
+endproc
+
+
+;****************************************************************************
+  food=0
+  counter=20
+  zars=0
+  hitpoints=-2          
+  seth=500
+  maxh=647
+  mana = "/ 56"
+;****************************************************************************
+
+repeat
+  health
+  if zars = 1
+     ZarRun
+  endif
+  if food=1
+     restock
+     food=0
+  endif
+  if zars = 0 and food = 0
+      put 
+      Waitfor "giant","dragon","floor",3
+      switch found
+         case 1:    put "a g"
+                    waitfor "Your attack","exhausted from your","Sorry, you don't see",2
+                    switch found
+                       case 1:put "a g^Ma g^Ma g^Ma g^Mc torazuma giant"
+                              delay 20
+                       case 2:delay 20
+                       case 3:
+                       otherwise:alarm "RLOGIN LAG!"
+                             delay 20
+                             hangup
+                             stop
+                    endswitch
+         case 2:    put "a d"
+                    waitfor "Your attack","exhausted from your","Sorry, you don't see",2
+                    switch found
+                           case 1:put "a d^Ma d^Ma d^Ma d^Mc torazuma dragon"
+                                  delay 20
+                           case 2:delay 20
+                           case 3:
+                           otherwise:alarm "RLOGIN LAG!"
+                                     delay 20
+                                     hangup
+                                     stop
+                    endswitch
+         case 3:    
+         otherwise: alarm "RLOGIN LAG!"
+                    delay 20
+                    hangup
+                    stop
+      endswitch
+   endif
+until not connected
+
+
+
+

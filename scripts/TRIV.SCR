@@ -1,0 +1,6 @@
+x=1889
+repeat 
+delay 2
+x=x+1
+put x 
+until x=1998

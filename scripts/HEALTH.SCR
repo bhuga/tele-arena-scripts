@@ -1,0 +1,28 @@
+
+
+Procedure health
+  integer getit,vit
+  string vital,endvital
+  vital="none"
+  endvital="none"
+  getit=0
+  vit=0
+ put "he"     
+  waitfor "/20",3
+   if found
+    get vital
+    strpos vital,"/",position
+    getit=(position-2)
+    substr vital,getit,2,endvital
+
+;    atoi endvital,vit
+delay 10
+    Print "Health is: ", endvital
+   endif
+endproc
+
+
+while connected
+health               
+delay 20
+endwhile

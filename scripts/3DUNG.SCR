@@ -1,0 +1,333 @@
+integer round,count,travel,position,killed,gol4,yar,failed,start,new
+integer hmin,hsec,hours,minutes,seconds,begin,drank,buyyar
+string time1,time2,timebeg,s,n,w,e,sw,ne,nw,se,u,d,f
+
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc          
+
+Procedure Soulcheck
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8 
+      Case 2 : Print "Soulstone still here!" 
+                      Soul = 0
+     EndSwitch 
+  If Soul = 3
+   GetOut "No Soulstone!"
+  EndIf 
+ 
+EndProc
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    ;xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 5
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = Xit+1
+          EndSwitch
+          If Xit = 4
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+    soulcheck
+EndProc
+
+procedure Kusamotu
+put "C Kusamotu Nemo"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: 
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch
+endproc
+
+procedure Healthcheck
+        integer getit,vit
+        string vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          put "he"
+          waitfor "/ 90",3 ;CURRENT MANA PUT HERE
+          if found
+          get vital
+          strpos vital,"/",position
+          getit=(position-5)
+          substr vital,getit,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 1300 and vit >= 800  ;RANGE OF HEALTH TO HEAL
+            kusamotu
+          elseif vit >= 1301          ;RANGE OF HEALTH TO NOT HEAL
+                     ; kusateka
+          elseif vit <= 799 and vit > 0   ;HANGUP IF HEALTH IS BELOW THIS
+            GetOut "Health Exremely Low!"
+          elseif vit <= 0                ;REMEMBER: ALL NUMBERS NEED TO MATCH
+            print "Bad Healthcheck!"     
+          endif
+        endif
+endproc
+
+
+Procedure Travel1
+if yar=1
+  back
+endif   
+m se,f
+soulcheckck
+endproc
+procedure travel2
+m d,f
+m n,f
+m n,f
+m nw,f
+m nw,f
+m ne,f
+m ne,f
+m e,f
+m e,f
+m se,f
+m e,f
+m e,f
+m e,f
+m se,f   
+soulcheck
+endproc
+procedure travel3
+m se,f
+soulcheck
+endproc
+procedure travel4
+m se,f
+soulcheck
+endproc
+procedure travel5
+m nw,f
+soulcheck
+endproc
+procedure travel6
+m nw,f
+endproc
+procedure travel7
+m nw,f
+m w,f
+m w,f
+m w,f
+m nw,f
+m w,f
+m w,f
+m sw,f
+m sw,f
+m w,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel8
+m n,f
+m nw,f
+m ne,f
+m ne,f
+m ne,f
+m e,f
+soulcheck
+endproc
+procedure travel9
+m w,f
+m w,f
+m sw,f
+m sw,f
+m sw,f
+m s,f
+soulcheck
+endproc
+procedure travel10
+m e,f
+m e,f
+m e,f
+m se,f
+m se,f
+m s,f
+m s,f
+m u,f
+soulcheck 
+endproc
+procedure travel11
+m nw,f
+soulcheck
+travel=0
+endproc
+
+
+procedure Movement
+     if travel=1
+     travel1
+     elseif travel=2
+     travel2
+     elseif travel=3
+     travel3
+     elseif travel=4
+     travel4
+     elseif travel=5
+     travel5
+     elseif travel=6
+     travel6
+     elseif travel=7
+     travel7
+     elseif travel=8
+     travel8
+     elseif travel=9
+     travel9
+     elseif travel=10
+     travel10
+     endif
+endproc
+
+
+Procedure Go
+  Travel=travel+1
+  Movement
+endproc
+
+
+Procedure Movetest
+   Print "Testing Physical Exhaustion"
+   put "gr"
+   Waitfor "Resting","Ready",25
+   switch found
+     case 1: Delay 3
+             Movetest
+     case 2: Go
+   endswitch
+endproc
+
+
+Procedure Montest
+  put
+  waitfor "roll here","rolls here","mage here","locks here","himera here","giant here","giants here","tess here","tesses here","lord","chieftain","warlock here","ogress","nobody else",2
+  switch found
+  case 1,2: put "a troll^Ma troll^ma troll^ma troll^ma troll"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 3,13: put "a ogre^ma ogre^ma ogre^ma ogre^ma ogre"
+          healthcheck
+          soulcheck
+          delay 80 
+          montest
+  case 4,12: put "a war^ma war^ma war^ma war^ma war"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 5: put "a chim^ma chim^ma chim^ma chim^ma chim"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 6,7,8,9: put "a gia^ma gia^ma gia^ma gia^ma gia"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 10: put "a sk^ma sk^ma sk^ma sk^ma sk^ma sk"
+           healthcheck
+           soulcheck
+           delay 80
+           montest
+  case 11: put "a min^ma min^ma min^ma min^ma min^ma min"
+           healthcheck
+           soulcheck
+           delay 80
+           montest
+  case 14: Goldread Gold, 17
+  otherwise: Goldread Gold,17
+             Movetest
+Endswitch
+Endproc
+
+; **** When Statements ****
+
+When "in the act of trying to rob you","Nice try ya douchebag!^m"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+When "tumble out of the room to the southwest!","~~~~~ne^m"
+When "tumble out of the room to the northwest!","~~~~~se^m"
+When "tumble out of the room to the southeast!","~~~~~nw^m"
+When "tumble out of the room to the northeast!","~~~~~se^m"
+When "tumble out of the room to the east!","~~~~~w^m"
+When "tumble out of the room to the west!","~~~~~e^m"
+When "tumble out of the room to the south!","~~~~n^m"
+When "tumble out of the room to the north!","~~~~s^m"
+when "temple","^*"
+when "slasher has","^*"
+when "slanter-2 has","^*"
+when "slanter has","^*"
+when "turbo has","^*"
+when "maelstrom","^*"
+when "downpour","^*"
+when "stone shards","^*"
+whenIdle 20, "^*"
+When "˜","^*"
+When "µ","^*"
+When "attacked you with a","^*"
+
+; **** MAIN PROGRAM ****
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+
+Stealth
+Timeinit
+Goldread Gold,17
+
+; **** Loop ****
+
+While Connected
+Put
+Waitfor  "warlock","chief","chimera","giant","skel","ogre","nobody else","with you","you're thirsty",2
+Switch found
+  case 1,2,3,4,5,6: Montest
+  case 7,8:       Movetest  
+  case 9:         Healthcheck
+Endswitch 
+put "warlock is to the west"
+Endwhile
+whenidle 30, "^*~~~^*~~~^*~~~^*"
+; **** END PROGRAM ****
+

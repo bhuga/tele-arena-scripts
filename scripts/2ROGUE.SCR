@@ -1,0 +1,418 @@
+integer any
+any=2
+Xit = 0
+
+;----------------------------------------------------------------------------------------------------
+Procedure Ring
+
+     Put "Group"
+     Waitfor "Ready",4
+      Switch Found
+       Case 1 : Print "Ringing Gong"
+                Put "Ring Gong"
+       Otherwise : Ring
+      EndSwitch
+ 
+Endproc 
+;---------------------------------------------------------------------------------------    
+Procedure GetOut String What
+
+    
+    Put "X^M~X^M~X^M"
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+
+Endproc
+;-------------------------------------------------------------------------------------------
+Procedure SoulCheck
+
+ put "use soul"
+   waitfor "sorry, but","sorry, that",2 
+    switch found
+     case 1: getout "no soul"
+             delay 10
+     case 2: print "Woo Woo, soul still here."
+    endswitch
+
+EndProc
+;-----------------------------------------------------------------------------------------------
+Procedure M String Dir, Place
+   Integer OK, Xit
+     OK = 0
+     Repeat
+       Put Dir
+         Waitfor Place, "fall!","no exit",4
+           Switch Found
+             Case 1 : Delay 5
+                      Print "Found ",place
+                      OK = 1
+             Case 2 : Delay 10
+                      OK = 0
+             Case 3 : Xit = Xit + 1
+           EndSwitch
+           If Xit = 5
+             Print "LOST!!! <Hanging Up>"
+             GetOut "Lost!"
+           EndIf   
+           If Ok = 1
+            Xit = 0
+           EndIf
+     Until OK = 1
+
+EndProc
+;---------------------------------------------------------------------------------------
+Procedure Continue
+
+m "s","path."
+
+  SoulCheck
+
+m "s","plaza."
+
+EndProc
+;---------------------------------------------------------------------------------
+Procedure Movetest
+   
+   Print "Testing Physical Exhaustion"
+   Repeat 
+     Put "Group"
+     Waitfor "Ready",4
+   Until Found
+
+   Continue
+
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure Back
+
+m "n","path."
+
+  SoulCheck
+
+m "n","arena."
+
+  SoulCheck
+
+EndProc
+;------------------------------------------------------------------------------------        
+;-----------------------------------------------------------------------------------------------          
+;---------------------------------------------------------------------------------------------          
+Procedure BuyAne
+
+  Movetest
+
+m "w","path."
+
+  SoulCheck
+
+m "w","plaza."
+
+  SoulCheck
+
+m "n","path."
+
+  SoulCheck
+
+m "n","shop." 
+
+   Put "Buy Anemone^M"
+   Delay 1
+   Put "Buy Anemone^M"
+   Delay 1
+     any=2
+     Waitfor "You can't afford",2
+      Switch found
+        Case 1: GetOut "You are BROKE!!!"
+      EndSwitch
+
+m "s","path."
+
+  SoulCheck
+
+m "s","plaza."
+
+  SoulCheck
+
+m "e","path."
+
+  SoulCheck
+
+m "e","plaza."
+
+  Back
+
+EndProc
+;------------------------------------------------------------------------------------
+Procedure AneCheck
+
+if any=0
+buyane
+endif
+          
+
+EndProc
+;-------------------------------------------------------------------------------------------
+procedure kamotu
+
+put "c kamotu dusty"
+  waitfor "exhausted","intoned","mana",3
+   switch found
+    case 1:  print "mentally exhausted, try again later"
+    case 2:  print "Casted Kamotu"
+    cast 3:  Print "Mana low, Try again later"
+  endswitch
+endproc
+Procedure Back
+
+m "n","path."
+
+  SoulCheck
+
+m "n","arena."
+
+  SoulCheck
+
+EndProc
+;------------------------------------------------------------------------------------        
+Procedure Tavern
+
+  Movetest
+
+m "w","path." 
+
+  SoulCheck
+
+m "w","plaza." 
+
+  SoulCheck
+
+m "sw","path." 
+
+  SoulCheck
+
+m "sw","inn." 
+
+  Put "Buy Meal"
+  Delay 5
+  Put "Buy Drink"
+  Delay 15
+
+Put "NorthEast"
+Delay 15
+
+  SoulCheck
+
+Put "NorthEast" 
+Delay 15
+
+  SoulCheck
+                
+put "n"
+delay 15
+put "n"
+delay 15
+;put "b rowan"
+;put "b hyssop"
+delay 15
+;put "dr rowan"
+;put "dr hyssop"
+delay 15
+put "s"
+delay 15
+put "s"
+delay 15
+Put "East"
+Delay 15
+
+  SoulCheck
+
+Put "East"
+Delay 15
+
+  SoulCheck
+
+Back 
+
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure FoodCheck
+
+   Put "Health"
+   Waitfor "Healthy","Hungry","Thirsty",2
+    Switch Found
+      Case 1 : Print "Status Healthy"
+      Case 2,3 : Print "Procedure Tavern"
+                 Tavern
+    EndSwitch
+
+EndProc
+;-------------------------------------------------------------------------------------------------------
+Procedure Temple 
+
+  Movetest
+
+m "s","path"
+
+  SoulCheck
+
+m "s","temple"
+
+  SoulCheck
+
+  Put "Buy Healing"
+  Waitfor "afford healing",2
+   If found
+    GetOut "You're Broke!"
+   EndIf
+
+  SoulCheck
+
+m "n","path"
+
+  SoulCheck
+
+m "n","plaza"
+
+  SoulCheck
+
+Back
+
+
+EndProc
+;---------------------------------------------------------------------------------------------------
+Procedure Anemone
+  
+  Put "Drink Anemone^M"
+  Waitfor "potion","one.",2
+   Switch Found
+     Case 1 : Print "Drank an Anemone"
+              any=any-1
+     Case 2 : Print "No Anemones"
+              GetOut "Uh Oh"
+   EndSwitch
+
+EndProc
+;---------------------------------------------------------------------------------------- 
+Procedure Healthcheck
+
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "Health"
+          Waitfor "/ 7",3 ;CURRENT MANA PUT HERE
+          If Found
+          get vital
+          strpos vital,"/",position
+          getit=(position-4)
+          substr vital,getit,3,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 170 and vit >= ;range of health to heal from
+                kamotu          
+          elseif vit <=  89 and vit > 0   ;range of health to anemone
+                 Anemone
+          elseif vit <= 0                
+            Print "Bad Healthcheck!"     
+          EndIf
+        EndIf
+
+EndProc
+;----------------------------------------------------------------------------
+Procedure Attack String Monster
+                
+  Integer Broad
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                         
+    Repeat                               
+     Healthcheck
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+    Until Found
+
+       If Found = 1 
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0
+       EndIf
+  
+       Healthcheck
+
+EndProc
+;---------------------------------------------------------------------------------- 
+Procedure Montest
+  
+  Put
+  Waitfor "Warlock","Minotaur","Giant","Mage","Chimera","Lord","Troll",1
+   Switch Found
+    Case 1 : Attack "Warlock"            
+             Montest   
+             healthcheck
+    Case 2 : Attack "Minotaur"
+             Montest   
+             healthcheck
+    Case 3 : Attack "Giant"
+             Montest    
+             healthcheck
+    Case 4 : Attack "Mage"
+             Montest    
+             healthcheck
+    Case 5 : Attack "Chimera"
+             Montest    
+             healthcheck
+    Case 6 : Attack "Lord"
+             Montest    
+             healthcheck
+    Case 7 : Attack "Troll"
+             Montest    
+             healthcheck
+    Otherwise : Foodcheck
+                delay 20 
+                anecheck
+                Ring
+   EndSwitch
+
+EndProc
+;-----------------------------------------------------------------------------------------------
+When "rang the great gong!","pl^M"
+When "Decimator            Arch Magus","x^M^*"
+When "Flower               Acolyte","x^M^*"
+When "in the act","^*"
+When "attacked you with a dagger","^*"
+When "attacked you with a staff","^*"
+When "attacked you with a pyrehammer","^*"
+When "attacked you with a rimeax","^*"
+When "attacked you with a greatsword","^*"
+When "attacked you with a levinblade","^*"
+When "attacked you with a flail","^*"
+When "attacked you with a warhammer","^*"
+When "attacked you with a halberd","^*"
+When "attacked you with a broadsword","^*"
+WhenIdle 20, "^*"
+When "run away run away", "^*"                  
+When "blast of frost at you from a rimeax","^*"
+When "blast of flame at you from a pyrehammer","^*"
+When "blast of lightning at you from a levinblade","^*"
+When "Strider would like you to join","Join Strider^M"
+When "as the final blow strikes your body","^*"
+When "the damage was more than you could withstand","^*"
+When "you are expecting",".taxes^M"
+When "has issued a challenge",".accept^M"
+When ".pocket",".share^M"
+When "you're poisoned","^*"
+;----------------------------------------------------------------------------------------------------
+While Connected
+
+  Montest
+
+EndWhile
+

@@ -1,0 +1,25 @@
+#include "toolbox2.scr"
+Procedure Health
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "He"
+          Waitfor "vitality:",3 ;RENT MANA PUT HERE
+          If Found
+          getn vital,10
+strdel vital, 1,5                 
+         ; strpos vital,"/",position
+         ; getit=(position-5)
+          substr vital,1,4,endvital
+          atoi endvital,vit
+endif                       
+put "----> ",vit 
+endproc
+while connected
+health
+delay 50
+endwhile

@@ -1,0 +1,686 @@
+;
+;Telemate Learn Script generated on 12-20-95
+;
+
+
+Waitfor 0          ; wait until string matched
+
+Set AutoStop,On
+
+Put "e^m",
+
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "down^m",
+;delay 5
+;Waitfor " exit in that direction."
+;Put "w^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "rope lying on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "push stone^M",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "tion lying on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor"
+Put "nw^m",
+delay 5
+Waitfor "is nothingon the floor."
+;Put "nw^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "n^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "tion lying on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "rope lying on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "down^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "down^m",
+delay 5
+Waitfor "tion lying on the floor."
+Put "down^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "the walls, striking "
+Put "dr verb^M",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "e^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "e^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "se^m",
+;delay 5
+;Waitfor " exit in that direction."
+;Put "sw^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "s^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "se^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "s^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "s^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+;Put "sw^m",
+;delay 5
+;Waitfor " exit in that direction."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor"
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "w^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing omn the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothingonthe floor."
+Put "sw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "n^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "nw^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "up^m",
+delay 5
+Waitfor "is nothing on the floor."
+Put "ne^m",
+

@@ -1,0 +1,319 @@
+#include "toolbox2.scr"
+#include "toolbox3.scr"
+
+whenidle 5,"^M"
+                   
+when "Surprise slashes you","break^m^*^m"
+when "moves to attack you","break^m^*^M" 
+When "Inanna drops to the ground","break^m^*^m"
+when "Spigot jumps on you","invite spigot^M"
+when "Spigot started to follow you","smooch spigot^M"
+when "Spigot surprise","A^M"
+when "Spigot moves to attack","A^m"
+when "Spigot moves to cast","A^M"
+when "rodion hugs you","invite igne^M"
+when "rodion moves to attack","A^M"
+when "rodion surprise","A^M"
+when "gnort jumps on you","invite gnort^M"
+when "you notice gold","get gold^M"
+when "GIMME!","give 2000 gold to spigot^M"
+when "falls dead","get gold^M"
+when "up blood","get gold^M"
+when "[HP=10]","break^m^*^m"
+when "[HP=9]","break^m^*^m"
+when "[HP=8]","break^m^*^m"
+when "[HP=7]","break^m^*^m"
+when "[HP=6]","break^m^*^m"
+when "[HP=5]","break^m^*^m"
+when "[HP=4]","break^m^*^m"
+when "[HP=3]","break^m^*^m"
+when "[HP=2]","break^m^*^m"
+when "[HP=1]","break^m^*^m"
+when "[HP=0]","break^m^*^m"
+when "[HP=-]","break^m^*^m"
+String bh,wm,li,ac,ca,ro,sk,hb,gh
+String ko,zo,th,ar,sh,cu,oc,me,os,do,ba,ob,now,start
+String pa,cu,go,mo,mi,de,be,p        
+
+
+; *** STRING DECLARATION ***
+
+bh="bounty hunter."
+wm="warlock mercenary."
+li="lightning"
+ac="acid"
+ca="elite"
+ro="gorgan"
+sk="gnoll axeman."
+th="centaur."
+gh="gnoll scout."
+ko="ankheg."
+zo="harpy."
+ba="bandit."
+ar="monk."
+sh="chieftain."
+do=" hellhound."
+cu="cultist."        
+me="mercenary."
+oc="captain."
+os="snake."      
+hb="bodyguard."                             
+pa="paladin."
+cu="cube."
+go="stone golem."
+mo="moaning spirit."
+mi="minotaur."
+de="death dog."
+be="beetle."
+ob="obvious."
+
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Detect and Attack~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Procedure a String Monster
+  Put "a ", Monster
+  Waitfor "You gain", "Your Command", 30
+endproc
+
+
+Procedure Montest
+
+REPEAT
+  WAITFOR "Also here:", 1
+  IF NOT FOUND
+    PUT
+    WAITFOR "Also here:", 3
+  ENDIF
+  IF FOUND
+    Waitfor bh,wm,li,ac,ca,ro,sk,th,gh,ko,zo,ba,ar,sh,do,cu,me,oc,os,hb,pa,cu,go,mo,mi,de,be,ob,4
+  ENDIF
+  Switch Found
+    Case 0,1,2,3: Return
+    Case 4: a Ac
+    Case 5: a Ca
+    Case 6: a Ro
+    Case 7: a Sk
+    Case 8: a Th
+    Case 9: a Gh
+    Case 10: a Ko
+    Case 11: a Zo
+    Case 12: a Ba
+    Case 13: a Ar
+    Case 14: a Sh
+    Case 15: a Do
+    Case 16: a Cu                                     
+    Case 17: a Me
+    Case 18: a Oc
+    Case 19: a Os
+    Case 20: a Hb
+    Case 21: a Pa
+    Case 22: a cu
+    Case 23: a go
+    Case 24: a mo
+    Case 25: a mi
+    Case 26: a de
+    Case 27: a be
+  endswitch
+UNTIL FOUND = 28
+
+endproc 
+
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~Health and Healing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Procedure Health
+      put "health"
+      waitfor "Health: "
+      getN Raw,15
+      strpos Raw, "/", end
+      Substr raw, 1, end-1,health1
+      atoi health1,health2
+      if health2 <  250
+      put "rest"
+       waitfor "[HP=356/356","at you","you for","damage",300
+       switch found
+       case 1: return
+       case 2,3,4 : montest
+      endswitch
+   endif
+Endproc
+
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Movement~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Procedure N
+  put "n"
+  montest
+  health
+endproc
+
+Procedure E
+  put "e"
+  montest
+  health
+endproc
+
+Procedure S
+  put "s"
+  montest
+  health
+endproc
+
+Procedure W
+  put "w"
+  montest
+  health
+endproc
+
+Procedure NE
+  put "ne"
+  montest
+  health
+endproc
+
+Procedure SE
+  put "se"
+  montest
+  health
+endproc
+
+Procedure SW
+  put "sw"
+  montest
+  health
+endproc
+
+Procedure NW
+  put "nw"
+  montest
+  health
+endproc
+
+Procedure U
+  put "u"
+  montest
+  health
+endproc
+
+Procedure D
+  put "d"
+  montest
+  health
+endproc
+
+Procedure Bashn
+  put "bash n"
+  Waitfor "Your attempts","You bashed","The door",20
+    switch found
+      case 1: bashn
+      case 2: bashn
+      case 3: delay 20
+      case 4: delay 20
+endswitch
+endproc
+
+Procedure Bashe
+  put "bash e"
+  Waitfor "Your attempts","You bashed","The door",20
+    switch found
+      case 1: bashe
+      case 2: bashe
+      case 3: delay 20
+      case 4: delay 20
+endswitch
+endproc
+
+Procedure Bashs
+  put "bash s"
+  Waitfor "Your attempts","You bashed","The door",20
+    switch found
+      case 1: bashs
+      case 2: bashs
+      case 3: delay 20
+      case 4: delay 20
+endswitch
+endproc
+
+Procedure Bashw
+  put "bash w"
+  Waitfor "Your attempts","You bashed","The door",20
+    switch found
+      case 1: bashw
+      case 2: bashw
+      case 3: delay 20
+      case 4: delay 20
+endswitch
+endproc
+
+Procedure Bashu
+  put "bash u"
+  Waitfor "Your attempts","You bashed","The door",20
+    switch found
+      case 1: bashu
+      case 2: bashu
+      case 3: delay 20
+      case 4: delay 20
+endswitch
+endproc
+
+Procedure Bashd
+  put "bash d"
+  Waitfor "Your attempts","You bashed","The door",20
+    switch found
+      case 1: bashd
+      case 2: bashd
+      case 3: delay 20
+      case 4: delay 20
+endswitch
+endproc
+
+
+; *** MAIN PROGRAM ***                                  
+PUT "Talk Slow"
+Time Start     
+LOW=120
+HIGH=170             
+Act=0
+While connected               
+Put 
+Health
+Montest
+Print "Time: ",Current
+If Current>14000
+  Print "Time Limit Reached!"
+  Leave=1
+  Stealth=1
+  elseif Now > "05:30:00" and Now < "06:20:00"
+  Print "The Time is Now: ",Now," - Stopping Script (Cleanup)!"
+  Leave=1  
+  Stealth=1
+                     
+Else
+s
+e
+w
+s
+e
+w
+w
+w
+w
+e
+s
+w
+e
+e
+e
+se
+nw
+n
+e
+w
+n
+e
+w
+n
+endif
+endwhile
+

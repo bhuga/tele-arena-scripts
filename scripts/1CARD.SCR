@@ -1,0 +1,353 @@
+string f 
+integer mover
+mover=0
+f = "floor"
+;--------------------------------------------------------------------------
+Procedure GetOut string what
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",1
+    Until Found             
+    Put "^M"              
+    hangup
+    Stop
+EndProc
+
+Procedure movetest
+WhenIdle 35,"^*^*^*"
+put "gr"
+waitfor "ST:Ready",1
+if not found
+movetest
+endif
+mover=0
+endproc
+
+;------------------------------------------------------------------------
+Procedure Soulcheck
+put "u soul"    
+put "poke rep"
+put "poke magi"
+put "poke non"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8 
+      Case 2 : Print "Soulstone still here!" 
+                      Soul = 0
+     EndSwitch 
+
+  If Soul = 2
+   GetOut "No Soulstone!"
+  EndIf 
+    
+EndProc
+;---------------------------------------------------------------------
+;---------------------------------------------------------------------
+Procedure BugOut
+    Put "c gimotu geb"
+EndProc
+;---------------------------------------------------------------------
+procedure anemone
+  put "dr anem" 
+   waitfor "sorry, but",3
+    if found
+     getout "no anemones"
+    endif
+endproc
+
+procedure gimotu
+put "C gimotu geb"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: print "mana low"
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch            
+mover=1
+endproc
+                  
+
+procedure Kusamotu
+put "C Kamotu geb"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: print "mana low"
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch            
+mover=1
+endproc
+
+
+procedure Healthcheck
+        integer getit,vit
+        string vital,endvital
+        vital="none"
+        endvital="none"
+        position=0   
+        mover=1
+        getit=0
+        vit=0
+          put "he"
+          waitfor "/ 20",3 ;CURRENT MANA PUT HERE
+          if found
+          get vital
+          strpos vital,"/",position
+          getit=(position-5)
+          substr vital,getit,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 501 and vit >= 480  ;RANGE OF HEALTH TO HEAL
+            kusamotu
+          elseif vit < 479 and vit > 200    
+            gimotu          
+          elseif vit <= 199 and vit > 0   ;HANGUP IF HEALTH IS BELOW THIS
+           anemone ;GetOut "Health Exremely Low!"
+          elseif vit <= 0                ;REMEMBER: ALL NUMBERS NEED TO MATCH
+            print "Bad Healthcheck!"     
+          endif
+        endif
+endproc
+;---------------------------------------------------------------------
+Procedure Attack String Monster
+                
+  Integer Pyre
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                         
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+ 
+
+       If Found = 1 
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0   
+       EndIf
+endproc
+;---------------------------------------------------------------------
+Procedure DragonAttack
+   Put "ex"
+   Waitfor "There is a stygian dragon here.","Exits: n,w.","Exits: e,sw.","Exits: ne,sw.","Exits: n,s.",2
+   Switch Found
+     Case 1:
+     Case 2:  
+     Case 3: MoveTest
+             Put "E"
+     Case 4: MoveTest
+             Put "NE"
+             Put "E"
+     Case 5: MoveTest
+             Put "S"
+   EndSwitch
+   Attack "Dragon"
+EndProc   
+;---------------------------------------------------------------------
+Procedure MonTest    
+   Put
+   Waitfor "dragon","troll","cyclops","gargoyle","lord","minotaur","lion","giant","ogre","chimera","warlock",1
+   Switch Found
+     Case 0: if mover=1
+               movetest
+             endif
+     Case 1: DragonAttack
+             healthcheck
+             soulcheck
+             MonTest
+     Case 2: Attack "Troll"
+             healthcheck
+             soulcheck
+             MonTest
+     Case 3: Attack "Cyclops"
+             healthcheck
+             soulcheck
+             MonTest
+     Case 4: Attack "Gargoyle"
+             healthcheck
+             soulcheck
+             MonTest
+     Case 5: Attack "Lord"
+             healthcheck
+             soulcheck      
+             MonTest
+     Case 6: Attack "Minotaur"
+             healthcheck
+             soulcheck      
+             MonTest
+     Case 7: Attack "Lion"
+             healthcheck
+             soulcheck
+             MonTest
+     Case 8: Attack "Giant"
+             healthcheck
+             soulcheck   
+             MonTest
+     Case 9: Attack "Ogre"
+             healthcheck
+             soulcheck   
+             MonTest
+     Case 10: Attack "Chimera"
+              healthcheck
+              soulcheck  
+              MonTest
+     Case 11: Attack "Warlock"
+              healthcheck
+              soulcheck  
+              MonTest   
+
+     Otherwise: if mover=1
+                  movetest
+                endif
+   EndSwitch
+EndProc
+;---------------------------------------------------------------------
+Procedure Move String Dir, Place
+  Integer OK, Xit
+    mover=0
+    xit = 0   
+    gimp=0
+    ok = 0            
+    delay 10
+    Repeat            
+      Put Dir
+         gimp=gimp+1
+        Waitfor Place, "fall!","no exit",
+          Switch Found
+            Case 1 :gimp=0 
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+     if gimp=10 
+      hangup
+      stop 
+     endif
+    until OK = 1
+   soulcheck    
+   montest
+endProc
+
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                                   ;MAIN    
+when "repent","^*^*^*"
+when "attacked you with a","^*^*"
+when "you awaken after","^*^*"     
+when "poke!","^*^*"
+when "in the act of ","^*^*"
+When "˜","^*"
+When "µ","^*"
+
+;*************************************************************************
+procedure travel
+print "First Set of Two Stone Giantesses"
+montest
+Move "SE",f               ;First Set of Two Stone Giantesses
+Move "D",f
+Move "N",f
+Move "N",f 
+healthcheck
+Move "NW",f
+Move "NW",f 
+Move "NE",f
+Move "NE",f
+Move "E",f
+Move "E",f
+Move "SE",f
+Move "E",f 
+healthcheck
+Move "E",f
+Move "E",f
+Move "SE",f
+Move "SE",f
+Print "Second Set of Two Stone Giantesses"
+Move "SE",f               ;Second Set of Two Stone Giantesses
+Move "NW",f
+Move "NW",f
+Move "NW",f
+healthcheck
+Move "W",f
+Move "W",f
+Move "W",f
+Move "NW",f
+Move "W",f
+Move "W",f
+Move "SW",f
+Move "SW",f
+healthcheck
+Move "W",f
+Move "W",f
+Move "W",f
+Print "The Two Trolls"
+Move "N",f
+Move "NW",f
+Move "NE",f
+Move "NE",f
+Move "NE",f 
+healthcheck
+Move "E",f
+Print "The Gargoyle"
+Move "E",f                ;Gargoyle
+Move "N",f
+Move "S",f
+Move "E",f
+Move "E",f
+Move "E",f
+Move "N",f 
+healthcheck
+Move "N",f
+Move "N",f
+Move "E",f
+Move "E",f 
+Move "NE",f
+Move "NE",f
+Move "NE",f
+Print "The All Mighty Dragon!"
+Move "E",f                ;Stygian Dragon (Be careful about tumbling.)
+healthcheck
+Move "W",f
+Move "SW",f
+Move "SW",f
+Move "SW",f
+Move "W",f
+Move "W",f
+Move "S",f
+Move "S",f 
+healthcheck
+Move "S",f
+Move "W",f
+Move "W",f
+Print "Gargoyle, Again"
+Move "W",f                ;Gargoyle Again
+healthcheck
+Move "W",f
+Move "W",f
+Move "SW",f
+Move "SW",f
+Move "SW",f
+Move "SE",f
+Print "Two Trolls Again"
+Move "S",f                ;Two Trolls Again
+Move "E",f 
+healthcheck
+Move "E",f
+Move "E",f
+Move "SE",f
+Move "SE",f
+Move "S",f
+Move "S",f
+Move "U",f
+Print "The Begining"
+Move "NW",f               ;First Two Stone Giantesses, Again
+endproc
+
+while connected
+travel
+whenidle 35,"^*^*^*^*"
+endwhile

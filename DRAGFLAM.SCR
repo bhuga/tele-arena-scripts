@@ -1,0 +1,83 @@
+
+string dir1,dir2,dir3,dir4
+n="n"
+s="s"
+e="e"
+w="w"
+ne="ne"
+se="se"
+nw="nw"
+sw="sw"
+procedure getdirs
+print "input first direction"
+input st1
+dir1=st1
+print "input 2nd direction"
+input st2
+dir2=st2
+put                      
+if dir2=n
+dir3=s
+elseif dir2=s
+dir3=n
+elseif dir2=e
+dir3=w
+elseif dir2=w
+dir3=e
+elseif dir2=ne
+dir3=sw
+elseif dir2=nw
+dir3=se
+elseif dir2=se
+dir3=nw
+elseif dir2=sw
+dir3=ne
+endif
+if dir1=n
+dir4=s
+elseif dir1=s
+dir4=n
+elseif dir1=e
+dir4=w
+elseif dir1=w
+dir4=e
+elseif dir1=ne
+dir4=sw
+elseif dir1=nw
+dir4=se
+elseif dir1=se
+dir4=nw
+elseif dir1=sw
+dir4=ne
+endif
+
+endproc
+
+procedure dmonsterback
+print "2nd move"
+waitfor "ok, come in",600
+put dir3
+delay 10
+put dir4
+put "c kusamotu nemo"
+endproc
+
+procedure dragmonster
+print "1st move"
+waitfor "ok, come in",600
+put dir1
+delay 10
+put dir2
+put "c kusamotu nemo"
+dmonsterback
+endproc
+        
+getdirs
+while connected
+print "am I here?"
+delay 20
+dragmonster
+endwhile       
+
+
+

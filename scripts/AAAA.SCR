@@ -1,0 +1,3657 @@
+;  Script written by Dave Pyne.
+;          MajorNET address: SCORPION@STG
+;          INTERNET address: SCORPION@CLOCKWORK.COM
+                                                                                                                Graphics ANSI
+
+string mon10,mon11,mon12,mon13,mon14,mon15,mon16                       ;7
+string mon1,mon2,mon3,mon4,mon5,mon6,mon7,mon8,mon9                    ;16
+string min,maj,gre,heal,hea,cname,hit,x,loc,caa,attcom,mana,lowmana    ;29
+string room,light,monget,press,dir,move,buy,bashpick,cure,temp,grab    ;40
+string reg,i,j,showexp,wealth,to,mrest,maxhps,max,mmove,kai,k          ;52
+string recast3,recast2,recast1,ansicom                                 ;56
+assign to 30
+assign i 0
+assign k 0
+assign room exits
+assign lowmana -1
+assign 1 5 ;these 3 are
+assign 2 5 ;for the three
+assign 3 5 ;recast spells - 5 means it is OFF - 0 is ON
+assign 5 0 ;this is a counter that will count to 50 then reset to start
+
+
+PICKFILE:
+closefile
+openfile c:\DAVIS\CONFIG.DAT read
+readfile mon1
+readfile mon2
+readfile mon3
+readfile mon4
+readfile mon5
+readfile mon6
+readfile mon7
+readfile mon8
+readfile mon9
+readfile mon10
+pickfilea:
+gosub version
+color 10
+displayln "          You can choose up to 10 different configurations, allowing"
+displayln "          you to use this script for different characters or for"
+displayln "          multiple people using the same file. "
+color 9
+displayln " "
+displayln " "
+displayln " "
+displayln "           1)  $mon1"
+displayln " "
+displayln "           2)  $mon2"
+displayln " "
+displayln "           3)  $mon3"
+displayln " "
+displayln "           4)  $mon4"
+displayln " "
+displayln "           5)  $mon5"
+gotoxy 40 9
+display "6)  $mon6"
+gotoxy 40 11
+display "7)  $mon7"
+gotoxy 40 13
+display "8)  $mon8"
+gotoxy 40 15
+display "9)  $mon9"
+gotoxy 39 17
+display "10)  $mon10"
+gotoxy 11 20
+color 4
+display "Please select a file to load (0-10)  "
+gotoxy 11 21
+display "Enter 0 to rename a file. ---> "
+color 9
+getn mon16 2
+if "$mon16" = "0" renamecfg
+if "$mon16" < "0" pickfilea
+if "$mon16" > "10" pickfilea
+assign j $mon16
+if "$mon16" = "1" namecfg1
+if "$mon16" = "2" namecfg2
+if "$mon16" = "3" namecfg3
+if "$mon16" = "4" namecfg4
+if "$mon16" = "5" namecfg5
+if "$mon16" = "6" namecfg6
+if "$mon16" = "7" namecfg7
+if "$mon16" = "8" namecfg8
+if "$mon16" = "9" namecfg9
+if "$mon16" = "10" namecfg10
+goto namecfgall
+
+RENAMECFG:
+displayln " "
+display " Which file do you wish to rename? [1-10]  "
+getn mon15 2
+if "$mon15" < "1" renamecfg
+if "$mon15" > "10" renamecfg
+assign j $mon15
+goto rename1
+
+
+RENAME1:
+assign mon$j none
+
+RENAMEALL:
+closefile
+openfile c:\DAVIS\config.dat rewrite
+writefile $mon1
+writefile $mon2
+writefile $mon3
+writefile $mon4
+writefile $mon5
+writefile $mon6
+writefile $mon7
+writefile $mon8
+writefile $mon9
+writefile $mon10
+closefile
+goto namecfgalla
+NAMECFG1:
+if "$mon1" = "none" namecfgalla
+goto begin3
+NAMECFG2:
+if "$mon2" = "none" namecfgalla
+goto begin3
+NAMECFG3:
+if "$mon3" = "none" namecfgalla
+goto begin3
+NAMECFG4:
+if "$mon4" = "none" namecfgalla
+goto begin3
+NAMECFG5:
+if "$mon5" = "none" namecfgalla
+goto begin3
+NAMECFG6:
+if "$mon6" = "none" namecfgalla
+goto begin3
+NAMECFG7:
+if "$mon7" = "none" namecfgalla
+goto begin3
+NAMECFG8:
+if "$mon8" = "none" namecfgalla
+goto begin3
+NAMECFG9:
+if "$mon9" = "none" namecfgalla
+goto begin3
+NAMECFG10:
+if "$mon10" = "none" namecfgalla
+goto begin3
+
+
+
+NAMECFGALLA:
+displayln " "
+display "Please enter the name of this config: "
+getn mon$j 10
+closefile
+openfile c:\DAVIS\config.dat rewrite
+writefile $mon1
+writefile $mon2
+writefile $mon3
+writefile $mon4
+writefile $mon5
+writefile $mon6
+writefile $mon7
+writefile $mon8
+writefile $mon9
+writefile $mon10
+closefile
+goto delname
+
+
+
+DELNAME:
+assign hit 0
+assign i 0
+dos "del c:\DAVIS\NAME$jDAT"
+GOTO BEGIN2
+
+
+
+BEGIN3:
+exist c:\DAVIS\name$j.dat import
+                                                                                                                                                        BEGIN1:
+                                                                                                                                                        exist c:\davis\walk015.dat dummy1
+                                                                                                                                                        closefile
+                                                                                                                                                        clrscr
+                                                                                                                                                        color 11
+                                                                                                                                                        displayln "             +-----------------------------------------------------+"
+                                                                                                                                                        displayln "             |  Hello! And welcome to the finest MajorMUD script!  |"
+                                                                                                                                                        displayln "             |  I have put in many hours of time and effort to     |"
+                                                                                                                                                        displayln "             |  make this the best script out there!  I am asking  |"
+                                                                                                                                                        displayln "             |  for a donation of $$15.00 so that I may continue    |"
+                                                                                                                                                        displayln "             |  to develop this script and make it even better.    |"
+                                                                                                                                                        displayln "             |  PLEASE register this script.  If you think that    |"
+                                                                                                                                                        displayln "             |  that the registration fee is too much, I will      |"
+                                                                                                                                                        displayln "             |  accept 10 dollars, but I ask for 15 dollars.       |"
+                                                                                                                                                        displayln "             |  Once you register the script you will receive      |"
+                                                                                                                                                        displayln "             |  the access to run the registered scripts.  You     |"
+                                                                                                                                                        displayln "             |  MUST and I repeat MUST supply me with a valid      |"
+                                                                                                                                                        displayln "             |  email address, whether it be InterNET or MajorNET. |"
+                                                                                                                                                        displayln "             |  This is important.  Please DO NOT distribute this  |"
+                                                                                                                                                        displayln "             |  script freely, give the person the BBS number and  |"
+                                                                                                                                                        displayln "             |  contact name.  I welcome any comments, suggestions,|"
+                                                                                                                                                        displayln "             |  or questions, and ideas you may have.  Send them   |"
+                                                                                                                                                        display   "             |  all to "
+                                                                                                                                                        color 9
+                                                                                                                                                        display "Scorpion@STG (MajorNet!),"
+                                                                                                                                                        color 11
+                                                                                                                                                        displayln " or logon my bbs.  |"
+                                                                                                                                                        display   "             |  "
+                                                                                                                                                        color 14
+                                                                                                                                                        display "StarGate OnLine"
+                                                                                                                                                        color 10
+                                                                                                                                                        display "  [215]-728-4933"
+                                                                                                                                                        color 11
+                                                                                                                                                        displayln " and send email.    |"
+                                                                                                                                                        display   "             |  "
+                                                                                                                                                        color 12
+                                                                                                                                                        display "The registration fee can be sent to:"
+                                                                                                                                                        color 11
+                                                                                                                                                        displayln "               |"
+                                                                                                                                                        displayln "             |             Dave Pyne            *Include an email  |"
+                                                                                                                                                        displayln "             |             PO Box 643            address where I   |"
+                                                                                                                                                        displayln "             |             Richboro, PA 18954    can reach you!    |"
+                                                                                                                                                        display   "             +-----------------------------------------------------+"
+                                                                                                                                                        getn hit 1
+                                                                                                                                                        dummy1:
+                                                                                                                                                        exist c:\DAVIS\name$j.dat select
+goto begin2
+
+VERSION:
+clrscr
+color 143
+displayln "                         Version 1.5a"
+displayln " "
+return
+
+
+
+BEGIN2:
+clrscr
+gosub version
+NAME:
+color 9
+displayln " "
+display "What is your character's first name? "
+getn cname 20
+if "$hit" = "1" select
+RESTSNEAK:
+color 11
+displayln " "
+displayln "Do You wish to: 1) Rest"
+displayln "  |             2) Sneak"
+displayln "  |             3) Hide"
+displayln "  v "
+display "After an attack? Enter 1-3 ---> "
+getn caa 1
+if "$caa" < 1 restsneak
+if "$caa" > 3 restsneak
+gosub afterexp
+if "$hit" = "3" select
+ATTACKCOM:
+gosub version
+color 14
+displayln " "
+displayln "What attack command do you use?"
+displayln "  |"
+displayln "  |  1) Attack   (The regular a <monster>)"
+displayln "  |  2) BackStab (The bs command)"
+displayln "  |  3) Punch    (The pu command)"
+displayln "  |  4) JumpKick (The ju command)"
+displayln "  |  5) Other    (Make your  own)"
+displayln "  v "
+display   "Enter choice: "
+getn k 2
+if "$k" < 1 attackcom
+if "$k" > 5 attackcom
+goto abspu
+ATTACKCOM1:
+if "$hit" = "4" select
+goto whatmoney
+WHATMONEY:
+gosub version
+color 13
+displayln " "
+displayln "Do You wish to get money that has dropped?"
+displayln " "
+displayln "     0) To get none"
+displayln "     1) To get Gold"
+displayln "     2) To get Silver"
+displayln "     3) To get Copper"
+displayln "     4) To get all money "
+displayln "     5) Gold and Silver"
+displayln "     6) Silver and Copper"
+displayln " "
+display   "Enter choice: "
+getn monget 1
+if "$monget" < 0 whatmoney
+if "$monget" > 6 whatmoney
+gosub gather
+WHATITEM:
+color 12
+displayln " "
+displayln "Would you also you like to grab an item after killing a certain monster?"
+displayln " "
+displayln "(0) No"
+displayln "(1) Fine Broadswords in Ancient Crypt"
+displayln "(2) Darkwood Rings in Elder Grove"
+displayln "(3) Black Star Keys"
+displayln "(4) Oaken Staffs in Elder Grove"
+displayln " "
+display "Please choose (0-3)--> "
+getn grab 1
+if "$grab" < 0 whatitem
+if "$grab" > 4 whatitem
+gosub gatheritem
+if "$hit" = "2" select
+EXP:
+color 9
+displayln " "
+display "Do you wish to show experience after each kill? [y/n] "
+getn showexp 1
+if "$hit" = "10" select
+ANSITOGGLE:
+color 12
+displayln " "
+displayln "In order for the script to deposit money in the bank correctly, it needs to"
+displayln "turn ansi off.  It will be turned back on when the deposit is finished."
+display   "Please enter your systems ansi toggle command (example: =a) :  "
+getn ansicom 5
+if "$hit" = "9" select
+MAXHPS:
+color 11
+displayln " "
+display "What are your Max hps: "
+getn maxhps 3
+if "$hit" = "11" select
+BASHORPICK:
+color 10
+displayln " "
+display "Do you bash or picklock doors? [1] bash  [2] picklock ---> "
+getn bashpick 1
+if "$bashpick" = "1" bash
+if "$bashpick" = "2" pick
+goto bashorpick
+BASHORPICK1:
+if "$hit" = "5" select
+goto walking
+BPTOGGLE:
+if "$bashpick" = "bash" pick
+if "$bashpick" = "pick" bash
+goto select
+BASH:
+assign bashpick bash
+goto bashorpick1
+PICK:
+assign bashpick pick
+goto bashorpick1
+WALKING:
+gosub version
+color 10
+displayln " "
+displayln "In a walking script, under what hps should you rest"
+display   "before moving again ---> "
+getn move 3
+displayln " "
+color 2
+displayln "In a walking script, above what hps should you continue moving"
+display   "again [Must be greater than rest and lower than max] ---> "
+getn max 3
+if "$hit" = "12" select
+KAI1:
+color 10
+displayln " "
+display "Do you have KAI powers? [y/n] "
+getn kai 1
+if "$kai" = "y" kai2
+if "$kai" = "n" mrest
+goto kai1
+KAI2:
+color 10
+displayln " "
+display   "Under how many KAI do you wish to rest? ---> "
+getn mrest 3
+display   "Above how many KAI do you wish to move? ---> "
+getn mmove 3
+ASSIGN LOWMANA 0
+if "$hit" = "13" select
+goto lightspell
+
+MREST:
+color 9
+displayln " "
+displayln " "
+display "Do you have MANA spells? [y/n] "
+getn mrest 1
+if "$mrest" = "y" mrest1
+if "$mrest" = "n" mrest2
+goto mrest
+MREST1:
+color 10
+displayln " "
+display   "Under how many mana do you wish to rest? ---> "
+getn mrest 3
+display   "Above how many mana do you wish to move? ---> "
+getn mmove 3
+display   "Under how many mana do you NOT want to cast spells? ---> "
+getn lowmana 3
+if "$hit" = "13" select
+goto lightspell
+MREST2:
+assign mrest none
+assign mmove none
+assign lowmana none
+if "$hit" = "13" select
+goto lightspell
+LIGHTSPELL:
+gosub version
+color 15
+displayln " "
+displayln "What spell/item do you have to light up dark areas?"
+displayln " "
+displayln "  (1) STAR"
+displayln "  (2) ILLU"
+displayln "  (3) Lantern/Lamp/Torches"
+displayln "  (4) None"
+displayln " "
+display   "-> "
+getn light 1
+if "$light" = "1" star
+if "$light" = "2" illu
+if "$light" = "3" lightitem
+if "$light" = "4" nolight
+goto lightspell
+STAR:
+assign light star
+goto recast
+ILLU:
+assign light illu
+goto recast
+LIGHTITEM:
+assign light item
+goto recast
+NOLIGHT:
+assign light none
+goto recast
+RECAST:
+if "$hit" = "15" select
+gosub version
+displayln " "
+displayln " "
+color 11
+displayln "What spell do you wish to continually recast on yourself?"
+displayln " "
+displayln " (1) MSHI         (10) SMIT"
+displayln " (2) SKIN         (11) TIGE"
+displayln " (3) BLUR"
+displayln " (4) SHLD"
+displayln " (5) BLES"
+displayln " (6) GBLS"
+displayln " (7) ARMR"
+displayln " (8) Optional?
+displayln " (9) NONE"
+displayln " "
+display   "-> "
+getn recast1 2
+RECASTA:
+if "$recast1" = "1" recast1a
+if "$recast1" = "2" recast2a
+if "$recast1" = "3" recast3a
+if "$recast1" = "4" recast4a
+if "$recast1" = "5" recast5a
+if "$recast1" = "6" recast6a
+if "$recast1" = "7" recast7a
+if "$recast1" = "8" recast8a
+if "$recast1" = "9" recast9a
+if "$recast1" = "10" recast10a
+if "$recast1" = "11" recast11a
+goto recast
+RECASTB:
+gosub version
+displayln " "
+displayln " "
+color 12
+displayln "What 2nd spell do you wish to continually recast on yourself?"
+displayln " "
+displayln " (1) MSHI         (10) SMIT"
+displayln " (2) SKIN         (11) RFIR"
+displayln " (3) BLUR"
+displayln " (4) SHLD"
+displayln " (5) BLES"
+displayln " (6) GBLS"
+displayln " (7) ARMR"
+displayln " (8) Optional?
+displayln " (9) NONE"
+displayln " "
+display   "-> "
+getn recast2 2
+RECASTB1:
+if "$recast2" = "1" recast1b
+if "$recast2" = "2" recast2b
+if "$recast2" = "3" recast3b
+if "$recast2" = "4" recast4b
+if "$recast2" = "5" recast5b
+if "$recast2" = "6" recast6b
+if "$recast2" = "7" recast7b
+if "$recast2" = "8" recast8b
+if "$recast2" = "9" recast9b
+if "$recast2" = "10" recast10b
+if "$recast2" = "11" recast11b
+goto recastb
+RECASTC:
+gosub version
+displayln " "
+displayln " "
+color 13
+displayln "What 3rd spell do you wish to continually recast on yourself?"
+displayln " "
+displayln " (1) MSHI         (10) SMIT"
+displayln " (2) SKIN         (11) RFIR"
+displayln " (3) BLUR"
+displayln " (4) SHLD"
+displayln " (5) BLES"
+displayln " (6) GBLS"
+displayln " (7) ARMR"
+displayln " (8) Optional?
+displayln " (9) NONE"
+displayln " "
+display   "-> "
+getn recast3 2
+RECASTC1:
+if "$recast3" = "1" recast1c
+if "$recast3" = "2" recast2c
+if "$recast3" = "3" recast3c
+if "$recast3" = "4" recast4c
+if "$recast3" = "5" recast5c
+if "$recast3" = "6" recast6c
+if "$recast3" = "7" recast7c
+if "$recast3" = "8" recast8c
+if "$recast3" = "9" recast9c
+if "$recast3" = "10" recast10c
+if "$recast3" = "11" recast11c
+goto recastc
+
+;assign recast1 "The effects of mageshield wear off"
+;assign recast1 "The effects of barkskin wear off"
+;assign recast1 "The effects of blur wear off"
+;assign recast1 "The effects of mageshield wear off"
+;assign recast1 "The effects of bless wear off"
+;assign recast1 "The effects of greater bless wear off"
+;assign recast1 "The effects of holy armour wear off"
+;assign recast1 "NO CARRIER"
+;assign recast1 "@@@@@@@@@@"
+;assign recast1 "The effects of smite wear off"
+
+
+RECAST1A:
+assign recast1 "mshi"
+goto recastb
+RECAST1AA:
+assign recast1 "Your mageshield shimmers and fades"
+goto recastz2
+RECAST2A:
+assign recast1 "skin"
+goto recastb
+RECAST2AA:
+assign recast1 "The effects of barkskin wear off"
+goto recastz2
+RECAST3A:
+assign recast1 "blur"
+goto recastb
+RECAST3AA:
+assign recast1 "The effects of blur wear off"
+goto recastz2
+RECAST4A:
+assign recast1 "shld"
+goto recastb
+RECAST4AA:
+assign recast1 "The effects of ethereal shield wear off"
+goto recastz2
+RECAST5A:
+assign recast1 "bles"
+goto recastb
+RECAST5AA:
+assign recast1 "The effects of bless wear off"
+goto recastz2
+RECAST6A:
+assign recast1 "gbls"
+goto recastb
+RECAST6AA:
+assign recast1 "The effects of greater bless wear off"
+goto recastz2
+RECAST7A:
+assign recast1 "armr"
+goto recastb
+RECAST7AA:
+assign recast1 "The effects of magic armour wear off"
+goto recastz2
+RECAST8A:
+assign recast1 "opt"
+goto recastb
+RECAST8AA:
+assign recast1 "NO CARRIER"
+assign 1 0
+goto recastz2
+RECAST9A:
+assign recast1 "none"
+assign 1 0
+goto recastb
+RECAST9AA:
+assign recast1 "@@@@@@@@@@"
+assign 1 0
+goto recastz2
+RECAST10A:
+assign recast1 "smit"
+goto recastb
+RECAST10AA:
+assign recast1 "The effects of smite wear off"
+goto recastz2
+RECAST11A:
+assign recast1 "tige"
+goto recastb
+RECAST11AA:
+assign recast1 "The effects of way of the tiger wear off"
+goto recastz2
+
+RECAST1B:
+assign recast2 "mshi"
+goto recastc
+RECAST2B:
+assign recast2 "skin"
+goto recastc
+RECAST3B:
+assign recast2 "blur"
+goto recastc
+RECAST4B:
+assign recast2 "shld"
+goto recastc
+RECAST5B:
+assign recast2 "bles"
+goto recastc
+RECAST6B:
+assign recast2 "gbls"
+goto recastc
+RECAST7B:
+assign recast2 "armr"
+goto recastc
+RECAST8B:
+assign recast2 "opt"
+goto recastc
+RECAST9B:
+assign recast2 "none"
+assign 2 0
+goto recastc
+RECAST10B:
+assign recast2 "smit"
+goto recastc
+RECAST11B:
+assign recast2 "tige"
+goto recastc
+RECAST1BB:
+assign recast2 "Your mageshield shimmers and fades"
+goto recastz2
+RECAST2BB:
+assign recast2 "The effects of barkskin wear off"
+goto recastz3
+RECAST3BB:
+assign recast2 "The effects of blur wear off"
+goto recastz3
+RECAST4BB:
+assign recast2 "The effects of ethereal shield wear off"
+goto recastz3
+RECAST5BB:
+assign recast2 "The effects of bless wear off"
+goto recastz3
+RECAST6BB:
+assign recast2 "The effects of greater bless wear off"
+goto recastz3
+RECAST7BB:
+assign recast2 "The effects of magic armour wear off"
+goto recastz3
+RECAST8BB:
+assign recast2 "NO CARRIER"
+assign 2 0
+goto recastz3
+RECAST9BB:
+assign recast2 "@@@@@@@@@@"
+assign 2 0
+goto recastz3
+RECAST10BB:
+assign recast2 "The effects of smite wear off"
+goto recastz3
+RECAST11BB:
+assign recast2 "The effects of way of the tiger wear off"
+goto recastz3
+RECAST1C:
+assign recast3 "mshi"
+if "$hit" = "14" select
+goto healspell
+RECAST2C:
+assign recast3 "skin"
+if "$hit" = "14" select
+goto healspell
+RECAST3C:
+assign recast3 "blur"
+if "$hit" = "14" select
+goto healspell
+RECAST4C:
+assign recast3 "shld"
+if "$hit" = "14" select
+goto healspell
+RECAST5C:
+assign recast3 "bles"
+if "$hit" = "14" select
+goto healspell
+RECAST6C:
+assign recast3 "gbls"
+if "$hit" = "14" select
+goto healspell
+RECAST7C:
+assign recast3 "armr"
+if "$hit" = "14" select
+goto healspell
+RECAST8C:
+assign recast3 "opt"
+if "$hit" = "14" select
+goto healspell
+RECAST9C:
+assign recast3 "none"
+if "$hit" = "14" select
+goto healspell
+RECAST10C:
+assign recast3 "smit"
+if "$hit" = "14" select
+goto healspell
+RECAST11C:
+assign recast3 "tige"
+if "$hit" = "14" select
+goto healspell
+RECAST1CC:
+assign recast3 "Your mageshield shimmers and fades"
+goto moves1
+RECAST2CC:
+assign recast3 "The effects of barkskin wear off"
+goto moves1
+RECAST3CC:
+assign recast3 "The effects of blur wear off"
+goto moves1
+RECAST4CC:
+assign recast3 "The effects of ethereal shield wear off"
+goto moves1
+RECAST5CC:
+assign recast3 "The effects of bless wear off"
+goto moves1
+RECAST6CC:
+assign recast3 "The effects of greater bless wear off"
+goto moves1
+RECAST7CC:
+assign recast3 "The effects of magic armour wear off"
+goto moves1
+RECAST8CC:
+assign recast3 "NO CARRIER"
+assign 3 0
+goto moves1
+RECAST9CC:
+assign recast3 "@@@@@@@@@@"
+assign 3 0
+goto moves1
+RECAST10CC:
+assign recast3 "The effects of smite wear off"
+goto moves1
+RECAST11CC:
+assign recast3 "The effects of way of the tiger wear off"
+goto moves1
+
+RECASTZ1:
+if "$recast1" = "mshi" recast1aa
+if "$recast1" = "skin" recast2aa
+if "$recast1" = "blur" recast3aa
+if "$recast1" = "shld" recast4aa
+if "$recast1" = "bles" recast5aa
+if "$recast1" = "gbls" recast6aa
+if "$recast1" = "armr" recast7aa
+if "$recast1" = "none" recast9aa
+if "$recast1" = "opt"  recast8aa
+if "$recast1" = "smit" recast10aa
+if "$recast1" = "tige" recast11aa
+goto moves1
+RECASTZ2:
+if "$recast2" = "mshi" recast1bb
+if "$recast2" = "skin" recast2bb
+if "$recast2" = "blur" recast3bb
+if "$recast2" = "shld" recast4bb
+if "$recast2" = "bles" recast5bb
+if "$recast2" = "gbls" recast6bb
+if "$recast2" = "armr" recast7bb
+if "$recast2" = "none" recast9bb
+if "$recast2" = "opt"  recast8bb
+if "$recast2" = "smit" recast10bb
+if "$recast2" = "tige" recast11bb
+goto moves1
+RECASTZ3:
+if "$recast3" = "mshi" recast1cc
+if "$recast3" = "skin" recast2cc
+if "$recast3" = "blur" recast3cc
+if "$recast3" = "shld" recast4cc
+if "$recast3" = "bles" recast5cc
+if "$recast3" = "gbls" recast6cc
+if "$recast3" = "armr" recast7cc
+if "$recast3" = "none" recast9cc
+if "$recast3" = "opt"  recast8cc
+if "$recast3" = "smit" recast10cc
+if "$recast3" = "tige" recast11cc
+goto moves1
+
+
+
+
+HEALSPELL:
+gosub version
+color 11
+displayln " "
+displayln "       Which spell do you have to heal?"
+displayln " "
+displayln "       (1) mihe"
+displayln "       (2) mihe&mahe"
+displayln "       (3) mihe&mahe&grhe"
+displayln "       (4) mend"
+displayln "       (5) invoke swan"
+displayln "       (6) none"
+displayln " "
+display   "       Enter choice:  "
+getn heal 1
+if "$heal" < 1  healspell
+if "$heal" > 6  healspell
+gosub healing
+if "$hit" = "7" select
+POISON:
+gosub version
+color 14
+displayln " "
+displayln "       What spell do you have to cure poison?"
+displayln " "
+displayln "       (1) cure "
+displayln "       (2) anti"
+;displayln "       (3) rat"
+displayln "       (4) none"
+displayln " "
+display   "       Enter choice:  "
+getn cure 1
+if "$cure" = "1" acure1
+if "$cure" = "2" anti
+;if "$cure" = "3" rat
+if "$cure" = "4" potion
+goto poison
+ACURE1:
+assign cure cure
+goto poison1
+ANTI:
+assign cure anti
+goto poison1
+RAT:
+assign cure rat
+goto poison1
+POTION:
+assign cure none
+goto poison1
+POISON1:
+if "$hit" = "8" select
+goto select
+AFTEREXP:
+if "$caa" = 1   rest
+if "$caa" = 2   sneak
+if "$caa" = 3   hide
+return
+REST:
+assign caa rest
+return
+SNEAK:
+assign caa sneak
+return
+HIDE:
+assign caa hide
+return
+ABSPU:
+if "$k" = 1   at
+if "$k" = 2   bs
+if "$k" = 3   pu
+if "$k" = 4   ju
+if "$k" = 5   op
+goto attackcom
+AT:
+assign attcom a
+goto attackcom1
+BS:
+assign attcom bs
+goto attackcom1
+PU:
+assign attcom pu
+goto attackcom1
+JU:
+assign attcom ju
+goto attackcom1
+OP:
+displayln "The script will allow you to enter your own attack command."
+displayln "This attack command MUST be a valid spell."
+displayln "The script will add a return so you only need enter the attack."
+displayln " "
+display "Enter your attack: "
+getn attcom 4
+assign temp "$attcom"
+goto attackcom1
+
+GATHER:
+if "$monget" = 0 nomoney
+if "$monget" = 1 gold
+if "$monget" = 2 silver
+if "$monget" = 3 copper
+if "$monget" = 4 allmoney
+if "$monget" =  5 gsilver
+if "$monget" = 6 scopper
+return
+GOLD:
+assign monget gold
+return
+SILVER:
+assign monget silver
+return
+COPPER:
+assign monget copper
+return
+ALLMONEY:
+assign monget all
+return
+GSILVER:
+assign monget goldsilver
+return
+SCOPPER:
+assign monget silvercopper
+return
+NOMONEY:
+assign monget none
+return
+GATHERITEM:
+if "$grab" = 0 noitem
+if "$grab" = 1 fine
+if "$grab" = 2 ring
+if "$grab" = 3 key
+if "$grab" = 4 staff
+return
+NOITEM:
+assign grab none
+return
+FINE:
+assign grab fine
+return
+RING:
+assign grab ring
+return
+KEY:
+assign grab key
+return
+STAFF:
+assign grab staff
+return
+HEALING:
+if "$heal" = 1 one
+if "$heal" = 2 one
+if "$heal" = 3 one
+if "$heal" = 4 four
+if "$heal" = 5 five
+if "$heal" = 6 six
+return
+DONE:
+return
+HEALING1:
+if "$heal" = 1 one1
+if "$heal" = 2 one1
+if "$heal" = 3 one1
+if "$heal" = 4 four1
+if "$heal" = 5 five1
+if "$heal" = 6 six1
+return
+ONE:
+displayln " "
+display "At lower than how many hps do you wish to minor heal? "
+getn min 3
+if "$heal" = 2 two
+if "$heal" = 3 two
+assign maj 0
+assign gre 0
+gosub six
+return
+ONE1:
+displayln "            Minor healing occurs at lower than $min hps"
+if "$heal" = 2 two1
+if "$heal" = 3 two1
+return
+TWO:
+displayln " "
+display "At lower than how many hps do you wish to majorheal? "
+getn maj 3
+if "$heal" = 3 three
+assign gre 0
+gosub six
+return
+TWO1:
+displayln "            Major healing occurs at lower than $maj hps"
+if "$heal" = 3 three1
+return
+THREE:
+displayln " "
+display "At lower than how many hps do you wish to greaterheal? "
+getn gre 3
+gosub six
+THREE1:
+displayln "            Great healing occurs at lower than $gre hps"
+return
+FOUR:
+displayln " "
+display "At lower than how many hps do you wish to cast mend? "
+getn min 3
+assign maj 0
+assign gre 0
+gosub six
+return
+FOUR1:
+displayln "            Cast mend occurs at lower than $min hps"
+return
+FIVE:
+displayln " "
+displayln "At lower than how many hps do you wish to invoke swan? "
+getn min 3
+assign maj 0
+assign gre 0
+gosub six
+FIVE1:
+displayln "            Invoke swan occurs at lower than $min hps"
+return
+SIX:
+color 12
+if "$heal" <> "6" sixa
+assign maj 0
+assign min 0
+assign gre 0
+sixa:
+if "$hit" = "7" done
+displayln " "
+display "At lower than how many hps do you wish to hangup? "
+getn x 3
+if "$hit" = "6" select
+return
+SIX1:
+return
+
+
+
+NEWBUYHEAL:
+clrscr
+color 12
+display "Under what hps do you wish to buy healing? ---> "
+getn buy 2
+goto newhaven
+EXPTOGGLE:
+if "$showexp" = "y" exptoggle1
+assign showexp y
+goto select
+exptoggle1:
+assign showexp n
+goto select
+TOGGLERSN:
+if "$caa" = "rest"  trsha
+if "$caa" = "sneak" trshb
+if "$caa" = "hide"  trshc
+goto select
+TRSHA:
+assign caa sneak
+goto select
+TRSHB:
+assign caa hide
+goto select
+TRSHC:
+assign caa rest
+goto select
+MOVES1:
+goto location2
+
+
+SELECT:
+closefile
+openfile c:\DAVIS\name$j.dat rewrite
+writefile $cname
+writefile $caa
+writefile $attcom
+writefile $monget
+writefile $bashpick
+writefile $showexp
+writefile $min
+writefile $maj
+writefile $gre
+writefile $maxhps
+writefile $max
+writefile $x
+writefile $heal
+writefile $move
+writefile $caa
+writefile $lowmana
+writefile $cure
+writefile $mrest
+writefile $mmove
+writefile $light
+writefile $recast1
+writefile $recast2
+writefile $recast3
+writefile $KAI
+writefile $k
+writefile $grab
+writefile $ansicom
+closefile
+goto correct
+IMPORT:
+closefile
+openfile c:\DAVIS\name$j.dat read
+readfile cname
+readfile caa
+readfile attcom
+readfile monget
+readfile bashpick
+readfile showexp
+readfile min
+readfile maj
+readfile gre
+readfile maxhps
+readfile max
+readfile x
+readfile heal
+readfile move
+readfile caa
+readfile lowmana
+readfile cure
+readfile mrest
+readfile mmove
+readfile light
+readfile recast1
+readfile recast2
+readfile recast3
+readfile KAI
+readfile k
+readfile grab
+readfile ansicom
+CORRECT:
+gosub version
+color 9
+displayln "        1) Name: $cname"
+color 12
+displayln "        2) Gather : $monget & $grab"
+color 11
+displayln "        3) After kill: $caa"
+color 14
+displayln "        4) Attack: $attcom"
+color 10
+displayln "        5) Doors: $bashpick"
+color 12
+displayln "        6) Hangup: $x hps"
+color 10
+display   "        8) Poison spell: $cure"
+gotoxy 8 11
+color 11
+displayln " 7) Heal Spell: $heal"
+gosub healing1
+gotoxy 40 3
+color 12
+display   "  9) Ansi toggle is: $ansicom"
+gotoxy 40 4
+color 9
+display   " 10) Show experience: $showexp"
+gotoxy 40 5
+color 14
+display   " 11) Maximum hps are $maxhps"
+gotoxy 7 16
+color 10
+displayln " 12) Rest occurs at less than $move  hps in a walk script."
+color 11
+displayln "           Movement begins again at $max  hps in a walk script."
+if "$mrest" = "none" correct3
+CORRECT1:
+gotoxy 7 19
+color 12
+displayln " 13) Rest occurs at  lower than $mrest mana/kai."
+displayln "           Movement  occurs at above  $mmove mana/kai."
+displayln "           Spells not cast lower than $lowmana mana/kai."
+goto correct2
+CORRECT3:
+gotoxy 7 19
+color 12
+displayln " 13) You do NOT have mana/kai spells."
+CORRECT2:
+gotoxy 40 6
+color 14
+displayln " 14) Recast#1 is: $recast1"
+gotoxy 40 7
+displayln "     Recast#2 is: $recast2"
+gotoxy 40 8
+displayln "     Recast#3 is: $recast3"
+gotoxy 40 9
+color 11
+displayln " 15) Light spell: $light."
+color 10
+gotoxy 1 23
+displayln "Is this correct? [y/n] If no then choose # ---> "
+display   "NOTE: Hit N to start over from the beginning."
+gotoxy 49 23
+getn hit 2
+;if "$hit" = "y" recastz1
+if "$hit" = "y" where
+if "$hit" = "n" delname
+clrscr
+if "$hit" = "3"  togglersn
+if "$hit" = "1"  name
+if "$hit" = "2"  whatmoney
+if "$hit" = "4"  attackcom
+if "$hit" = "5"  bptoggle
+if "$hit" = "6"  sixa
+if "$hit" = "7"  healspell
+if "$hit" = "8"  poison
+if "$hit" = "9"  ansitoggle
+if "$hit" = "10" exptoggle
+if "$hit" = "11" maxhps
+if "$hit" = "12" walking
+if "$hit" = "13" kai1
+if "$hit" = "14" recast
+if "$hit" = "15" lightspell
+goto select
+closefile
+WHERE:
+closefile
+gosub version
+color 1
+displayln " "
+displayln "           Where will you be scripting at?"
+displayln " "
+displayln " "
+color 11
+displayln "       1) NewHaven Arena     * 10) Fungus Forest/Swamp"
+color 5
+displayln "       2) Silvermere Sewers  * 11) Torchlit Caverns"
+color 13
+displayln "       3) Silvermere Slums   * 12) Cystalline Caverns"
+color 14
+displayln "       4) Graveyard/Crypt    * 13) Elder Grove"
+color 10
+displayln "       5) Forest             * 14) Black Fortress"
+color 11
+displayln "     * 6) Caves              * 15) Cracked Plain"
+color 14
+displayln "     * 7) Black House        * 16) Lava Fields"
+color 9
+displayln "     * 8) Island             * 17) empty"
+color 10
+displayln "     * 9) Frozen Caverns     * 18) Dreary Village"
+displayln " "
+gotoxy 1 18
+color 13
+displayln  "           Please choose: "
+gotoxy 1 20
+color 139
+displayln "*** NOTE:
+color 12
+displayln "Those numbers with a * next to them are only available to registered users."
+displayln "The Newhaven script should be started in the healer."
+displayln "All other walking scripts should be started in the bank."
+display "For NON-WALKING scripts choose the number+a  ex: 7a for Black House"
+color 13
+gotoxy 27 18
+getn loc 3
+                                                                                                                                                        goto regcheck
+location:
+assign i 0
+location1:
+incr i
+assign mon$i @@@@@
+if "$i" < "16" location1
+goto recastz1
+location2:
+clrscr
+if "$loc" = "1"  newbuyheal
+if "$loc" = "2"   sewers
+if "$loc" = "2a"  sewers
+if "$loc" = "3"   slums
+if "$loc" = "3a"  slums
+if "$loc" = "4"   grave
+if "$loc" = "4a"  grave
+if "$loc" = "5"   forest
+if "$loc" = "5a"  forest
+if "$loc" = "6"   caves
+if "$loc" = "6a"  caves
+if "$loc" = "7"   black
+if "$loc" = "7a"  black
+if "$loc" = "8"   island
+if "$loc" = "8a"  island
+if "$loc" = "9"   caverns
+if "$loc" = "9a"  caverns
+if "$loc" = "10"  fungus
+if "$loc" = "10a" fungus
+if "$loc" = "11a" torchlit
+if "$loc" = "11"  torchlit
+if "$loc" = "12"  crystal
+if "$loc" = "12a" crystal
+if "$loc" = "13"  grove
+if "$loc" = "13a" grove
+if "$loc" = "14"  fortress
+if "$loc" = "14a" fortress
+if "$loc" = "15"  plain
+if "$loc" = "15a" plain
+if "$loc" = "16"  lava
+if "$loc" = "16a" lava
+if "$loc" = "17"  where
+if "$loc" = "17a" where
+if "$loc" = "18"  dreary
+if "$loc" = "18a" dreary
+goto where
+
+MONSTERS:
+;assign hit 99
+closefile
+assign 8 1
+openfile c:\DAVIS\monsters.dat read
+MONSTERS1:
+readfile mon1
+if "$mon1" = "$hit" monsters2
+goto monsters1
+MONSTERS2:
+if "$8" = "17" monsters3
+readfile j
+if "$j" = "end" monsters2a
+assign mon$8 "$j"
+incr 8
+
+goto monsters2
+monsters2a:
+closefile
+
+monsters3:
+return
+NEWHAVEN:
+assign hit 1
+closefile
+gosub monsters
+assign room exits
+assign hit 111
+goto enter
+FOREST:
+closefile
+assign hit 6
+gosub monsters
+FOREST1:
+if "$loc" = "5a" enterz
+FOREST2:
+assign room exits
+closefile
+openfile c:\DAVIS\walk5.dat read
+goto enter
+CAVES:
+closefile
+assign hit 6
+gosub monsters
+if "$loc" = "6a" enterz
+CAVESA:
+clrscr
+color 12
+displayln " Map   (1) Caves (Start at Bank)"
+displayln "       (2) Caves (Start at Darkwood Forest, Cave Opening)"
+display   "        "
+getn press 1
+CAVES2:
+assign room exits
+if "$press" = "1" caves21
+if "$press" = "2" caves22
+goto cavesa
+CAVES21:
+if "$j" = "99" caves22
+closefile
+openfile c:\DAVIS\walk61.dat read
+goto enter
+CAVES22:
+closefile
+openfile c:\DAVIS\walk62.dat read
+goto enter
+
+
+
+
+ISLAND:
+closefile
+assign hit 8
+gosub monsters
+if "$loc" = "8a" enterz
+ISLANDA:
+clrscr
+color 12
+displayln " Map   (1) Ancient Crypt (Start at 1st entrance, closed door east)"
+displayln "       (2) Ancient Crypt (Start at Bank)"
+displayln "       (3) Wooden Passage(Start at 1st entrance, closed door west)"
+displayln "       (4) Wooden Passage(Start at Bank)"
+displayln " "
+display "          "
+getn press 1
+ISLAND2:
+assign room exits
+if "$press" = "1" island21
+if "$press" = "2" island22
+if "$press" = "3" island23
+if "$press" = "4" island24
+goto islanda
+ISLAND21:
+closefile
+openfile c:\DAVIS\walk81.dat read
+goto enter
+ISLAND22:
+if "$j" = "99" island21
+closefile
+openfile c:\DAVIS\walk82.dat read
+goto enter
+ISLAND23:
+closefile
+openfile c:\DAVIS\walk83.dat read
+goto enter
+ISLAND24:
+if "$j" = "99" island23
+closefile
+openfile c:\DAVIS\walk84.dat read
+goto enter
+SLUMS:
+closefile
+assign hit 3
+gosub monsters
+SLUMS1:
+if "$loc" = "3a" enterz
+clrscr
+displayln "Map (1)  Slums everywhere            Both of these scripts"
+displayln "    (2)  Cultist area and SW Slums   start in Bank of Godfrey"
+display   "     "
+getn press 1
+SLUMS1A:
+if "$press" = "1" slums21
+if "$press" = "2" slums2a
+goto slums1
+SLUMS2A:
+assign room exits
+closefile
+openfile c:\DAVIS\walk321.dat read
+goto enter
+SLUMS2:
+assign room exits
+if "$press" = "1" slums21
+if "$press" = "2" slums22
+goto slums1
+SLUMS21:
+closefile
+openfile c:\DAVIS\walk31.dat read
+goto enter
+SLUMS22:
+closefile
+openfile c:\DAVIS\walk32.dat read
+goto enter
+BLACK:
+closefile
+assign hit 7
+gosub monsters
+BLACK1:
+if "$loc" = "7a" enterz
+clrscr
+displayln " "
+displayln "        Map (1)  HellHound area, starting at BankofGodfrey."
+displayln "            (2)  HellHound area, starting under waterfall."
+displayln "            (3)  Cave Worm area, starting at BankofGodfrey."
+displayln "            (4)  Cave Worm area, starting under waterfall."
+displayln "            (5)  2nd level black house (Start at Dark Cavern,Ledge)"
+displayln "            (6)  2nd level black house (Start at Bank of Godfrey)"
+displayln " "
+display   "             "
+getn press 1
+assign room exits
+if "$press" = "1" black11a
+if "$press" = "2" black2
+if "$press" = "3" black12a
+if "$press" = "4" black2
+if "$press" = "5" black2
+if "$press" = "6" black13a
+goto black1
+BLACK13A:
+closefile
+openfile c:\DAVIS\walk713.dat read
+goto enter
+BLACK12A:
+closefile
+openfile c:\DAVIS\walk712.dat read
+goto enter
+BLACK11A:
+closefile
+openfile c:\DAVIS\walk711.dat read
+goto enter
+BLACK2:
+assign room exits
+if "$press" = "1" black21
+if "$press" = "2" black21
+if "$press" = "3" black22
+if "$press" = "4" black22
+if "$press" = "5" black23
+if "$press" = "6" black23
+goto black1
+BLACK21:
+closefile
+openfile c:\DAVIS\walk71.dat read
+goto enter
+BLACK22:
+closefile
+openfile c:\DAVIS\walk72.dat read
+goto enter
+BLACK23:
+closefile
+openfile c:\DAVIS\walk73.dat read
+goto enter
+SEWERS:
+assign hit 3
+closefile
+gosub monsters
+if "$loc" = "2a" enterz
+SEWERS2:
+assign room exits
+closefile
+openfile c:\DAVIS\walk2.dat read
+goto enter
+GRAVE:
+closefile
+assign hit 4
+gosub monsters
+GRAVE1:
+assign monget none
+if "$loc" = "4a" enterz
+clrscr
+color 2
+displayln " "
+displayln "       Map (1) Graveyard Only  (Start In Bank)"
+displayln "           (2) Graveyard Only  (Start in 1st room of Graveyard)"
+displayln "           (3) Graveyard and 1st Level Crypt (Start In Bank)"
+displayln "           (4) Graveyard and 1st Level Crypt (Start in 1st Room of Graveyard)"
+displayln "           (5) Graveyard 1st, 2nd Lvl Crypt  (Start In Bank)"
+displayln "           (6) Graveyard 1st, 2nd Lvl Crypt  (Start in 1st Room of Graveyard)"
+display   "            "
+getn press 1
+assign room exits
+if "$press" < "1" grave1
+if "$press" > "6" grave1
+GRAVE2:
+assign room exits
+if "$press" = "1" grave21
+if "$press" = "2" grave22
+if "$press" = "3" grave23
+if "$press" = "4" grave24
+if "$press" = "5" grave25
+if "$press" = "6" grave26
+
+GRAVE21:
+if "$j" = "99" grave22
+closefile
+openfile c:\DAVIS\walk411.dat read
+goto enter
+GRAVE22:
+closefile
+openfile c:\DAVIS\walk41.dat read
+goto enter
+GRAVE23:
+if "$j" = "99" grave24
+closefile
+openfile c:\DAVIS\walk411.dat read
+goto enter
+GRAVE24:
+closefile
+openfile c:\DAVIS\walk42.dat read
+goto enter
+GRAVE25:
+if "$j" = "99" grave26
+closefile
+openfile c:\DAVIS\walk411.dat read
+goto enter
+GRAVE26:
+closefile
+openfile c:\DAVIS\walk43.dat read
+goto enter
+
+
+CAVERNS:
+closefile
+assign hit 6
+gosub monsters
+if "$loc" = "9a" enterz
+cavernsa:
+clrscr
+displayln "Map  (1) Start at First room named Frozen Cavern"
+displayln "     (2) Start at Bank of Godfrey"
+displayln " "
+getn press 1
+CAVERNS2:
+if "$press" = "1" caverns11
+if "$press" = "2" caverns12
+goto cavernsa
+CAVERNS11:
+assign room exits
+closefile
+openfile c:\DAVIS\walk9.dat read
+goto enter
+CAVERNS12:
+if "$j" = "99" caverns11
+assign room exits
+closefile
+openfile c:\DAVIS\walk91.dat read
+goto enter
+FUNGUS:
+closefile
+assign hit 10
+gosub monsters
+if "$loc" = "10a" enterz
+clrscr
+displayln "Map  (1) Fungus Forest starting at bank"
+displayln "     (2) Fungus Forest starting at Fungus Forest, Tunnel Opening"
+getn press 1
+FUNGUS2:
+if "$press" = "1" fungus21
+if "$press" = "2" fungus22
+goto fungus
+FUNGUS21:
+if "$j" = "99" fungus22
+assign hit 7
+closefile
+gosub monsters
+assign room exits
+closefile
+openfile c:\DAVIS\walk101.dat read
+goto enter
+FUNGUS22:
+assign room exits
+closefile
+openfile c:\DAVIS\walk10.dat read
+goto enter
+TORCHLIT:
+closefile
+assign hit 6
+gosub monsters
+if "$loc" = "11a" enterz
+clrscr
+displayln "Map  (1) Start in first room named Torchlit Caverns"
+displayln "     (2) Start in Bank of Godfrey"
+displayln " "
+getn press 1
+TORCHLIT2:
+if "$press" = "1" torchlit11
+if "$press" = "2" torchlit12
+goto torchlit
+TORCHLIT11:
+assign room exits
+closefile
+openfile c:\DAVIS\walk11.dat read
+goto enter
+TORCHLIT12:
+if "$j" = "99" torchlit11
+assign room exits
+closefile
+openfile c:\DAVIS\walk111.dat read
+goto enter
+CRYSTAL:
+assign hit 14
+closefile
+gosub monsters
+if "$loc" = "12a" enterz
+clrscr
+displayln "This script should be started at first room named Crystalline Cavern."
+displayln " "
+displayln "Map (1) Serpentkin Village and Smooth Crystal Tunnel"
+displayln "    (2) Walk to the Black Fortress"
+displayln "    (3) Same as #2, NO attacking on the way."
+getn press 1
+CRYSTAL2:
+if "$press" = "1" crystal21
+if "$press" = "2" crystal22
+if "$press" = "3" crystal23
+CRYSTAL21:
+assign room exits
+closefile
+openfile c:\DAVIS\walk12.dat read
+goto enter
+CRYSTAL22:
+assign room exits
+closefile
+openfile c:\DAVIS\walk121.dat read
+goto enter
+CRYSTAL23:
+assign hit 99
+assign room exits
+closefile
+openfile c:\DAVIS\walk121.dat read
+goto enter
+FORTRESS:
+assign hit 14
+closefile
+gosub monsters
+if "$loc" = "14a" enterz
+clrscr
+displayln " Map   (1) Fortress starting in room where arrows fly."
+displayln "       (2) Walk from bank"
+displayln "       (3) Walk from bank without attacking on the way."
+getn press 1
+FORTRESS2:
+if "$press" = "1" fortress21
+if "$press" = "2" fortress22
+if "$press" = "3" fortress23
+goto fortress
+FORTRESS21:
+assign room exits
+closefile
+openfile c:\DAVIS\walk14.dat read
+goto enter
+FORTRESS22:
+if "$j" = "99" fortress21
+assign hit 7
+assign loc 7
+closefile
+gosub monsters
+fortress22a:
+assign room exits
+closefile
+openfile c:\DAVIS\walk141.dat read
+goto enter
+FORTRESS23:
+assign room exits
+assign hit 99
+goto fortress22a
+GROVE:
+assign hit 13
+closefile
+gosub monsters
+if "$loc" = "13a" enterz
+clrscr
+displayln " Map   (1) Grove starting at Bank"
+displayln "       (2) Grove starting at Twisted Tree"
+getn press 1
+GROVE2:
+if "$press" = "1" grove21
+if "$press" = "2" grove22
+GROVE21:
+if "$j" = "99" grove22
+assign hit 6
+closefile
+gosub monsters
+assign room exits
+closefile
+openfile c:\DAVIS\walk13.dat read
+goto enter
+GROVE22:
+assign room exits
+closefile
+openfile c:\DAVIS\walk132.dat read
+goto enter
+PLAIN:
+assign hit 10
+closefile
+gosub monsters
+if "$loc" = "15a" enterz
+clrscr
+displayln "This script should be started at first room named 'Cracked Plain, Black Chasm'"
+displayln "(Hint: It's the room east of the Heavy Rope Bridge)
+getn press 1
+PLAIN2:
+assign room exits
+closefile
+openfile c:\DAVIS\walk15.dat read
+goto enter
+LAVA:
+assign hit 10
+closefile
+gosub monsters
+if "$loc" = "16a" enterz
+clrscr
+displayln "This script should be started at 'Cracked Plain, Glowing Opening'"
+getn press 1
+LAVA2:
+assign room exits
+closefile
+openfile c:\DAVIS\walk16.dat read
+goto enter
+DREARY:
+assign hit 10
+closefile
+gosub monsters
+if "$loc" = "18a" enterz
+clrscr
+color 12
+displayln "This script should be started at first room named Dark Valley"
+getn press 1
+DREARY2:
+assign room exits
+closefile
+openfile c:\DAVIS\walk18.dat read
+goto enter
+
+
+
+
+
+ENTERZ:
+assign hit 111
+assign loc a
+ENTER:
+when
+if "$j" = "99" walk
+delay 100
+send "^M"
+timeout 5 enter1
+when "exits" enter1
+waitfor "MAJORMUD"
+send "e^M"
+timeout 2 enter1
+when "press a key" , "^M"
+waitfor "@@@@@"
+ENTER1:
+if "$loc" = "1" enter2
+if "$j" = "99" walkc
+gosub gehea
+goto start
+ENTER2:
+gosub gehea
+send "e^Md^M"
+timeout 30 start3
+waitfor "Arena"
+goto start2
+
+START:
+WHEN
+assign i 0
+goto walk
+START1:
+WHEN
+START3:
+send "^M"
+START2:
+WHEN
+timeout 24 nowalk
+when      "$recast1"                     again1
+when      "$recast2"                     again2
+when      "$recast3"                     again3
+WHEN      "You are blind"                nomove
+when      "You may not"                  start3
+when      "The room is very dark"        light
+when      "You feel ill"                 cure
+when      "You make a sound"             iwalk
+when      "Also here:"                   start4
+waitfor "$room"
+if "$hit" = "111" nowalk1
+goto walk
+
+
+
+START4:
+timeout 20 start
+WHEN
+when      "$recast1"                     again1
+when      "$recast2"                     again2
+when      "$recast3"                     again3
+WHEN      "You are blind"                nomove
+when      "You may not"                  start3
+when      "The room is very dark"        light
+when      "You feel ill"                 cure
+when      "You make a sound"             iwalk
+when      "$mon1"                        attack1
+when      "$mon2"                        attack2
+When      "$mon3"                        attack3
+When      "$mon4"                        attack4
+when      "$mon5"                        attack5
+When      "$mon6"                        attack6
+When      "$mon7"                        attack7
+when      "$mon8"                        attack8
+when      "$mon9"                        attack9
+when      "$mon10"                       attack10
+when      "$mon11"                       attack11
+when      "$mon12"                       attack12
+when      "$mon13"                       attack13
+when      "$mon14"                       attack14
+when      "$mon15"                       attack15
+when      "$mon16"                       attack16
+waitfor "$room"
+if "$i" = "75" rest1aa
+if "$hit" = "111" nowalk1
+;pause 5000
+;send "get $monget^M"
+goto walk
+
+OPTOGGLE:
+if "$attcom" = "a" moneya
+assign i 0
+assign temp "$attcom"
+assign attcom "a"
+goto start3
+OPTOGGLE1:
+assign i 0
+assign attcom "$temp"
+goto start3
+
+
+MONEY:
+if "$k" <> "5" moneya
+if "$mrest" = "none" moneya
+if "$mana" < "$lowmana" optoggle
+if "$attcom" = "a" optoggle1
+MONEYA:
+timeout 30 start3
+;timeout $to again
+WHEN
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when      "You fumble in confusion"       fumble
+when      "You are too afraid"            fumble
+when      "You are blind"                 nomove
+when      "You feel ill"                  cure
+when      "you gain"                      time
+when      "you for"                       health
+when      "swing"                         health
+when      "damage"                        health
+when      "lunge"                         health
+when      "swipe"                         health
+when      "but fail"                      health
+when      "~!@"                           walkcc1
+Waitfor   "Combat off"
+TIME:
+WHEN
+assign i 0
+goto money2
+TIMEA:
+assign i 9
+return
+TIME1:
+WHEN
+if "$showexp" = "n" time2
+send "exp^M"
+TIME2:
+;send "=DT^M"             ;after a kill, the script sends this command
+if "$hit" <> "111" health
+time3:
+assign i 19
+goto nowalk
+goto start
+time4:
+assign i 0
+if "$hea" < "$buy" healer
+goto walk
+NOWALK:
+assign room exits
+gosub gehea
+send "^M"
+goto start4
+NOWALK1:
+assign room @@@@@
+if "$hea" < "$move" resting
+if "$mrest" = "none" nowalk2
+if "$mana" <= "$mrest" resting
+NOWALK2:
+gosub rsn1
+send "^M"
+goto start4
+
+HEALTHA:
+assign i 0
+WHEN
+timeout 15 health
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when      "You fumble in confusion"       health
+when      "You are too afraid"            health
+waitfor "Health:   "
+goto healthb
+
+
+HEALTH:
+;delay 500
+send "hea^M"
+when
+timeout 15 health
+when
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when      "You fumble in confusion"       health
+when      "You are too afraid"            health
+when      "You gain"                      time
+waitfor "Health:   "
+HEALTHB:
+getx hea 3 [
+if "$hea" < "$x" hang
+if "$mrest" = "none" health1
+if "$KAI" = "y" kai
+MANA1:
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+waitfor "Mana: "
+getx mana 3 /
+goto health1
+KAI:
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+waitfor "Kai: "
+getx mana 3 /
+goto health1
+
+HEALTH1:
+when
+if "$heal" = "1" mihe
+if "$heal" = "2" mahe
+if "$heal" = "3" grhe
+if "$heal" = "4" mend
+if "$heal" = "5" swan
+if "$heal" = "6" none
+goto start3
+YOUSAY:
+WHEN
+gosub gehea
+assign i 0
+gosub rsn
+goto start3
+IWALK:
+assign i 0
+goto start2
+MONEY2:
+if "$monget" = "all"  getmoneyall
+if "$monget" = "none" item
+if "$monget" = "goldsilver" money3
+if "$monget" = "silvercopper" money4
+send "get $monget^M"
+goto item
+GETMONEYALL:
+send "get gold^Mget silver^Mget copper^M"
+goto item
+MONEY3:
+SEND "get gold^Mget silver^M"
+goto item
+MONEY4:
+send "get silver^Mget copper^M"
+goto item
+ITEM:
+if "$grab" = "none" time1
+send "get $grab^M"
+goto time1
+LIGHT:
+if "$light" = "item" lamp
+if "$light" = "none" start2
+send "$light^M"
+goto start3
+LAMP:
+when
+send "use lamp^M"
+timeout 10 start2
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when "You don't have lamp"  lantern
+waitfor "You lit the lamp"
+goto start3
+LANTERN:
+when
+send "use lantern^M"
+timeout 10 start2
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when "You don't have lantern"  torch
+waitfor "You lit the lantern"
+goto start3
+TORCH:
+when
+send "use torch^M"
+timeout 10 start2
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when "You don't have torch"  hang
+waitfor "You lit the torch"
+goto start3
+FUMBLE:
+assign i 0
+goto start3
+
+
+BANK:
+send "$ansicom^M"
+WHEN
+send "weal^M"
+timeout 20 start
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when      "You have No money"             bank1
+waitfor "Wealth: "
+getx wealth 10 c
+send "dep $wealth^M"
+bank1:
+send "$ansicom^M"
+send "with 500^M"
+goto walk
+ENDWALK:
+WHEN
+
+;BEEP 100
+;BEEP 200
+;BEEP 300
+;BEEP 400
+;BEEP 500
+;BEEP 600
+;BEEP 700
+;BEEP 800
+;BEEP 900
+;BEEP 1000
+;EXIT
+
+;when "$recast1" again1
+;when "$recast2" again2
+;when "$recast3" again3
+assign j 99
+endwalk1:
+if "$dir" = "endend" hang2
+if "$loc" = "2" sewers2
+if "$loc" = "3" slums2
+if "$loc" = "4" grave2
+if "$loc" = "5" forest2
+if "$loc" = "6" caves2
+if "$loc" = "7" black2
+if "$loc" = "8" island2
+if "$loc" = "9" caverns2
+if "$loc" = "10" fungus2
+if "$loc" = "11" torchlit2
+if "$loc" = "12" crystal2
+if "$loc" = "13" grove2
+if "$loc" = "14" fortress2
+if "$loc" = "15" plain2
+if "$loc" = "16" lava2
+if "$loc" = "17" obsidian2
+if "$loc" = "18" dreary2
+goto start
+
+
+
+
+WALK:
+WHEN
+when "$recast1" again1
+when "$recast2" again2
+when "$recast3" again3
+if "$0" = "5" walka
+if "$1" = "5" again1
+if "$2" = "5" again2
+if "$3" = "5" again3
+WALKA:
+if "$hit" = "111" start3
+when
+;gosub gehea
+if "$hea" < "$move" resting
+if "$mrest" = "none" walkac
+if "$mana" < "$mrest" resting
+walkac:
+if "$i" = "5" walkc
+when
+gosub rsn
+WALKC:
+WHEN
+when "$recast1" again1
+when "$recast2" again2
+when "$recast3" again3
+WALKCC:
+when
+readfile dir
+if "$dir" = "1"   sw
+if "$dir" = "2"   s
+if "$dir" = "3"   se
+if "$dir" = "4"   w
+if "$dir" = "6"   e
+if "$dir" = "7"   nw
+if "$dir" = "8"   n
+if "$dir" = "9"   ne
+if "$dir" = "85"  u
+if "$dir" = "25"  d
+if "$dir" = "22"  searchs
+if "$dir" = "88"  searchn
+if "$dir" = "551" manhole
+if "$dir" = "552" crack
+if "$dir" = "553" hole
+if "$dir" = "554" waterfall
+if "$dir" = "555" brick
+if "$dir" = "556" stone
+if "$dir" = "557" button
+if "$dir" = "558" lever
+if "$dir" = "559" path
+if "$dir" = "881" knot
+if "$dir" = "882" bstar
+if "$dir" = "883" boulder
+if "$dir" = "884" stump
+if "$dir" = "885" faith
+if "$dir" = "regi"    bank
+if "$dir" = "fungus"  fungmon
+if "$dir" = "crystal" crysmon
+if "$dir" = "grove"   grovmon
+if "$dir" = "end"      endwalk
+if "$dir" = "endend"   hang2
+goto hang
+walkcc1:
+send "^H^H^H^H"
+goto walkcc
+WALKE:
+send "$dir^M"
+assign 0 0
+WHEN
+timeout 10 walkd
+when "$recast1"                 again1
+when "$recast2"                 again2
+when "$recast3"                 again3
+when "There is no exit"         walkcc
+when "You fumble in confusion"  walke
+when "You are too afraid"       walke
+when "You can't seem to move"   nomove
+when "You make a sound"         iwalk
+when "There is a closed door"   doorall
+when "There is a closed gate"   doorall
+when "The door is closed"       doorall
+when "The gate is closed"       doorall
+when "Also here"                start4
+when "exits"                    walkd
+when "Sneaking..."              walkb
+waitfor "$room"
+WALKD:
+;pause 5000
+if "$caa" = "rest" sysreset
+assign i 0
+goto sysreset
+WALKB:
+assign i 5
+WALKB1:
+WHEN
+timeout 10 start3
+when "You make a sound" iwalk
+when "exits" sysreset
+when "$recast1" again1
+when "$recast2" again2
+when "$recast3" again3
+when "There is a closed door"   doorall
+when "There is a closed gate"   doorall
+when "The door is closed"       doorall
+when "The gate is closed"       doorall
+waitfor "Also here:"
+goto sysreset1
+
+
+
+
+
+
+
+
+
+
+
+
+SYSRESET:
+when
+;send "sys reset room^M"
+;send "sys reset area^M"
+;pause 5000
+;send "get $monget^M"
+goto walk
+SYSRESET1:
+when
+;assign to 4
+;send "sys reset room^M"
+;send "sys reset area^M"
+goto start4
+NOMOVE:
+when
+gosub gehea
+if "$hea" >= "$maxhps" nomove1
+send "rest^M"
+goto nomove3
+NOMOVE1:
+when
+gosub rsn
+goto nomove3
+NOMOVE2:
+when
+gosub gehea
+NOMOVE3:
+when
+timeout 7 nomove2
+when      "$recast1"                     again1
+when      "$recast2"                     again2
+when      "$recast3"                     again3
+when      "You can move again"           walke
+when      "You are freed from the webbing" walke
+when      "You can see again"            start3
+when      "Your vision returns to normal" start3
+when      "$mon1"                        attack1
+when      "$mon2"                        attack2
+When      "$mon3"                        attack3
+When      "$mon4"                        attack4
+when      "$mon5"                        attack5
+When      "$mon6"                        attack6
+When      "$mon7"                        attack7
+when      "$mon8"                        attack8
+when      "$mon9"                        attack9
+when      "$mon10"                       attack10
+when      "$mon11"                       attack11
+when      "$mon12"                       attack12
+when      "$mon13"                       attack13
+when      "$mon14"                       attack14
+when      "$mon15"                       attack15
+when      "$mon16"                       attack16
+waitfor "@@@@@"
+
+
+
+AGAIN1:
+if "$mana" <= "$lowmana" again99
+assign i 0
+assign 1 5
+WHEN
+when "$recast2" againz2
+when "$recast3" againz3
+if "$recast1" = "Your mageshield shimmers and fades"        again11
+if "$recast1" = "The effects of barkskin wear off"           again12
+if "$recast1" = "The effects of blur wear off"               again13
+if "$recast1" = "The effects of ethereal shield wear off"    again14
+if "$recast1" = "The effects of bless wear off"              again15
+if "$recast1" = "The effects of greater bless wear off"      again16
+if "$recast1" = "The effects of magic armour wear off"       again17
+if "$recast1" = "NO CARRIER"                                 relog
+if "$recast1" = "jk2lasn‰ ðb"                                  again19
+if "$recast1" = "The effects of smite wear off"              again110
+if "$recast1" = "The effects of way of the tiger wear off"        again111
+AGAIN11:
+send "mshi^M"
+timeout 3 again11
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast mage"
+assign 1 0
+assign i 0
+goto start3
+AGAIN12:
+send "skin^M"
+timeout 3 again12
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast barkskin"
+assign 1 0
+assign i 0
+goto start3
+AGAIN13:
+send "blur^M"
+timeout 3 again13
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast blur"
+assign 1 0
+assign i 0
+goto start3
+AGAIN14:
+send "shld^M"
+timeout 3 again14
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast ethereal shield"
+assign 1 0
+assign i 0
+goto start3
+AGAIN15:
+send "bles^M"
+timeout 3 again15
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast bless"
+assign 1 0
+assign i 0
+goto start3
+AGAIN16:
+send "gbls^M"
+timeout 3 again16
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast greater bless"
+assign 1 0
+assign i 0
+goto start3
+AGAIN17:
+send "armr^M"
+timeout 3 again17
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast magic armour"
+assign 1 0
+assign i 0
+goto start3
+AGAIN18:
+assign 1 0
+assign i 0
+goto again
+AGAIN19:
+assign 1 0
+assign i 0
+goto again
+AGAIN110:
+send "smit^M"
+timeout 3 again110
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast smite"
+assign 1 0
+assign i 0
+goto start3
+AGAIN111:
+send "tige^M"
+timeout 3 again111
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You invoke"
+assign 1 0
+assign i 0
+goto start3
+
+
+AGAIN99:
+if "$i" = "1" money
+if "$0" = "45" gather1
+assign 0 5
+goto start3
+TEN:
+assign 5 0
+assign i 0
+goto start3
+NEWAGAIN:
+if "$hea" < "$buy" healer
+goto againb
+
+AGAIN:
+when
+when "You gain" time
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+
+incr 5
+gosub gehea
+if "$loc" = "1" newagain
+againb:
+if "$5" >= "50" ten
+if "$i" = "9" time
+if "$mana" <= "$lowmana" again99
+if "$1" = "5" again1
+if "$2" = "5" again2
+if "$3" = "5" again3
+assign to 5
+if "$0" = "45" gather1
+goto health
+if "$i" = "1" money
+goto start3
+
+AGAINZ1:
+assign 1 5
+goto again
+AGAINZ2:
+assign 2 5
+goto again
+AGAINZ3:
+assign 3 5
+goto again
+AGAINFAIL:
+assign to 5
+gosub gehea
+if "$0" = "45" gather1
+assign 0 5
+send "^M"
+goto start4
+
+
+
+AGAIN2:
+if "$mana" <= "$lowmana" again99
+assign i 0
+assign 2 5
+WHEN
+when "$recast1" againz1
+when "$recast3" againz3
+if "$recast2" = "Your mageshield shimmers and fades"        again21
+if "$recast2" = "The effects of barkskin wear off"           again22
+if "$recast2" = "The effects of blur wear off"               again23
+if "$recast2" = "The effects of ethereal shield wear off"    again24
+if "$recast2" = "The effects of bless wear off"              again25
+if "$recast2" = "The effects of greater bless wear off"      again26
+if "$recast2" = "The effects of magic armour wear off"       again27
+if "$recast2" = "NO CARRIER"                                 relog
+if "$recast2" = "jk2lasn‰ ðb"                                  again29
+if "$recast2" = "The effects of smite wear off"              again210
+if "$recast2" = "The effects of way of the tiger wear off"        again211
+AGAIN21:
+send "mshi^M"
+timeout 3 again21
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast mage"
+assign 2 0
+assign i 0
+goto start3
+AGAIN22:
+send "skin^M"
+timeout 3 again22
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast barkskin"
+assign 2 0
+assign i 0
+goto start3
+AGAIN23:
+send "blur^M"
+timeout 3 again23
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast blur"
+assign 2 0
+assign i 0
+goto start3
+AGAIN24:
+send "shld^M"
+timeout 3 again24
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast ethereal shield"
+assign 2 0
+assign i 0
+goto start3
+AGAIN25:
+send "bles^M"
+timeout 3 again25
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast bless"
+assign 2 0
+assign i 0
+goto start3
+AGAIN26:
+send "gbls^M"
+timeout 3 again26
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast greater bless"
+assign 2 0
+assign i 0
+goto start3
+AGAIN27:
+send "armr^M"
+timeout 3 again27
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast magic armour"
+assign 2 0
+assign i 0
+goto start3
+AGAIN28:
+assign 2 0
+assign i 0
+goto again
+AGAIN29:
+assign 2 0
+assign i 0
+goto again
+AGAIN210:
+send "smit^M"
+timeout 3 again210
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast smite"
+assign 2 0
+assign i 0
+goto start3
+AGAIN211:
+send "tige^M"
+timeout 3 again211
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You invoke "
+assign 2 0
+assign i 0
+goto start3
+
+AGAIN3:
+if "$mana" <= "$lowmana" again99
+assign i 0
+assign 3 5
+WHEN
+when "$recast1" againz1
+when "$recast2" againz2
+if "$recast3" = "Your mageshield shimmers and fades"        again31
+if "$recast3" = "The effects of barkskin wear off"           again32
+if "$recast3" = "The effects of blur wear off"               again33
+if "$recast3" = "The effects of ethereal shield wear off"    again34
+if "$recast3" = "The effects of bless wear off"              again35
+if "$recast3" = "The effects of greater bless wear off"      again36
+if "$recast3" = "The effects of magic armour wear off"       again37
+if "$recast3" = "NO CARRIER"                                 relog
+if "$recast3" = "jklasnKCV"                                  again39
+if "$recast3" = "The effects of smite wear off"              again310
+if "$recast3" = "The effects of way of the tiger wear off"        again311
+AGAIN31:
+send "mshi^M"
+timeout 3 again31
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast mage"
+assign 3 0
+assign i 0
+goto start3
+AGAIN32:
+send "skin^M"
+timeout 3 again32
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast barkskin"
+assign 3 0
+assign i 0
+goto start3
+AGAIN33:
+send "blur^M"
+timeout 3 again33
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast blur"
+assign 3 0
+assign i 0
+goto start3
+AGAIN34:
+send "shld^M"
+timeout 3 again34
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast ethereal shield"
+assign 3 0
+assign i 0
+goto start3
+AGAIN35:
+send "bles^M"
+timeout 3 again35
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast bless"
+assign 3 0
+assign i 0
+goto start3
+AGAIN36:
+send "gbls^M"
+timeout 3 again36
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast greater bless"
+assign 3 0
+assign i 0
+goto start3
+AGAIN37:
+send "armr^M"
+timeout 3 again37
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast magic armour"
+assign 3 0
+assign i 0
+goto start3
+AGAIN38:
+assign 3 0
+assign i 0
+goto again
+AGAIN39:
+assign 3 0
+assign i 0
+goto again
+AGAIN310:
+send "smit^M"
+timeout 3 again310
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You cast smite"
+assign 3 0
+assign i 0
+goto start3
+AGAIN311:
+send "tige^M"
+timeout 3 again311
+when "but fail" againfail
+when "You have already cast" againfail
+waitfor "You invoke "
+assign 3 0
+assign i 0
+goto start3
+
+
+
+
+againa1:
+WHEN
+assign 0 45
+goto again1
+againa2:
+WHEN
+assign 0 45
+goto again2
+againa3:
+WHEN
+assign 0 45
+goto again3
+
+GATHER1:
+;assign i 0
+WHEN
+return
+goto start
+GATHER2:
+WHEN
+assign attcom bs
+return
+GATHER3:
+WHEN
+return
+
+RSN:
+WHEN
+if "$caa" = "rest" gather1
+RSN1:
+WHEN
+send "$caa^M"
+if "$caa" = "rest" gather1
+timeout 1 hide1
+when      "$recast1" againa1
+when      "$recast2" againa2
+when      "$recast3" againa3
+when "You fumble in confusion" rsn1
+when "You are too afraid"      rsn1
+when "You may not" gather3
+when "You don't think" rsn1
+waitfor "#!@%^&"
+HIDE1:
+WHEN
+if "$caa" = "sneak" gather1
+send "l $cname^M"
+timeout 3 gather1
+when "$recast1" againa1
+when      "$recast2" againa2
+when      "$recast3" againa3
+when "You do not see"  gather3
+when "You may not"    gather3
+when "is equipped with"  rsn1
+waitfor "#%#^@&"
+
+
+RESTING:
+WHEN
+if "$hit" = "99" walkc
+if "$i" = "1" money
+assign to 7
+if "$i" = "75" rest1a
+restinga:
+when
+send "^M"
+assign i 75
+REST1:
+WHEN
+REST1A:
+WHEN
+timeout $to rest2
+when      "You are blind"                       restzz
+when      "You fumble in confusion"            restinga
+when      "You are too afraid"                 restinga
+;when      "You can see again"                  rest2
+;when      "Your vision returns to normal"      rest2
+;when      "You are too sick to rest"           cure
+;when      "You feel ill"                       cure
+when      "Also here:"                         start4
+waitfor   "$room"
+restzz:
+send "rest^M"
+REST1AA:
+assign to 7
+when
+timeout $to rest2
+when      "You fumble in confusion"            restzz
+when      "You are too afraid"                 restzz
+
+when      "The effects of the poison wear off" start3
+when      "You can see again"                  rest2
+when      "Your vision returns to normal"      rest2
+when      "You feel ill"                       cure
+when      "$mon1"                        attack1
+when      "$mon2"                        attack2
+When      "$mon3"                        attack3
+When      "$mon4"                        attack4
+when      "$mon5"                        attack5
+When      "$mon6"                        attack6
+When      "$mon7"                        attack7
+when      "$mon8"                        attack8
+when      "$mon9"                        attack9
+when      "$mon10"                       attack10
+when      "$mon11"                       attack11
+when      "$mon12"                       attack12
+when      "$mon13"                       attack13
+when      "$mon14"                       attack14
+when      "$mon15"                       attack15
+when      "$mon16"                       attack16
+when      "$recast1"                     restagain1
+when      "$recast2"                     restagain2
+when      "$recast3"                     restagain3
+waitfor "@@@@@"
+REST2:
+gosub gehea
+if "$mrest" = "none" rest3
+if "$hea" >= "$maxhps" rest4
+REST2A:
+WHEN
+if "$mana" < "$mmove" rest1aa
+REST3:
+when
+if "$hea" < "$max" rest1aa
+assign i 0
+assign room exits
+goto start3
+REST4:
+when
+if "$mana" > "$mrest" rest3
+if "$caa" = "rest" rest2a
+if "$i" = "77" rest2a
+assign caa hide
+assign i 77
+gosub rsn
+assign caa sneak
+goto rest2a
+RESTAGAIN1:
+assign 1 5
+goto rest2
+RESTAGAIN2:
+assign 2 5
+goto rest2
+RESTAGAIN3:
+assign 3 5
+goto rest2
+
+
+
+
+
+CURE:
+WHEN
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+assign to 32
+if "$i" = "15" rest1a
+if "$cure" = "none" cure1
+send "$cure^M"
+WHEN
+goto health
+CURE1:
+WHEN
+if "$caa" = "rest" cure2
+assign i 15
+assign caa hide
+gosub rsn
+assign caa sneak
+CURE2:
+WHEN
+if "$hea" < "$max" rest1a
+goto health
+
+
+ATTACK1:
+when
+if "$hit" = "99" walk
+if "$mon1" = "orc" attack1a
+send "$attcom $mon1^M"
+goto attackwait
+ATTACK1A:
+when
+timeout 2 attack1z
+when "sentry"  attack1b
+when "rogue"   attack1c
+when "captain" attack1d
+when "shaman"  attack1e
+when "Also here:" start4
+waitfor "exits"
+send "$attcom orc^M"
+goto attackwait
+ATTACK1B:
+send "$attcom sentry^M"
+goto attackwait
+ATTACK1C:
+send "$attcom rogue^M"
+goto attackwait
+ATTACK1D:
+send "$attcom captain^M"
+goto attackwait
+ATTACK1E:
+send "$attcom shaman^M"
+goto attackwait
+ATTACK1Z:
+send "$attcom orc^M"
+goto attackwait
+ATTACK2:
+when
+if "$hit" = "99" walk
+if "$mon2" = "dark" attack2a
+send "$attcom $mon2^M"
+goto attackwait
+ATTACK2A:
+when
+timeout 5 start3
+when "assassin"  attack2b
+when "warlock"   attack2c
+when "cleric"    attack2d
+when "priest"    attack2e
+when "warrior"   attack2f
+when "cultist"   attack2g
+when "paladin"   attack2h
+when "mage"      attack2i
+when "goblin"    attack2j
+when "druid"     attack2k
+when "wizard"    attack2l
+when "bishop"    attack2m
+when "Also here:" start4
+waitfor "exits"
+goto walk
+ATTACK2B:
+send "$attcom assassin^M"
+goto attackwait
+ATTACK2C:
+send "$attcom warlock^M"
+goto attackwait
+ATTACK2D:
+send "$attcom cleric^M"
+goto attackwait
+ATTACK2E:
+send "$attcom priest^M"
+goto attackwait
+ATTACK2F:
+send "$attcom warrior^M"
+goto attackwait
+ATTACK2G:
+send "$attcom cultist^M"
+goto attackwait
+ATTACK2H:
+send "$attcom paladin^M"
+goto attackwait
+ATTACK2I:
+send "$attcom mage^M"
+goto attackwait
+ATTACK2J:
+send "$attcom goblin^M"
+goto attackwait
+ATTACK2K:
+send "$attcom druid^M"
+goto attackwait
+ATTACK2L:
+send "$attcom wizard^M"
+goto attackwait
+ATTACK2M:
+send "$attcom bishop^M"
+goto attackwait
+
+ATTACK3:
+when
+if "$hit" = "99" walk
+if "$mon3" = "spirit" attack3a
+if "$mon3" = "black" attack3b
+send "$attcom $mon3^M"
+goto attackwait
+ATTACK3A:
+if "$attcom" = "bs" attack3aa
+send "$attcom $mon3^M"
+goto attackwait
+ATTACK3AA:
+send "a spirit^M"
+goto attackwait
+ATTACK3B:
+WHEN
+timeout 5 start3
+when "orc" attack3b1
+when "Also here:" start4
+waitfor "exits"
+goto walk
+ATTACK3B1:
+send "$attcom black^M"
+goto attackwait
+ATTACK4:
+when
+if "$hit" = "99" walk
+send "$attcom $mon4^M"
+goto attackwait
+ATTACK5:
+when
+if "$hit" = "99" walk
+send "$attcom $mon5^M"
+goto attackwait
+ATTACK6:
+when
+if "$hit" = "99" walk
+send "$attcom $mon6^M"
+goto attackwait
+ATTACK7:
+when
+if "$hit" = "99" walk
+send "$attcom $mon7^M"
+goto attackwait
+ATTACK8:
+when
+if "$hit" = "99" walk
+send "$attcom $mon8^M"
+goto attackwait
+ATTACK9:
+when
+if "$hit" = "99" walk
+if "$mon9" = "black ooze" walkc
+send "$attcom $mon9^M"
+goto attackwait
+ATTACK10:
+when
+if "$hit" = "99" walk
+send "$attcom $mon10^M"
+goto attackwait
+ATTACK11:
+when
+if "$hit" = "99" walk
+send "$attcom $mon11^M"
+goto attackwait
+ATTACK12:
+when
+if "$hit" = "99" walk
+send "$attcom $mon12^M"
+goto attackwait
+ATTACK13:
+when
+if "$hit" = "99" walk
+send "$attcom $mon13^M"
+goto attackwait
+ATTACK14:
+when
+if "$hit" = "99" walk
+send "$attcom $mon14^M"
+goto attackwait
+ATTACK15:
+when
+if "$hit" = "99" walk
+send "$attcom $mon15^M"
+goto attackwait
+attack16:
+when
+if "$hit" = "99" walk
+send "$attcom $mon16^M"
+goto attackwait
+ATTACKWAIT:
+WHEN
+timeout 5 attackwait1
+when      "$recast1"                      again1
+when      "$recast2"                      again2
+when      "$recast3"                      again3
+when      "you say"                       yousay
+when      "you do not see"                yousay
+when      "You fumble in confusion"       start3
+when      "You are too afraid"            start3
+waitfor "Combat Engaged"
+assign i 1
+goto money
+ATTACKWAIT1:
+assign room exits
+goto start3
+
+                                                                                                                                                                        regcheck:
+                                                                                                                                                                        exist c:\davis\walk015.dat location
+                                                                                                                                                                        if "$loc" = "1"  location
+                                                                                                                                                                        if "$loc" = "2"  location
+                                                                                                                                                                        if "$loc" = "3"  location
+                                                                                                                                                                        if "$loc" = "4"  location
+                                                                                                                                                                        if "$loc" = "5"  location
+                                                                                                                                                                        if "$loc" = "1a" location
+                                                                                                                                                                        if "$loc" = "3a" location
+                                                                                                                                                                        if "$loc" = "4a" location
+                                                                                                                                                                        if "$loc" = "5a" location
+                                                                                                                                                                        if "$loc" = "6a" location
+                                                                                                                                                                        if "$loc" = "7a" location
+                                                                                                                                                                        if "$loc" = "8a" location
+                                                                                                                                                                        if "$loc" = "9a" location
+                                                                                                                                                                        if "$loc" = "10a" location
+                                                                                                                                                                        if "$loc" = "11a" location
+                                                                                                                                                                        if "$loc" = "12a" location
+                                                                                                                                                                        if "$loc" = "13a" location
+                                                                                                                                                                        if "$loc" = "14a" location
+                                                                                                                                                                        if "$loc" = "15a" location
+                                                                                                                                                                        if "$loc" = "16a" location
+                                                                                                                                                                        if "$loc" = "17a" location
+                                                                                                                                                                        if "$loc" = "18a" location
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                        color 10
+                                                                                                                                                                        clrscr
+                                                                                                                                                                        displayln " "
+                                                                                                                                                                        displayln " "
+                                                                                                                                                                        displayln "          Sorry, this script is available only to registered users."
+                                                                                                                                                                        display   "                             <Press Return>"
+                                                                                                                                                                        getn hit 1
+                                                                                                                                                                        goto begin1
+GEHEA:
+WHEN
+send "hea^M"
+timeout 15 gehea
+when "$recast1" againa1
+when "$recast2" againa2
+when "$recast3" againa3
+when "You fumble in confusion" gehea
+when "You are too afraid"      gehea
+when      "You gain" timea
+waitfor "Health:   "
+getx hea 3 [
+if "$hea" < "$x" hang
+if "$kai" = "y" kai5
+if "$mrest" = "none" gather1
+MANA:
+WHEN
+when "$recast1" againa1
+when "$recast2" againa2
+when "$recast3" againa3
+waitfor "Mana: "
+getx mana 3 /
+return
+KAI5:
+when
+when "$recast1" againa1
+when "$recast2" againa2
+when "$recast3" againa3
+waitfor "Kai: "
+getx mana 3 /
+return
+
+
+
+MIHE:
+if "$hea" < "$min" mihe1
+goto none
+MIHE1:
+if "$mana" <= "$lowmana" none
+send "mihe^M"
+if "$i" = "1" nonez
+assign i 0
+gosub gehea
+goto none
+MAHE:
+if "$hea" < "$maj" mahe1
+if "$hea" < "$min" mihe1
+goto none
+MAHE1:
+if "$mana" <= "$lowmana" none
+send "mahe^M"
+if "$i" = "1" nonez
+assign i 0
+gosub gehea
+goto none
+GRHE:
+if "$hea" < "$gre" grhe1
+if "$hea" < "$maj" mahe1
+if "$hea" < "$min" mihe1
+goto none
+GRHE1:
+if "$mana" <= "$lowmana" none
+send "grhe^M"
+if "$i" = "1" nonez
+assign i 0
+gosub gehea
+goto none
+MEND:
+if "$hea" < "$min" mend1
+goto none
+MEND1:
+if "$mana" <= "$lowmana" none
+send "mend^M"
+if "$i" = "1" nonez
+assign i 0
+gosub gehea
+goto none
+SWAN:
+if "$hea" < "$min" swan1
+goto none
+SWAN1:
+assign i 0
+send "swan^M"
+assign i 0
+goto none
+NONE:
+WHEN
+if "$1" = "5" again1
+if "$2" = "5" again2
+if "$3" = "5" again3
+if "$i" = "19" time4
+if "$loc" = "1" none1
+if "$loc" <> "a" none2
+if "$i" = "1" money
+goto nowalk
+NONE1:
+WHEN
+if "$hea" < "$buy" healer
+if "$i" = "1" money
+WHEN
+goto start3
+NONE2:
+WHEN
+assign to 5
+if "$i" = "1" money
+if "$hea" < "$move" resting
+;pause 2000
+if "$mrest" = "none" start3
+if "$mana" < "$mrest" resting
+goto start3
+NONEZ:
+when
+send "a^M"
+goto attackwait
+
+
+HEALER:
+WHEN
+send "break^Mu^Mw^M"
+timeout 5 arena
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+waitfor "healer"
+HEALER1:
+WHEN
+send "buy heal^M"
+timeout 10 start
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+when "You cannot afford" healer3
+when "You do not have"   healer3
+waitfor "All your wounds are healed"
+gosub gehea
+if "$hea" < "$maxhps" healer1
+goto healer2a
+HEALER2:
+WHEN
+gosub gehea
+if "$hea" < "$maxhps" healer4
+HEALER2A:
+WHEN
+send "e^Md^M"
+timeout 30 start3
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+waitfor "Arena"
+goto start4
+HEALER3:
+WHEN
+send "rest^M"
+HEALER4:
+WHEN
+timeout 22 healer2
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+waitfor "@@@@@"
+goto healer2
+
+
+
+
+
+
+SEARCHS:
+assign dir s
+goto searchall2
+SEARCHN:
+assign dir n
+goto searchall2
+
+SEARCHALL:
+WHEN
+assign i 0
+searchall1:
+incr i
+if "$i" = "5" searchall2
+send "sea $dir^M"
+timeout 30 searchall2
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+when "You found an exit" start3
+when "You notice nothing" searchall1
+waitfor "@@@@@"
+goto start3
+SEARCHALL2:
+when
+assign i 0
+send "^M"
+timeout 2 searchall
+when "Secret Passage" walk
+when      "$recast1" again1
+when      "$recast2" again2
+when      "$recast3" again3
+waitfor "@@@@@@@@@"
+
+
+
+DOOR:
+WHEN
+assign i 0
+if "$bashpick" = "pick" door1
+goto door2
+DOOR1:
+WHEN
+send "open $dir^M"
+goto door2
+DOORALL:
+WHEN
+assign i 0
+timeout 20 start
+send "$bashpick $dir^M"
+when      "$recast1"            again1
+when      "$recast2"            again2
+when      "$recast3"            again3
+when "fail"                     doorall
+when "You fumble in confusion"  doorall
+when "You are too afraid"       doorall
+when "There is no benefit"      door
+when "You bashed the door open" door
+when "already open"             door2
+when "You bashed the gate open" door
+waitfor "You successfully"
+goto door
+
+DOOR2:
+when
+gosub rsn
+DOOR2A:
+when
+goto walke
+
+
+
+
+SW:
+ASSIGN DIR SW
+GOTO WALKE
+S:
+ASSIGN DIR S
+GOTO WALKE
+SE:
+ASSIGN DIR SE
+GOTO WALKE
+W:
+ASSIGN DIR W
+GOTO WALKE
+E:
+ASSIGN DIR E
+GOTO WALKE
+NW:
+ASSIGN DIR NW
+GOTO WALKE
+N:
+ASSIGN DIR N
+GOTO WALKE
+NE:
+ASSIGN DIR NE
+GOTO WALKE
+U:
+ASSIGN DIR U
+GOTO WALKE
+D:
+ASSIGN DIR D
+GOTO WALKE
+MANHOLE:
+ASSIGN DIR "GO MANHOLE"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO START2
+CRACK:
+ASSIGN DIR "GO CRACK"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO START2
+HOLE:
+ASSIGN DIR "GO HOLE"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO START2
+WATERFALL:
+ASSIGN DIR "GO WATERFALL"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO START2
+BRICK:
+ASSIGN DIR "PUSH BRICK"
+SEND "$DIR^M"
+GOTO WALK
+STONE:
+ASSIGN DIR "PUSH STONE"
+SEND "$DIR^M"
+GOTO WALK
+BUTTON:
+ASSIGN DIR "PUSH BUTTON"
+SEND "$DIR^M"
+GOTO WALK
+LEVER:
+ASSIGN DIR "PULL LEVER"
+SEND "$DIR^M"
+GOTO WALK
+PATH:
+ASSIGN DIR "GO PATH"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO START2
+KNOT:
+ASSIGN DIR "TWIST KNOT^MPUSH KNOT^M"
+SEND "$DIR^M"
+GOTO WALK
+BSTAR:
+ASSIGN DIR "USE BLACK STAR KEY E^MOP E^M"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO WALK
+BOULDER:
+assign dir "push boulder^M"
+send "$dir^M"
+goto walk
+STUMP:
+assign dir "go stump"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO START2
+FAITH:
+assign dir "say faith"
+ASSIGN I 0
+SEND "$DIR^M"
+GOTO walk
+
+
+
+
+FUNGMON:
+if "$loc" = "17" fungmon4
+if "$loc" = "10" fungmon2
+assign loc 10
+if "$hit" = "99" fungmona
+assign hit 10
+fungmona1:
+closefile
+gosub monsters
+fungmona:
+closefile
+openfile c:\DAVIS\walk141.dat read
+FUNGMON1:
+readfile dir
+if "$dir" = "fungus" WALK
+goto fungmon1
+FUNGMON2:
+closefile
+assign hit 10
+assign loc 10
+gosub monsters
+closefile
+openfile c:\DAVIS\walk101.dat read
+FUNGMON3:
+readfile dir
+if "$dir" = "fungus" walk
+goto fungmon3
+FUNGMON4:
+if "$hit" = "99" walk
+assign hit 10
+closefile
+gosub monsters
+fungmon5:
+closefile
+openfile c:\davis\walk171.dat read
+fungmon4a:
+readfile dir
+if "$dir" = "fungus" walk
+goto fungmon4a
+
+
+
+CRYSMON:
+assign loc 12
+if "$hit" = "99" crysmonc
+assign hit 14
+crysmona:
+closefile
+gosub monsters
+crysmonc:
+closefile
+openfile c:\DAVIS\walk141.dat read
+CRYSMON1:
+readfile dir
+if "$dir" = "crystal"  WALK
+goto crysmon1
+GROVMON:
+closefile
+assign hit 13
+gosub monsters
+goto endwalk
+;closefile
+;openfile c:\DAVIS\walk13.dat read
+GROVMON1:
+readfile dir
+if "$dir" = "grove" WALK
+goto grovmon1
+
+
+
+HANG2:
+when
+exit
+
+
+HANG:
+
+hangup
+exit
+
+
+;WHEN
+;if "$i" = "65" rest1a
+;send "break^Msys go s^M"
+;pause 3000
+;send "u^M"
+;HANGA:
+;WHEN
+;send "hea^M"
+;timeout 5 gehea
+;waitfor "Health:   "
+;getx hea 3 [
+;if "$hea" < "$maxhps" shealer
+;goto hangb
+;HANGB:
+;send "sn^Ms^Me^Me^ME^ME^ME^ME^ME^MS^MW^M"
+;timeout 200 relog
+;when
+;waitfor "Bank of Godfrey"
+;closefile
+;assign 1 0
+;assign 2 0
+;assign 3 0
+;assign i 65
+;assign press 4
+;if "$hea" = "$maxhps" island24
+;goto resting
+;SHEALER:
+;WHEN
+;send "buy greater healing^M"
+;timeout 10 shealer
+;when "You fumble in confusion" shealer
+;when "You are too afraid" shealer
+;when "You cannot afford" hangb
+;waitfor "The healer casts greater healing on you"
+;goto hanga
+
+;RELOGZ:
+;pause 17000
+;RELOG:
+;hangup
+;pause 3000
+;WHEN
+;send "atdt12157284933^M"
+;timeout 300 relog
+;when "NO CARRIER" relog
+;when "BUSY" relogz
+;waitfor "CONNECT"
+;timeout 160 relog
+;when
+;when "Press any key, or Q to Quit" password
+;waitfor "##@%"
+;RELOG1:
+;WHEN
+;timeout 160 relog
+;when  "Press any key" keypress
+;when     "Do you want to see it now" noread
+;when  "anything else to continue" keypress
+;Waitfor  "Please make your selection"
+;Send     "/go mud^M"
+;RELOG3:
+;timeout 160 relog
+;when
+;when "Press any key" keypress3
+;waitfor "MAJORMUD"
+;send "e^M"
+;RELOG2:
+;timeout 160 relog
+;when
+;when "Press any key" keypress2
+;when "The gods have punished you" keypress2
+;waitfor "exits"
+;assign i 0
+;send "=b^M"
+;assign 1 0
+;assign 2 0
+;assign 3 0
+;goto hang
+
+;KEYPRESS:
+;send "^M"
+;goto relog1
+;KEYPRESS2:
+;send "^M"
+;goto relog2
+;KEYPRESS3:
+;send "^M"
+;goto relog3
+;PASSWORD:
+;send "q"
+;delay 2000
+;send "userid^M********^M"
+
+;change the password where the ******** are
+
+;goto relog1
+;NOREAD:
+;send "n^M"
+;goto relog1
+
+
+;hangup
+;exit

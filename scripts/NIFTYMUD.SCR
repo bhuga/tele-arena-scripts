@@ -1,0 +1,460 @@
+;PRINT " Really Nifty MAJOR MUD script"
+;PRINT " Copyright 1996 Mr. Syko Productions Inc."
+;PRINT " Programmed by Nathan Monteleone, alias:"
+;PRINT ""
+;PRINT "   /###########       /#####           /#####        /###########"
+;PRINT "  //###########     /#########       /#########     //###########"
+;PRINT " ///////////###    /####///####     /####///####    ///////###///"
+;PRINT " //////////###    //###/////###    //###/////###    ///////###//"
+;PRINT " /////////###    ///###/////###   ///###/////###    ///////###/ "
+;PRINT "        /###     ///### ////###   ///### ////###        ///###"
+;PRINT "       /###      ///###  ///###   ///###  ///###        ///###"
+;PRINT "      /###       ///###  ///###   ///###  ///###        ///###"
+;PRINT "     /###        ///###  ///###   ///###  ///###        ///###"
+;PRINT "    /###         ///###  ///###   ///###  ///###        ///###"
+;PRINT "   /###          ///#### //####   ///#### //####        ///###"
+;PRINT "  //###########  ////#########    ////#########         ///###"
+;PRINT " ///###########  //////#####/     //////#####/          ///###"
+;PRINT " /////////////   ///////////      ///////////           /////"
+;PRINT " ////////////     /////////        /////////            ////"
+;PRINT " ///////////        /////            /////              ///"
+;PRINT ""
+
+INTEGER HP, MaxHP, SafeHealth, MaxMana, Monst, Pos
+INTEGER Sneaking, MaxHP, RunDist, RunCounter, Len, HealthEnd
+INTEGER FullRest, Fighting, RestHP, ComPos
+STRING Move, WhichWay, Stealth, Pick, MaxHealth
+STRING RawHealth, Health, Who, Com, Command
+STRING Bh,Wm,Li,Ac,Ca,Ro,Sk,Hb,Gh,Ko,Zo,Th,Ar,Sh
+STRING Cu,Oc,Me,Os,Do,Ba,Pa,Sp,Pr,Cl,Cw,Ta,Gb        
+
+#INCLUDE "EASYDIR.SCR"
+
+;Edit the directions into EASYDIR.SCR
+
+Who = "Zootvis"   ;First name of your character.
+Stealth = "Y"     ;Does your character have stealth?
+Pick = "Y"        ;Can your character pick locks?
+MaxHP = 56        ;Your maximum hit points.
+MaxMana = 34      ;Your maximum mana.
+SafeHealth = 20   ;Once your health drops below this, you run.
+RunDist = 5       ;Number of rooms to retreat when hurt.
+RestHP = 40       ;After a fight, if below this health, you rest.
+
+;WHEN "[HP=10/", "Break^M^*^M"
+;WHEN "[HP=9/", "Break^M^*^M"
+;WHEN "[HP=8/", "Break^M^*^M"
+;WHEN "[HP=7/", "Break^M^*^M"
+;WHEN "[HP=6/", "Break^M^*^M"
+;WHEN "[HP=5/", "Break^M^*^M"
+;WHEN "[HP=4/", "Break^M^*^M"
+;WHEN "[HP=3/", "Break^M^*^M"
+;WHEN "[HP=2/", "Break^M^*^M"
+;WHEN "[HP=1/", "Break^M^*^M"
+;WHEN "[HP=0/", "Break^M^*^M"
+;WHEN "[HP=-", "Break^M^*^M"
+WHEN "Zootvis drops", "Break^M^*^M"
+WHEN "copper drop", "Get Copper^M"
+WHEN "silver drop", "Get Silver^M"
+WHEN "gold drop", "Get Gold^M"
+WHEN "platinum drop", "Get Plat^M"
+WHEN " moves to attack you", "Break^M^*^M"
+WHEN "onstop", "^M"
+WHEN "E-Mail to Sysop. Thanks.", "X^M^*^M"
+WHEN "5 minutes", "Break^MX^M"
+WHEN "4 minutes", "Break^MX^M"
+WHEN "3 minutes", "Break^MX^M"
+WHEN "2 minutes", "Break^MX^M"
+WHEN "1 minute", "X^M~~~~~~~~^*"
+WHEN " surprise slashes you", "Break^M^*^M"
+WHEN " surprise smashes you", "Break^M^*^M"
+WHEN " surprise stabs you", "Break^M^*^M"
+WHEN " surprise punches you", "Break^M^*^M"
+WHEN " surprise slices you", "Break^M^*^M"
+WHEN " surprise impales you", "Break^M^*^M"
+WHEN " surprise pounds you", "Break^M^*^M"
+WHEN " surprise whacks you", "Break^M^*^M"
+WHEN " surprise chops you", "Break^M^*^M"
+WHEN " surprise bludgeons you", "Break^M^*^M"
+WHEN " surprise attacks you", "Break^M^*^M"
+WHEN " casts rotting flesh upon you", "Break^M^*^M"
+WHEN " attempted to cast rotting flesh on you", "Break^M^*^M"
+
+Pos = 2
+Mo = 0
+UhOh = 0
+Double = 0
+ITOA MaxHP, MaxHealth
+CONCAT MaxHealth, "/"
+
+Bh = "bounty hunter"
+Wm = "warlock mercenary"
+Li = "lightning"
+Ac = "acid"
+Ca = "carrion"
+Ro = "rogue"
+Sk = "skeleton"
+Th = "thug"
+Gh = "ghoul"
+Ko = "kobold"
+Zo = "zombie"
+Ba = "bandit"
+Ar = "giant"
+Sh = "shaman"
+Do = "hellhound"
+Cu = "cultist"        
+Me = "mercenary"
+Oc = "captain"
+Os = "sentry"      
+Hb = "bodyguard"                             
+Pa = "paladin"
+Sp = "spider"
+Pr = "priest"
+Cl = "cleric"
+Cw = "cave worm"
+Ta = "tentacled"
+Gb = "giant bat"
+
+PROCEDURE GetN STRING S, INTEGER N
+  INTEGER I
+  STRING Ch
+  S = ""
+  Ch = ""
+  I = 0
+  WHILE I < N AND Ch <> "^M"
+    REPEAT
+      GETCH Ch
+    UNTIL SUCCESS
+    CONCAT S,Ch
+    IF Ch = "^H"          
+      IF I = 0
+        PRINT " ",    
+      ELSE
+        I = I - 1;
+      ENDIF
+    ELSE
+      I = I + 1
+    ENDIF
+  ENDWHILE
+ENDPROC
+
+PROCEDURE RestYourself
+  FullRest = 0
+  Put "Rest Health"
+  WHILE FullRest = 0
+    WHILE Not Connected
+      STOP
+    ENDWHILE
+    WAITFOR MaxHealth, "at you", "damage", 200
+    SWITCH FOUND
+      CASE 1: FullRest = 1
+      CASE 2, 3: RETURN
+    ENDSWITCH
+  ENDWHILE
+  HP = MaxHP
+ENDPROC
+
+PROCEDURE Bash
+  PUT "Bash ", WhichWay
+  WAITFOR "Your attempts to bash", "You bashed the", "The door is already", 5
+  SWITCH FOUND
+    CASE 1: Bash
+    CASE 2, 3: RETURN
+  ENDSWITCH
+ENDPROC
+
+PROCEDURE PickLock
+  PUT "Pick ", WhichWay
+  WAITFOR "Your skill fails", "You successfully unlocked", "There is no benefit", 5
+  SWITCH FOUND
+    CASE 1: PickLock
+    CASE 2, 3: Put "Open ", WhichWay
+  ENDSWITCH
+ENDPROC
+
+PROCEDURE Run
+  PUT WhichWay
+  WAITFOR "Obvious", "closed", 5
+  SWITCH FOUND
+    CASE 1: RETURN
+    CASE 2: IF Pick = "Y"
+              PickLock
+            ELSE
+              Bash
+            ENDIF
+            PUT WhichWay
+  ENDSWITCH
+ENDPROC
+
+PROCEDURE RunAway
+  WHILE RunCounter <= RunDist AND Pos > 2
+    Pos = Pos - 3
+    SubStr Directions, Pos, 2, Move
+    IF Move = "-N"
+      Pos = Pos + 1
+      WhichWay = "S"
+      Run 
+    ELSEIF Move = "-E"
+      Pos = Pos + 1
+      WhichWay = "W"
+      Run 
+    ELSEIF Move = "-W"
+      Pos = Pos + 1
+      WhichWay = "E"
+      Run 
+    ELSEIF Move = "-S"
+      Pos = Pos + 1
+      WhichWay = "N"
+      Run 
+    ELSEIF Move = "NW"
+      WhichWay = "SE"
+      Run 
+    ELSEIF Move = "NE"
+      WhichWay = "SW"
+      Run 
+    ELSEIF Move = "SE"
+      WhichWay = "NW"
+      Run 
+    ELSEIF Move = "SW"
+      WhichWay = "NE"
+      Run 
+    ELSEIF Move = "-U"
+      Pos = Pos + 1
+      WhichWay = "D"
+      Run  
+    ELSEIF Move = "-D"
+      Pos = Pos + 1
+      WhichWay = "U"
+      Run 
+    ELSEIF Move = "##"
+    Pos = Pos - 1
+    SUBSTR Directions, Pos, 1, Com
+    WHILE NOT Com = "#"
+      Pos = Pos - 1
+      SUBSTR Directions, Pos, 1, Com
+    ENDWHILE
+    Pos = Pos + 1
+    SUBSTR Directions, Pos, 100, Com
+    STRPOS Com, "#", ComPos
+    SUBSTR Com, 1, ComPos-1, Command
+    Pos = Pos - 4
+    PUT Command
+    RunCounter = RunCounter + 1
+    ENDIF
+  ENDWHILE
+  WAITFOR Bh,Wm,Li,Ac,Ca,Ro,Sk,Th,Gh,Ko,Zo,Ba,Ar,Sh,Do,Cu,Me,Oc,Os,Hb,Pa,Sp,Pr,Cl,Cw,Ta,Gb,5
+  IF FOUND
+    RunCounter = 3
+    RunAway
+  ENDIF
+  RestYourself
+ENDPROC
+
+PROCEDURE HealthCheck
+  WHILE NOT CONNECTED
+    STOP
+  ENDWHILE
+  PUT "Health"
+  WAITFOR "Health:", 5
+  IF FOUND
+    GetN RawHealth, 15
+    STRPOS RawHealth, "/", HealthEnd
+    SUBSTR RawHealth, 1, HealthEnd-1, Health
+    ATOI Health, HP
+    PRINT "HP = ", HP
+  ELSE 
+    HealthCheck
+  ENDIF
+  IF HP < SafeHealth
+    Fighting = 0
+    RunCounter = 1
+    RunAway
+  ENDIF           
+ENDPROC
+
+PROCEDURE Bs STRING Monster
+  Fighting = 1
+  While Fighting = 1
+    IF Monst = 1 
+      PUT "Bs ", Monster
+      Monst = 0
+    ENDIF
+    WAITFOR "You slash", "with your", "*Combat Off*", "You gain", 7
+    SWITCH FOUND
+      CASE 1, 2: Fighting = 1
+      CASE 3, 4: Fighting = 0
+    ENDSWITCH
+    IF NOT FOUND
+      Fighting = 0
+    ENDIF
+    HealthCheck
+  ENDWHILE
+ENDPROC
+
+PROCEDURE MonsterCheck
+  PUT
+  WAITFOR Bh,Wm,Li,Ac,Ca,Ro,Sk,Th,Gh,Ko,Zo,Ba,Ar,Sh,Do,Cu,Me,Oc,Os,Hb,Pa,Sp,Pr,Cl,Cw,Ta,Gb,"Obvious",5
+  IF FOUND
+    Monst = 1
+  ENDIF
+  SWITCH FOUND
+    CASE 1,2,3: Return
+    CASE 4: Bs Ac
+            MonsterCheck
+    CASE 5: Bs Ca
+            MonsterCheck
+    CASE 6: Bs Ro
+            MonsterCheck
+    CASE 7: Bs Sk
+            MonsterCheck
+    CASE 8: Bs Th
+            MonsterCheck
+    CASE 9: Bs Gh
+            MonsterCheck
+    CASE 10: Bs Ko
+             MonsterCheck
+    CASE 11: Bs Zo
+             MonsterCheck
+    CASE 12: Bs Ba
+             MonsterCheck
+    CASE 13: Bs Ar
+             MonsterCheck
+    CASE 14: Bs Sh
+             MonsterCheck
+    CASE 15: Bs Do
+             MonsterCheck
+    CASE 16: Bs Cu                                     
+             MonsterCheck
+    CASE 17: Bs Me
+             MonsterCheck
+    CASE 18: Bs Oc
+             MonsterCheck
+    CASE 19: Bs Os
+             MonsterCheck
+    CASE 20: Bs Hb
+             MonsterCheck
+    CASE 21: Bs Pa
+             MonsterCheck
+    CASE 22: Bs Sp
+             MonsterCheck
+    CASE 23: Bs Pr
+             MonsterCheck
+    CASE 24: Bs Cl
+             MonsterCheck
+    CASE 25: Bs Cw
+             MonsterCheck
+    CASE 26: Bs Ta
+             MonsterCheck
+    CASE 27: Bs Gb
+             MonsterCheck
+    CASE 28: Return
+  ENDSWITCH
+ENDPROC
+
+PROCEDURE Snk
+  PUT "Hug ", Who
+  WAITFOR "You hug", "Your command", "You may not sneak", 5
+  SWITCH FOUND
+    CASE 1: PUT "Sn"
+            Snk
+    CASE 2: RETURN
+    CASE 3: MonsterCheck
+  ENDSWITCH
+ENDPROC
+
+PROCEDURE InRoom
+  Monst = 0
+  MonsterCheck 
+  HealthCheck
+  IF HP < RestHP
+    RestYourself
+    IF FullRest = 0
+      InRoom
+    ENDIF
+  ENDIF
+ENDPROC
+
+PROCEDURE Go 
+  IF Stealth = "Y"
+    Snk           
+  ENDIF
+  PUT WhichWay  
+  WAITFOR "There is no exit", "closed", "obvious", 5
+  SWITCH FOUND
+    CASE 1: PRINT "CRUD!!!"
+            PUT "X"
+    CASE 2: IF Pick = "Y"
+              PickLock
+            ELSE 
+              Bash
+            ENDIF
+            Go
+    CASE 3: InRoom
+  ENDSWITCH
+ENDPROC
+
+PROCEDURE Movement
+  WHILE NOT CONNECTED
+    STOP
+  ENDWHILE
+  SUBSTR Directions, Pos, 2, Move
+  IF Move = "N-"
+    Pos = Pos + 2
+    WhichWay = "N"
+    Go 
+  ELSEIF Move = "E-"
+    Pos = Pos + 2
+    WhichWay = "E"
+    Go 
+  ELSEIF Move = "S-"
+    Pos = Pos + 2
+    WhichWay = "S"
+    Go 
+  ELSEIF Move = "W-"
+    Pos = Pos + 2
+    WhichWay = "W"
+    Go 
+  ELSEIF Move = "NW"
+    Pos = Pos + 3
+    WhichWay = "NW"
+    Go 
+  ELSEIF Move = "NE"
+    Pos = Pos + 3
+    WhichWay = "NE"
+    Go 
+  ELSEIF Move = "SE"
+    Pos = Pos + 3
+    WhichWay = "SE"
+    Go 
+  ELSEIF Move = "SW"
+    Pos = Pos + 3
+    WhichWay = "SW"
+    Go 
+  ELSEIF Move = "D-"
+    Pos = Pos + 2
+    WhichWay = "D"
+    Go 
+  ELSEIF Move = "U-"
+    Pos = Pos + 2
+    WhichWay = "U"
+    Go 
+  ELSEIF Move = "##"
+    Pos = Pos + 2
+    SUBSTR Directions, Pos, 100, Com
+    STRPOS Com, "#", ComPos
+    SUBSTR Com, 1, ComPos-1, Command
+    Pos = Pos + ComPos + 2
+    PUT Command
+  ENDIF
+ENDPROC
+
+PUT "Talk Slow"
+DELAY 20
+
+WHILE CONNECTED
+  LENGTH Directions, Len
+  IF Pos >= Len
+    Pos = 2
+  ENDIF
+  Movement
+ENDWHILE

@@ -1,0 +1,18 @@
+while connected
+when "stop in this","^M"
+put "1"
+put "y",
+ waitfor "Arriving sector: 1  Autopilot disengaging",15
+put "l"
+delay 10
+put "t"                               
+delay 30 
+put "150"
+put "y",
+ waitfor "Arriving sector: 150  Autopilot disengaging",15
+put "l",
+put "14"
+put "snl2"
+delay 10
+put "q",
+endwhile

@@ -1,0 +1,439 @@
+
+integer round,count,travel,position,killed,gol4,yar,failed,start,new
+integer hmin,hsec,hours,minutes,seconds,begin,drank,buyyar
+string time1,time2,timebeg,s,n,w,e,sw,ne,nw,se,u,d,f
+    
+
+
+Procedure DiffTime string time1,time2,integer hours,minutes,seconds
+integer h1,m1,s1,h2,m2,s2     ; <time1> and <time2> in "HH:MM:SS" format
+string hh,mm,ss
+substr time1,1,2,hh           ; get hour part
+substr time1,4,2,mm           ; get minute part
+substr time1,7,2,ss           ; get second part
+atoi hh,h1                    ; convert to integer
+atoi mm,m1
+atoi ss,s1
+substr time2,1,2,hh           ; get hour,minute and second from <time2>
+substr time2,4,2,mm
+substr time2,7,2,ss
+atoi hh,h2
+atoi mm,m2
+atoi ss,s2
+ if h2 < h1            ; if <time2> pass mid-night
+   h2 = h2 + 24        ; then add 24 hours
+ endif                 ;
+ if s2 = s1            ; if seconds are the same, then add a minute
+  m2 = m2 + 1          ;
+ endif                 ;
+ if m2 = m1            ; if minutes are the same, then add an hour
+  if h2 <> h1
+   h2 = h2 + 1          ;
+  endif                 ;
+ endif
+ if s2 < s1            ; if seconds are less than 60 seconds apart
+  s2 = s2 + 60         ; then take one minute and break it down to
+  m2 = m2 - 1          ; seconds and add this to the 2nd seconds.
+ endif                 ;
+ if m2 < m1            ; if minutes are less than 60 min. apart, then
+   m2 = m2 + 60        ; take one hour, break it down to minutes, and
+   h2 = h2 - 1         ; add this to the 2nd minutes.
+ endif                 ;
+   seconds = s2 - s1   ; gets total # of seconds
+   minutes = m2 - m1   ; gets total # of minutes
+   hours = h2 - h1     ; gets total # of hours
+EndProc
+
+
+Procedure Timeon               ;time1 & timebeg are defined at the start
+   time time2                  ;gets current time
+   difftime timebeg,time2,hours,minutes,seconds
+    if hours >= 1
+     print " ",hours," Hour(s) ",minutes," Minute(s) and ",seconds," Second(s)."
+    elseif minutes >=1
+     print " ",minutes," Minute(s) and ",seconds," Second(s)."
+    else
+     print " ",seconds," Second(s)."
+    endif
+   difftime time1,time2,hours,minutes,seconds
+   delay 10
+Endproc
+
+
+procedure Timeinit
+   time time1
+   time timebeg
+Endproc
+ 
+
+procedure Stealth
+put "'s"
+waitfor "mode de-activated","mode activated",15
+switch found
+  case 1: put "'s"
+  case 2: print "Stealth On."
+endswitch
+put "'-"
+waitfor "won't be notified of future logons.","will be notified of future logons.",15
+switch found
+  case 1: print "Logon Notification Off."
+  case 2: put "'-"
+endswitch
+put ".off"
+Endproc
+  
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",1
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+          
+
+Procedure Soulcheck
+
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8 
+      Case 2 : Print "Soulstone still here!" 
+                      Soul = 0
+     EndSwitch 
+
+  If Soul = 6
+   GetOut "No Soulstone!"
+  EndIf 
+    
+
+ 
+EndProc
+
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 5
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+    put "i"
+    waitfor "soulstone",50
+    if not found
+      Print "NO SOULSTONE!"
+      GetOut "No Soulstone! <Hanging Up>"
+    endif
+EndProc
+
+procedure Kusateka
+put "c kusatami warlock"
+waitfor "damage!","spell.","defenses!","fails!","nearby.","incantation!",15
+switch found
+case 1: Print "Casted Kusateka!"
+case 2: if yar=0
+          Print "Mana Low! <Drinking Yarrow>"
+          Yarrow
+          if yar=0
+            Kusateka
+          endif
+        endif  
+case 3: Print "Spell Negated!"
+case 4: Print "Spell Failed!"
+case 5: Print "He's dead already!"
+case 6: Print "Mentally Exhausted! <Try Again Later>"
+endswitch
+endproc
+
+
+procedure Kusamotu
+put "C gimotu Nemo"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: if yar=0
+          print "Mana Low! <Drinking Yarrow>"
+          if yar=0
+            Kusamotu
+          endif
+        endif
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch
+endproc
+procedure kamotu
+put "C kamotu Nemo"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: if yar=0
+          print "Mana Low! <Drinking Yarrow>"
+          if yar=0
+            Kusamotu
+          endif
+        endif
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch
+endproc
+
+Procedure Travel1
+if yar=1
+  back
+endif   
+m e,f
+m e,f
+m e,f
+put "warlock is to the west" 
+soulcheck
+endproc
+procedure travel2
+m se,f
+m e,f
+m e,f
+put "warlock is to the west"   
+soulcheck
+endproc
+procedure travel3
+m nw,f
+m nw,f
+m nw,f
+put "warlock is to the west"
+soulcheck
+endproc
+procedure travel4
+m w,f
+m w,f
+m w,f
+put "warlock is to the west"  
+soulcheck
+endproc
+procedure travel5
+m sw,f
+m sw,f
+m sw,f
+put "warlock is to the west" 
+soulcheck
+endproc
+procedure travel6
+m ne,f
+m ne,f
+m ne,f
+put "warlock is to the west"
+endproc
+procedure travel7
+m e,f
+m e,f
+m e,f
+put "warlock is to the west"
+soulcheck
+endproc
+procedure travel8
+m se,f
+m se,f
+m se,f
+put "warlock is to the west" 
+soulcheck
+endproc
+procedure travel9
+m w,f
+m w,f
+m nw,f
+put "warlock is to the west" 
+soulcheck
+endproc
+procedure travel10
+m w,f
+m w,f
+m w,f
+put "warlock is to the west"  
+soulcheck
+travel=0
+endproc
+
+
+procedure Movement
+     if travel=1
+     travel1
+     elseif travel=2
+     travel2
+     elseif travel=3
+     travel3
+     elseif travel=4
+     travel4
+     elseif travel=5
+     travel5
+     elseif travel=6
+     travel6
+     elseif travel=7
+     travel7
+     elseif travel=8
+     travel8
+     elseif travel=9
+     travel9
+     elseif travel=10
+     travel10
+     endif
+endproc
+
+
+Procedure Go
+  Travel=travel+1
+  Movement
+endproc
+
+Procedure Healthcheck
+     ohoh
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "He"
+          Waitfor "vitality:",3 ;RENT MANA PUT HERE
+          If Found
+          getn vital,9
+strdel vital, 1,5                 
+         ; strpos vital,"/",position
+         ; getit=(position-5)
+          substr vital,1,3,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit <= 430 and vit >= 380
+                 kamotu          
+          elseif vit < 379 and vit > 200
+             kusamotu                     
+          elseif vit < 199 and vit > 0
+          put "drink zar"
+          getout "low health"
+          elseif vit <= 0                
+            Print "Bad Healthcheck!"     
+          EndIf
+        EndIf
+                               
+EndProc
+
+
+Procedure Movetest
+   Print "Testing Physical Exhaustion"
+   put "gr"
+   Waitfor "Resting","Ready",1
+   switch found
+     case 1: Delay 3
+             Movetest
+     case 2: Go
+   endswitch
+endproc
+
+
+Procedure Montest
+  put
+  waitfor "roll here","rolls here","mage here","locks here","himera here","giant here","giants here","tess here","tesses here","lord","chieftain","warlock here","ogress","nobody here",2
+  switch found
+  case 1,2: attack "troll"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 3,13: attack "ogre"
+        healthcheck
+          soulcheck
+          delay 80 
+          montest
+  case 4,12: attack "warlock"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 5: attack "chimera"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 6,7,8,9: attack "giant"
+          healthcheck
+          soulcheck
+          delay 80
+          montest
+  case 10: attack "sk"
+           healthcheck
+           soulcheck
+           delay 80
+           montest
+  case 11: attack "min"
+           healthcheck
+           soulcheck
+           delay 80
+           montest
+  case 14: movetest
+  otherwise: 
+            Movetest
+Endswitch
+Endproc
+
+; **** When Statements ****
+
+When "in the act of trying to rob you","Nice try ya douchebag!^m"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+when "temple","^*"
+when "slasher has","^*"
+when "slanter-2 has","^*"
+when "slanter has","^*"
+when "turbo has","^*"
+when "maelstrom","^*"
+when "downpour","^*"
+when "stone shards","^*"
+whenIdle 10, "^*"
+When "˜","^*"
+When "µ","^*"
+When "attacked you with a","^*"
+
+; **** MAIN PROGRAM ****
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+
+Stealth
+Timeinit
+; **** Loop ****
+
+While Connected
+Put
+Waitfor  "warlock","chief","chimera","giant","skel","ogre","nobody here","with you","you're thirsty",2
+Switch found
+  case 1,2,3,4,5,6: Montest
+  case 7,8:       Movetest  
+  case 9:         Healthcheck
+Endswitch 
+Endwhile
+; **** END PROGRAM ****
+

@@ -1,0 +1,67 @@
+integer x
+x=1
+
+
+procedure dl1
+put "atdt3912133" 
+delay 250
+if not connected
+hangup   
+elseif connected
+stop
+endif
+dl1          
+endproc
+
+procedure dl2
+put "atdt3917119"
+delay 250
+if not connected
+hangup 
+elseif connected
+stop
+endif
+dl2       
+endproc
+
+procedure dl3
+put "atdt3913119"
+delay 250
+if not connected
+hangup    
+elseif connected
+stop
+endif
+dl3       
+endproc
+
+procedure dl4
+put "atdt3913204"
+delay 250
+if not connected
+hangup    
+elseif connected
+stop
+endif
+dl4          
+endproc
+             
+procedure blah
+string bet 
+integer bum
+Print "Type 1-4"
+input bet
+atoi bet,bum
+if bum=1
+dl1
+elseif bum=2
+dl2
+elseif bum=3
+dl3
+elseif bum=4
+dl4
+endif
+endproc
+
+
+blah

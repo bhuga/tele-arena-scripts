@@ -1,0 +1,15 @@
+procedure redchk
+put "gr"
+waitfor "Nemo-2                         (f) [HE:100% ST:Ready]",1
+if found
+put "le"
+put "a dr^Ma dr^Mc teka dra^Mj mag^M"
+endif
+endproc
+
+
+
+while connected
+delay 20
+redchk
+endwhile

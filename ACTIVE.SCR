@@ -1,0 +1,4 @@
+while connected
+whenidle 20,"^M"
+endwhile
+

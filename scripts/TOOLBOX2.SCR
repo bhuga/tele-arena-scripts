@@ -1,0 +1,180 @@
+;
+; TOOLBOX2.SCR (c) Copyright 1990-1992 by White River Software.
+; All right reserved.
+;
+; Date written: 10 May 1990
+;
+;
+; This toolbox defines three I/O procedures and four 'is' type
+; procedures.
+;
+; To use this toolbox, you should add the line
+;    #include "toolbox2.scr"
+; at the beginning of your script file.  This will increase the file
+; size of the compiled script file .TMS by about 2K.  To minimum the
+; overhead, you should cut and paste the procedures that you used
+; into your script file.  For example, the <InputN> and <ReadN>
+; procedures may be excluded.
+;
+; Summary:
+;
+;   GetN s,n
+;   ; get <n> characters from remote system or until CR is detected
+;
+;   InputN s,n
+;   ; get <n> characters from keyboard or until [Enter] is detected,
+;   ; the characters are printed to the local screen
+;
+;   ReadN s,n
+;   ; read <n> characters from file or until end-if-line is detected
+;
+;   isalpha ch,result    ; check if <ch> is a letter
+;   isdigit ch,result    ; check if <ch> is a digit
+;   isalnum ch,result    ; check if <ch> is a letter or a digit
+;   iscntl  ch,result    ; check if <ch> is a control character
+;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; GetN s,n
+; function: get <n> characters into <s> from remote system or until CR
+;           is detected
+; remark:   This procedure can be used to wait for one character
+;           input by using  GetN ch,1
+;           CR is discarded
+;           BackSpace deletes the last character and the length of
+;           the string is recalcuated
+;
+Procedure GetN string s,integer n
+integer i
+string ch
+s = ""
+ch = ""
+i = 0
+While i<n and ch<>"^M"
+   repeat
+      GetCh ch
+   until success
+   concat s,ch
+   if ch="^H"           ; BackSpace is displayed to screen
+      if i=0
+         print " ",     ; move back the correct position
+      else
+         i = i-1;
+      endif
+   else
+      i = i+1
+   endif
+EndWhile
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; InputN s,n
+; function: get <n> characters into <s> from keyboard or until [Enter]
+;           is pressed
+; remark:   This procedure can be used to wait for one character
+;           input by using  InputN ch,1
+;           [Enter] is discarded
+;           BackSpace deletes the last character and the length of
+;           the string is recalcuated
+;           The characters are printed to the local screen but are not
+;           sent to the remote system.
+;           A line feed is supplied when [Enter] is pressed.
+; caution:  Once you do not need keyboard input any more, you should
+;           use the
+;               Clear Key
+;           statement to give up keyboard control
+;
+Procedure InputN string s,integer n
+integer i
+string ch
+s = ""
+ch = ""
+i = 0
+While i<n and ch<>"^M"
+   repeat
+      InputCh ch
+   until success
+   concat s,ch
+   if ch="^H"
+      if i>0
+         i = i-1
+         print ch,
+      endif
+   else
+      i = i+1
+      print ch,
+   endif
+EndWhile
+if ch="^M"
+   print
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; ReadN s,n
+; function: read <n> characters into <s> from file or until CR-LF
+;           end-of-line sequence is detected
+; remark:   CR-LF sequence is discarded
+;
+Procedure ReadN string s,integer n
+integer i
+string ch
+s = ""
+ch = ""
+i = 0
+while i<n and ch<>"^M"
+   ReadCh ch
+   concat s,ch
+   i = i+1
+EndWhile
+if ch="^M"
+   Readch ch                   ; discard CR-LF sequence
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; isalpha ch,result
+; function: <result> is non-zero if <ch> is a character
+;
+Procedure isalpha string ch,integer result
+strpos "ABCDEFGHIJKLMNOPQRSTUVWXYZ",ch,result
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; isdigit ch,result
+; function: <result> is non-zero if <ch> is a digit
+;
+Procedure isdigit string ch,integer result
+strpos "1234567890",ch,result
+EndProc
+
+; isalnum ch,result
+; function: <result> is non-zero if <ch> is a digit or character
+;
+Procedure isalnum string ch,integer result
+isdigit ch,result
+if not result
+   isalpha ch,result
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; iscntl ch,result
+; function: <result> is non-zero if <ch> is a control character
+;
+Procedure iscntl string ch,integer result
+strpos "^A^B^C^D^E^F^G^H^I^J^K^L^M^N^O^P^Q^R^S^T^U^V^W^X^Y^Z",ch,result
+EndProc
+

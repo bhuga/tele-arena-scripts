@@ -1,0 +1,668 @@
+string s,n,w,e,sw,ne,nw,se,u,d,f,time1,time2,timebeg,answer    
+integer soul,life,exp,grin,hmin,hsec,hours,minutes,seconds,temp,curexp,try
+tami = 0
+waityar = 0
+exp=0
+soul=0
+
+Procedure DiffTime string time1,time2,integer hours,minutes,seconds
+integer h1,m1,s1,h2,m2,s2     ; <time1> and <time2> in "HH:MM:SS" format
+string hh,mm,ss
+substr time1,1,2,hh           ; get hour part
+substr time1,4,2,mm           ; get minute part
+substr time1,7,2,ss           ; get second part
+atoi hh,h1                    ; convert to integer
+atoi mm,m1
+atoi ss,s1
+substr time2,1,2,hh           ; get hour,minute and second from <time2>
+substr time2,4,2,mm
+substr time2,7,2,ss
+atoi hh,h2
+atoi mm,m2
+atoi ss,s2
+ if h2 < h1            ; if <time2> pass mid-night
+   h2 = h2 + 24        ; then add 24 hours
+ endif                 ;
+ if s2 = s1            ; if seconds are the same, then add a minute
+  m2 = m2 + 1          ;
+ endif                 ;
+ if m2 = m1            ; if minutes are the same, then add an hour
+  if h2 <> h1
+   h2 = h2 + 1          ;
+  endif                 ;
+ endif
+ if s2 < s1            ; if seconds are less than 60 seconds apart
+  s2 = s2 + 60         ; then take one minute and break it down to
+  m2 = m2 - 1          ; seconds and add this to the 2nd seconds.
+ endif                 ;
+ if m2 < m1            ; if minutes are less than 60 min. apart, then
+   m2 = m2 + 60        ; take one hour, break it down to minutes, and
+   h2 = h2 - 1         ; add this to the 2nd minutes.
+ endif                 ;
+   seconds = s2 - s1   ; gets total # of seconds
+   minutes = m2 - m1   ; gets total # of minutes
+   hours = h2 - h1     ; gets total # of hours
+EndProc
+
+procedure timeinit
+   time time1
+   time timebeg
+endproc
+
+
+
+
+Procedure GetOut String What
+
+    repeat
+    Put "X"
+    waitfor "exit",1
+    until found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Put What
+    Delay 100
+    Hangup    
+    Stop
+
+Endproc
+;---------------------------------------------------------------------------------------------------
+Procedure SoulCheck
+
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8
+               Soulcheck 
+      Case 2 : Print "Soulstone still here!" 
+                      Soul = 0
+     EndSwitch 
+
+  If Soul = 6
+   GetOut "No Soulstone!"
+  EndIf 
+    
+
+ 
+EndProc
+;---------------------------------------------------------------------------------------
+procedure currexp
+   integer getit,curexp2,gained,position
+   string curr1,curr2
+   curr1="none"
+   curr2="none"
+   position=0
+   getit=0
+   curexp2=0
+   put "ep"
+   waitfor "21","22","23","24","25","26","27",3
+   if found
+   get curr1
+   strpos curr1,": ",position
+   getit=(position+4)
+   substr curr1,getit,9,curr2
+   atoi curr2,curexp2
+   gained=(curexp2-curexp)
+   if gained < 0
+     try=try+1
+     put
+     put
+     put
+       if try = 3
+       print "Too many bad checks, giving up!"
+     elseif try < 3
+       print "Bad Experience Check #",try," <Stopping at 3>"
+       put
+       delay 15      
+       currexp 
+     endif
+   elseif gained >= 0
+     put "/nemo Experience Gained So Far: ",gained
+     delay 10
+   endif
+ endif
+ try=0 
+ exp=0
+endproc
+
+
+procedure startexp
+   integer getit,position
+   string startex1,startex2
+   startex1="none"
+   startex2="none"
+   position=0
+   getit=0
+   curexp=0
+   put "ep"
+   waitfor "21","22","23","24","25","26","27",3
+   if found
+   get startex1
+   strpos startex1,": ",position
+   getit=(position+4)
+   substr startex1,getit,9,startex2
+   atoi startex2,curexp
+   if curexp <= 0
+     try=try+1
+     put
+     put
+     put
+       if try = 3
+       print "Too Many Bad Checks, Giving Up!"
+     elseif try < 3 and try > 0
+       print "Bad Experience Check #",try," <Stopping at 3>"
+       delay 15
+       put
+       startexp   
+     endif                               
+   elseif curexp > 0
+     put "/nemo Starting Experience: ",curexp
+     delay 5
+   endif
+  endif   
+  try=0
+endproc
+
+;procedure expchk 
+;integer grin
+;grin=grin+1
+;if grin=2
+;   currexp 
+;   grin=0
+;endif
+;endproc
+
+;-------------------------------------------------------------------------------------------
+Procedure M String Dir, Place
+   Integer OK, Xit
+     OK = 0
+     Repeat
+       Put Dir
+         Waitfor Place, "fall!","no exit",4
+           Switch Found
+             Case 1 : Delay 5
+                      Print "Found ",place
+                      OK = 1
+             Case 2 : Delay 10
+                      OK = 0
+             Case 3 : Xit = Xit + 1
+           EndSwitch
+           If Xit = 5
+             Print "LOST!!! <Hanging Up>"
+             GetOut "Lost!"
+           EndIf   
+           If Ok = 1
+            Xit = 0
+           EndIf
+     Until OK = 1
+
+EndProc               
+;---------------------------------------------------------------------------------------------------------
+Procedure BuyZar
+           
+m "se","square."
+m "se","plaza."
+m "se","shop."
+
+Put "Buy Zar"
+Delay 2
+Put "Buy Zar"
+Delay 2      
+
+ Waitfor "You can't afford",2
+  If Found
+   GetOut "BROKE!"
+  EndIF
+ 
+m "nw","plaza."
+m "nw","square."
+m "nw","plaza."
+Soulcheck
+m "ne","arena."
+
+ SoulCheck
+
+EndProc
+;-----------------------------------------------------------------------------------------------
+Procedure ZarTest
+
+m "Sw","plaza."
+
+ Put "I"
+ Waitfor "Zar",2
+  Switch Found
+   Case 1 : Print "Damn Stormers scroll my screen!!"
+            Soulcheck
+            m "ne","arena."
+            Soulcheck   
+   Otherwise : BuyZar
+  EndSwitch
+
+EndProc 
+;---------------------------------------------------------------------------------------
+Procedure Zaryn
+    
+   Put "Drink Zar"
+   Waitfor "potion","one.",2
+   Switch Found
+     Case 1 : Print "Drank a Zar"
+              Zar = Zar + 1
+     Case 2 : ZarTest
+   EndSwitch               
+
+  If Zar = 2
+   ZarTest
+   Zar = 0
+  EndIf 
+
+EndProc   
+;-------------------------------------------------------------------------------------------------------
+Procedure Tavern   
+
+m "sw","plaza."
+m "nw","tavern."
+
+ Put "Buy Meal^MBuy Drink^M"
+ Delay 10
+
+m "se","plaza."
+m "se","square."
+m "se","plaza."
+m "se","shop."   
+
+Delay 10
+Put "Buy Rowan^MBuy Hyssop^M"
+Delay 10
+Put "Drink Rowan^MDrink Hyssop^M"
+Delay 10
+
+m "nw","plaza."
+m "nw","square."
+m "nw","plaza."
+Soulcheck
+
+m "ne","arena." 
+
+EndProc
+;------------------------------------------------------------------------------------------------------
+Procedure FoodCheck
+
+   Put "He"
+   Waitfor "Healthy","Hungry","Thirsty",1
+    Switch Found
+      Case 1 : Print "Status Healthy"
+      Case 2,3 : Print "Procedure Tavern"
+                 Tavern
+    EndSwitch
+
+EndProc
+;-------------------------------------------------------------------------------------------------------
+Procedure BuyYar
+
+m "se","square."
+m "se","plaza."
+m "se","shop."
+                                 
+;Delay 10
+;Put "Buy Mana^MU mana^M" 
+Delay 20
+Put "Buy Yarrow^MBuy Yarrow^M"
+Delay 10
+
+m "nw","plaza."
+m "nw","square."
+m "nw","plaza."
+Soulcheck
+m "ne","arena."
+
+EndProc
+;---------------------------------------------------------------------------------------------------------------   
+Procedure YarTest
+
+m "Sw","plaza."
+
+ Put "I"
+ Waitfor "Yarrow",2
+  Switch Found
+   Case 1 : Print "Damn Stormers scroll my screen!!"
+            Soulcheck
+            m "ne","arena."
+            Soulcheck   
+   Otherwise : BuyYar
+  EndSwitch
+
+EndProc 
+;------------------------------------------------------------------------------------------------------
+Procedure Yarrow
+    
+   Put "Drink Yarrow"
+   Waitfor "potion","one.",2
+   Switch Found
+     Case 1 : Print "Drank a Yarrow"
+              Yar = Yar + 1
+     Case 2 : Yartest
+   EndSwitch               
+    
+   If Yar = 2
+    Yartest
+    Yar = 0
+   EndIf
+
+EndProc   
+;-----------------------------------------------------------------------------------------------
+Procedure Kusamotu
+
+  Put "Cast Kusamotu Nemo"
+  waitfor "damage!","spell.","incantation!"
+   switch found
+    case 1: print "Casted Kusamotu"
+    Case 2: Yarrow
+    case 3: print "Mentally Exhausted <Try Again Later>"
+   EndSwitch
+
+EndProc
+;---------------------------------------------------------------------------------------------------
+Procedure Kusatami
+
+  Put 
+  Waitfor "giant","dragon",1
+   Switch Found
+    Case 1 : Put "C Kusatami Giant"
+    Case 2 : Put "C kusatami Drag"
+   EndSwitch
+
+  waitfor "damage!","spell.","incantation!",1
+   switch found
+    case 1: print "Casted Kusatami"
+    Case 2: Yarrow
+    case 3: print "Mentally Exhausted <Try Again Later>"
+   EndSwitch
+EndProc  
+;--------------------------------------------------------------------------------------------------------
+Procedure LeaveKusa
+  
+god = 0
+
+Repeat
+
+ Integer getit,vit
+ String vital,endvital
+  vital="none"
+  endvital="none"
+  position=0
+  getit=0
+  vit=0
+  Put "He"
+  Waitfor "/ 94",3 ;CURRENT MANA PUT HERE
+  If Found
+  get vital
+  strpos vital,"/",position
+  getit=(position-5)
+  substr vital,getit,4,endvital
+  atoi endvital,vit
+  print "Health is: ", vit
+  If Vit >= 1470
+   Print "At Full Health, returning to Arena"
+   god = 1 
+  elseif Vit < 1469 and Vit > 0
+    Put "C Kusamotu nemo"
+    Delay 15
+  elseif vit <= 0                
+   Print "Bad Healthcheck, Retrying."    
+   Delay 15 
+   Put "^M~~^M"
+   EndIf
+ EndIf
+
+Until god = 1
+
+Soulcheck
+
+  m "ne","arena."
+
+Soulcheck
+
+EndProc
+;---------------------------------------------------------------------------------------------------------   
+Procedure Obiheal
+
+  Put "/obi atomic potato"
+  Waitfor "Obi-Wan just discharged a very dark bluish mist at friendly people in the area!","Sorry, you don't see",2                                                       
+   Switch Found
+    Case 1 : Print "Woo Woo,  Mana Saved!"
+    Case 2 : Kusamotu
+    Otherwise : Kusamotu
+   EndSwitch 
+    
+EndProc
+;---------------------------------------------------------------------------------------------------------
+Procedure Retreat
+           
+Repeat
+
+ Put "sw"
+ Waitfor "Sorry, you'll have to rest a while before you can move.","You must rest a moment before proceeding!","plaza.","in the heat",2
+  Switch Found
+   Case 1 : Zaryn
+            Obiheal
+   Case 2 : Delay 1
+            Retreat
+   Case 3 : Leavekusa                                       
+   Case 4 : Zaryn
+            Obiheal
+  EndSwitch
+
+Until Found
+
+EndProc                
+;---------------------------------------------------------------------------------------------------------
+Procedure Healthcheck
+
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "He"
+          Waitfor "/ 94",3 ;CURRENT MANA PUT HERE
+          If Found
+          get vital
+          strpos vital,"/",position
+          getit=(position-5)
+          substr vital,getit,5,endvital
+          atoi endvital,vit
+          print "Health is: ", vit   
+          If Vit <= 1509 and vit >= 1300
+               kusatami ;Tami = 1
+          elseif vit < 1299 and vit >= 401
+                Kusamotu
+          elseif vit <= 400 and vit > 0
+                Retreat
+          elseif vit <= 0                
+            Print "Bad Healthcheck, Retrying."    
+          EndIf
+        EndIf
+
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure Attack String Monster
+                
+  Integer Pyre
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                         
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+ 
+
+       If Found = 1 
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0   
+       EndIf
+
+          While Tami = 1
+          Put "C Kusatami ", Monster
+          Tami = 0
+          EndWhile  
+
+  WaitFor "damage!","spell.","incantation!",1
+   switch found
+    case 1: print "Casted Kusatami"
+    Case 2: Yarrow
+    case 3: print "Mentally Exhausted <Try Again Later>"
+   EndSwitch  
+       
+
+
+EndProc
+;---------------------------------------------------------------------------------- 
+Procedure Ring  
+
+When "giantess appears","a g^Ma g^Ma g^Ma g^Ma g^M"
+When "giant appears","a g^Ma g^Ma g^Ma g^Ma g^M"
+When "dragon appears","a a^Ma a^Ma a^Ma a^Ma a^M"
+                                                               
+
+Waityar = waityar + 1
+ If Waityar >= 5
+ Put "I"
+ Waitfor "Yar",2
+  If Not Found
+   Yartest
+  EndIf
+ Waityar = 0
+ Endif 
+
+  Print "Procedure Ring"
+  Put
+  WaitFor "There is nobody here.",1
+   If Found
+    Repeat
+     Healthcheck 
+     Put "group"
+     WaitFor "Ready"
+    Until Found
+    Put "Ring Gong" 
+    kusatami
+   If Not Found
+    Print "Waiting for that other person to ring."
+    Delay 10
+  EndIf
+ EndIf
+EndProc  
+;--------------------------------------------------------------------------------------------------------------
+Procedure Waitexp
+exp=exp+1
+if exp=10
+currexp   
+endif
+endproc
+
+
+
+Procedure Montest
+  
+  Put  
+  Waitfor "Dragon","Minotaur","Giant","ogre mage","Chimera","Lord","Troll",1 ;"slasher","slanter","Turbo",1
+   Switch Found
+    Case 1 : Attack "Dragon" 
+             Delay 1
+             Healthcheck    
+             soulcheck
+             Montest   
+    Case 2 : Attack "Minotaur"
+             Delay 5
+             Healthcheck           
+             Montest   
+    Case 3 : Attack "Giant"        
+             Delay 1
+             Healthcheck
+             soulcheck
+             Montest   
+    Case 4 : Attack "Mage"         
+             Delay 5
+             Healthcheck           
+             Montest 
+    Case 5 : Attack "Chimera"      
+             Delay 5
+             Healthcheck           
+             Montest   
+    Case 6 : Attack "Lord"         
+             Delay 5
+             Healthcheck           
+             Montest               
+    Case 7 : Attack "Troll"        
+             Delay 5
+             Healthcheck           
+             Montest   
+   ; case 8 : getout "ouch"
+    ;case 9 : getout "ouch"
+   ; case 10 : getout "ouch"
+Otherwise : Foodcheck
+           waitexp   
+                Healthcheck
+                                                  
+                Ring
+   EndSwitch
+
+EndProc
+;-----------------------------------------------------------------------------------------------
+When "in the act","^*"
+When "attacked you with a","^*"
+WhenIdle 25, "^*"
+When "run away run away", "^*"                  
+When "you're in the temple.","^*^*^*"     
+;When "giantess appears","a g^Ma g^Ma g^Ma g^Ma g^M"
+;When "giant appears","a g^Ma g^Ma g^Ma g^Ma g^M"
+;When "dragon appears","a a^Ma a^Ma a^Ma a^Ma a^M"
+when "slasher would like you to join","j slasher^M"
+when "obi-wan would like","j obi^M"
+When "˜","^*"
+When "µ","^*"                
+when "red dog","disband^Mj slan^M" 
+when "pariah would like you to join","j parI^M"
+when "pariah is asking","add par^M"
+when "turbo would like you to join","j turb^M"
+when "from zor: hydro potato","c kusamotumaru^M"
+when "nger a member of slanter-2","j turb^M"
+when "turbo has entered","j turbo^M"
+;when "discharged a maelstrom","^*"
+when "slanter-2 has entered","j slanter^M"
+when "nger a member of turbo","j slan^M"
+when "no longer","^*"
+;Startexp
+;tavern
+;Put "Drink Hyssop"
+;Put "Drink Rowan"   
+Zar = 0
+Yar = 0            
+;LeaveKusa
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor." 
+startexp
+timeinit
+;----------------------------------------------------------------------------------------------------
+While Connected
+
+  Montest
+
+EndWhile
+       
+while not connected
+stop
+endwhile  

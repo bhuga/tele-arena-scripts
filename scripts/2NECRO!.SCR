@@ -1,0 +1,440 @@
+#include "toolbox2.scr"
+Xit = 0                                                                                    
+x = 0
+soul = 0
+Rng = 0   
+Wexp = 0                      
+spelltype=0
+integer uhoh,yar,ane,spelltype
+;----------------------------------------------------------------------------------------------------
+procedure ohoh
+if uhoh=10
+hangup
+put "rlogon froze"
+stop
+endif
+endproc
+Procedure Ring
+ohoh
+     
+  Print "Procedure Ring"
+    Repeat 
+     Put "Ri G"
+uhoh=uhoh+1 
+if uhoh=10
+hangup
+put "rlogin froze"
+stop
+endif
+     WaitFor "you just rang",1
+    Until Found           
+uhoh=0
+EndProc  
+;---------------------------------------------------------------------------------------    
+Procedure GetOut String What
+
+    
+    Put "X^M~X^M~X^M"
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Put What
+    Delay 100
+    Hangup    
+    Stop
+
+Endproc
+;---------------------------------------------------------------------------------------------------
+Procedure M String Dir, Place
+ohoh
+   Integer OK, Xit
+     OK = 0
+     Repeat   
+ohoh
+uhoh=uhoh+1
+       Put Dir
+         Waitfor Place, "fall!","no exit",4
+           Switch Found
+             Case 1 : Delay 5
+                      Print "Found ",place
+                      OK = 1
+             Case 2 : Delay 10
+                      OK = 0
+             Case 3 : Xit = Xit + 1
+           EndSwitch
+           If Xit = 5
+             Print "LOST!!! <Hanging Up>"
+             GetOut "Lost!"
+           EndIf   
+           If Ok = 1
+            Xit = 0
+           EndIf
+     Until OK = 1
+uhoh=0
+
+EndProc
+;---------------------------------------------------------------------------------------
+Procedure Continue
+ohoh
+
+m "s","path."
+m "s","plaza." 
+
+
+
+EndProc
+;---------------------------------------------------------------------------------
+Procedure Movetest
+      ohoh
+   Print "Testing Physical Exhaustion"
+   Repeat
+uhoh=uhoh+1
+if uhoh=10
+hangup
+put "rlogon froze"
+stop
+endif
+     Put "Group"      
+     Waitfor "Ready",2
+   Until Found        
+uhoh=0
+
+   Continue
+
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure BuyAne
+     ohoh
+m "w","path."
+m "w","plaza."
+m "n","path."
+m "n","shop." 
+
+   Put "Buy Ane^M"
+   Delay 1
+   Put "Buy Ane^M"
+   Delay 1
+
+     Waitfor "You can't afford",2
+      Switch found
+        Case 1: GetOut "You are BROKE!!!"
+      EndSwitch
+
+m "s","path."
+m "s","plaza."
+m "e","path."
+m "e","plaza."
+
+EndProc
+;------------------------------------------------------------------------------------
+Procedure AneCheck
+     ohoh
+if ane>=2
+     BuyAne    
+ane=0
+endif
+     
+EndProc
+;-------------------------------------------------------------------------------------------
+Procedure SoulCheck
+     ohoh           
+put "I"
+Put "use soul"
+    Waitfor "sorry, but",2
+     if Found                              
+     getout "no soulstone"
+     endif
+endproc
+;---------------------------------------------------------------------------------
+Procedure Back
+         ohoh
+;AneCheck
+
+m "n","path." 
+soulcheck
+m "n","arena."
+
+SoulCheck
+
+EndProc
+;------------------------------------------------------------------------------------        
+Procedure Tavern
+             ohoh
+  Movetest
+
+m "w","path." 
+m "w","plaza." 
+m "sw","path." 
+m "sw","inn." 
+
+  Put "Buy Meal"
+  Delay 5
+  Put "Buy Drink"
+  Delay 15
+
+m "ne","path."
+m "ne","plaza."
+m "n","path."
+m "n","shop."
+
+;Put "Buy Rowan^M"
+;delay 5
+;put "Drink Rowan^M"
+;Put "Buy Hyssop^M"
+;delay 5
+;put "Drink Hyssop^M"
+
+m "s","path."
+m "s","plaza."
+m "e","path."
+m "e","plaza."
+
+  Back 
+
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure FoodCheck
+     ohoh
+   Put "He"
+   Waitfor "Healthy","Hungry","Thirsty",2
+    Switch Found
+      Case 1 : Print "Status  Healthy"
+uhoh=0
+      Case 2,3 : Print "Procedure Tavern"
+uhoh=0
+                 Tavern
+    EndSwitch
+
+EndProc
+;-------------------------------------------------------------------------------------------------------
+Procedure BuyYar
+     ohoh
+  Movetest
+
+m "w","path."
+m "w","plaza."
+m "n","path."
+m "n","shop."
+
+;   Put "B Hyssop"
+;   Delay 2
+;   Put "Drink Hyssop"
+
+   Yarrow = 2
+   
+    Repeat
+     Put "B Yarrow"
+     Yarrow = Yarrow - 1
+    Until Yarrow = 0
+    Waitfor "You can't afford",2
+    Switch found
+      Case 1: GetOut "You are BROKE!!!"
+    EndSwitch
+
+m "s","path."
+m "s","plaza."
+;m "sw","path."
+;m "sw","inn."
+ 
+;  Put "Buy Drink"
+;  Delay 5
+;  Put "Buy Meal"
+;  Delay 5
+    
+;m "e","path."
+;m "e","plaza."
+m "e","path."
+m "e","plaza."
+
+;AneCheck
+
+m "n","path."
+soulcheck
+m "n","arena."
+
+SoulCheck
+
+EndProc                
+procedure yarcheck
+if yar>=2
+buyyar
+yar=0
+endif     
+endproc
+;---------------------------------------------------------------------------------------------------
+Procedure Yarrow
+    
+   Put "Drink Yarrow"
+   Waitfor "potion","one.",2
+   Switch Found
+     Case 1 : Print "Drank a Yarrow"
+yar=yar+1
+     Case 2 : yar=2
+   EndSwitch
+EndProc   
+;-----------------------------------------------------------------------------------------------
+
+Procedure yilazi string monster
+string spell
+spell=""
+     ohoh  
+if spelltype=0
+spell="yilazi"
+spelltype=0
+elseif spelltype=1
+spell="tamikar"
+spelltype=0
+endif
+  Put "C ",spell," ",monster
+  waitfor "damage!","spell.","incantation!"
+   switch found
+    case 1: print "Casted Gimotu"
+    Case 2: Yarrow
+    case 3: print "Mentally Exhausted <Try Again Later>"
+   EndSwitch
+
+EndProc
+
+;---------------------------------------------------------------------------------------------------
+Procedure Anemone
+     ohoh
+  Put "Drink Ane^M"
+  Waitfor "potion","one.",2
+   Switch Found
+     Case 1 : Print "Drank an Anemone"
+ane=ane+1
+     Case 2 : Print "No Anemones"
+              GetOut "Uh Oh, no anemones"
+   EndSwitch
+
+EndProc
+;---------------------------------------------------------------------------------------- 
+Procedure Healthcheck
+     ohoh
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "He"
+          Waitfor "vitality:",3 ;RENT MANA PUT HERE
+          If Found
+          getn vital,10
+strdel vital, 1,5                 
+         ; strpos vital,"/",position
+         ; getit=(position-5)
+          substr vital,1,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit <= 215 and vit >= 80
+             ;    kamotu          
+spelltype=0
+          elseif vit < 279 and vit > 230
+spelltype=1
+          elseif vit >= 279
+spelltype=1
+          elseif vit < 80 and vit > 50
+          put "drink anemone"
+          getout "low health"
+          elseif vit <= 0                
+            Print "Bad Healthcheck!"     
+          EndIf
+        EndIf
+                               
+EndProc
+;------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------
+Procedure Attack String Monster
+     ohoh           
+  Integer Pyre
+
+     Attacks = 4
+     Atks = Attacks - 1
+                       
+yilazi monster                 
+
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+  
+
+       If Found = 1 
+uhoh=0
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0
+       EndIf
+  EndProc
+;-----------------------------------------------------------------------------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------------------------------
+Procedure WaitRing
+     ohoh
+  Rng = Rng + 1
+   
+   If Rng = 5
+    Rng = 0
+    Put "Ring Gong"
+   EndIf   
+
+EndProc    
+;---------------------------------------------------------------------------------- 
+Procedure Montest
+     ohoh
+  Put
+  Waitfor "Warlock","Minotaur","Giant","Mage","Chimera","skeleton","Troll","tttttttttttttttttttttttttttttttt",2
+   Switch Found
+    Case 1 : Attack "Warlock"     
+             Healthcheck       
+             Montest   
+    Case 2 : Attack "Minotaur"
+             Healthcheck
+             Montest   
+    Case 3 : Attack "Giant"
+             Healthcheck
+             Montest   
+    Case 4 : Attack "Mage" 
+             Healthcheck
+             Montest 
+    Case 5 : Attack "Chimera" 
+             Healthcheck
+             Montest   
+    Case 6 : Attack "Lord"
+             Healthcheck
+             Montest   
+    Case 7 : Attack "Troll"
+             Healthcheck
+             Montest                         
+    Case 8 : Put "k blade^Mk blade^Mk blade^Mk blade^Mk blade^M"
+             Delay 5
+             healthcheck
+             Montest                
+    Otherwise : Foodcheck                                
+                Healthcheck             
+                anecheck
+                yarcheck
+                Ring
+     uhoh=uhoh+1               
+   EndSwitch     
+
+EndProc
+;-----------------------------------------------------------------------------------------------
+When "in the act","^*"
+When "attacked you with a","^*"
+whenIdle 10, "^*"
+When "run away run away", "^*"                  
+when "poke!","^*"
+;When "Tingling","Drink Hyssop^MDrink Rowan^M"
+When "you're in the temple.","^*^*^*"    
+;When "A warlock appears in a puff of reddish smoke!","a w^Ma w^Ma w^Ma w^Ma w^M"
+;When "A minotaur chieftain appears in a puff of reddish smoke!","a c^Ma c^Ma c^Ma c^Ma c^M"
+;When "=","^*"
+When "˜","^*"
+When "µ","^*"
+;----------------------------------------------------------------------------------------------------
+While Connected
+
+  Montest
+
+EndWhile
+

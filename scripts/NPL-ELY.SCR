@@ -1,0 +1,116 @@
+
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Print "Moving"    
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 9
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 10
+          EndSwitch
+          If Xit = 7
+            Put "uh oh LOST!!!!!!"
+            Alarm "Lost."
+          EndIf
+    until OK = 1
+EndProc
+;---------------------------------------------------------------------------
+When "In your haste, you trip and fall!","Get All^M"
+When "lying on the floor.","Get All^M"
+;-------------------------------------------------------------------------------------------------------------------------
+x = 1
+
+
+Repeat
+
+
+m "s","floor."
+m "sw","floor."
+m "sw","floor."
+m "s","floor."
+m "sw","floor."
+m "se","floor."
+m "sw","floor."
+m "sw","floor."
+m "nw","floor."
+m "w","floor."
+m "w","floor."
+m "sw","floor."
+m "s","floor."
+m "s","floor."
+m "sw","floor."
+m "sw","floor."
+m "se","floor."
+m "sw","floor."
+m "se","floor."
+m "se","floor."
+m "se","floor."
+m "se","floor."
+m "sw","floor."
+m "se","floor."
+m "ne","floor."
+m "e","floor."
+m "e","floor."
+m "e","floor."
+m "ne","floor."
+m "n","floor."
+m "ne","floor."
+m "e","floor."
+m "e","floor."
+m "se","floor."
+m "s","floor."
+m "sw","floor."
+m "se","floor."
+m "se","floor."
+m "ne","floor."
+m "ne","floor."
+m "n","floor."
+m "ne","floor."
+m "ne","floor."
+m "ne","floor."
+m "ne","floor."
+m "se","floor."
+m "se","floor."
+m "e","floor."
+m "ne","floor."
+m "ne","floor."
+m "e","floor."
+m "se","floor."
+m "se","floor."
+m "e","floor."
+m "ne","floor."
+m "ne","floor."
+m "ne","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+m "d","floor."
+m "e","floor."
+m "se","floor."
+m "ne","floor."
+m "n","floor."
+m "nw","floor."
+m "ne","floor."
+m "e","floor."
+m "se","floor."
+m "se","floor."
+m "e","floor."
+m "u","floor."
+
+x = x + 1
+
+Print "Ending Travel Script (West of Elysian Dragons)"
+
+Until x = 2
+
+
+

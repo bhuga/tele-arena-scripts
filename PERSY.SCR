@@ -1,0 +1,19 @@
+while connected
+put "w"
+put "dr. anthrax"
+delay 5
+put "man you really suck"
+x=0
+repeat
+put "man you really suck"
+put "Think of YOUR MOM and of your RUSTY!"
+delay 1
+x=x+1
+until x=5
+put "/s"
+delay 10
+put ""    
+put ""          
+delay 3
+endwhile
+

@@ -1,0 +1,17 @@
+#include "toolbox2.scr"
+
+procedure health
+ put "health"
+  waitfor "hitpoints",3
+   if found
+    getN vit,20
+   endif
+    substr vit,9,5,vit2
+    atoi vit2,vit3
+    print vit3," <---health"
+endproc
+
+while connected
+delay 50
+health
+endwhile

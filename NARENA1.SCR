@@ -1,0 +1,190 @@
+#include "toolbox2.scr"
+integer tryagain,engaged,needfood,poison
+
+procedure ring       
+if engaged=1
+
+endif
+repeat
+put "r g" 
+engaged=0
+waitfor "summoned","round is not",3
+ if found=1
+       return
+ elseif found=2
+       delay 10
+ endif
+until x=111
+endproc
+
+procedure m string dir,what
+ repeat
+  put dir
+   waitfor what,"blocked","ready to act",3
+    switch found
+     case 1: tryagain=0
+             return                
+     case 2: tryagain=1
+             delay 15
+     case 3: tryagain=1
+             delay 15
+    endswitch
+ until tryagain=0
+endproc
+         
+
+procedure getheal
+m "n","boarded"
+m "e","exits"                  
+m "e","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "w","exits"
+m "w","exits"
+m "n","exits"
+m "n","exits"
+m "n","exits"
+m "d","exits"
+m "e","darkness"
+m "u","exits"
+m "s","exits"
+m "e","exits"
+m "e","exits"
+if poison=1
+put "request ppurge viv"
+poison=0
+endif
+repeat
+x=x+1
+put "request minheal viv"
+until x=8
+x=0
+m "w","exits"
+m "w","exits"
+m "n","exits"
+if needfood=1
+put "buy pear"
+put "buy pear"
+needfood=0
+endif
+m "d","darkness"
+m "w","exits"
+m "u","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "e","exits"
+m "e","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "s","exits"
+m "w","exits"
+m "w","exits"
+m "s","exits"
+endproc
+
+procedure st2 
+put "st2"
+waitfor "poisoned",3
+if found
+poison=1
+getheal
+endif
+put "st2"
+waitfor "you"
+waitfor "are getting pretty hungry","[hp=",7
+ switch found
+  case 1: put "eat pear^Meat pear^Meat pear"
+          needfood=1
+  case 2: print "nope nope nope, not hungry"
+          return
+ endswitch
+endproc         
+
+procedure health
+ put "health"
+  waitfor "hitpoints",3
+   if found
+    getN vit,20
+   endif 
+    substr vit,9,5,vit2
+    atoi vit2,vit3
+    print vit3," <---health"
+if needfood=1
+vit3=900
+endif
+if vit3 < 1300
+getheal
+elseif vit3 > 1300 
+return
+endif
+endproc
+
+procedure waitdead string death  
+ waitfor death,5
+  if found          
+   engaged=1
+   put "get gold"
+  elseif not found
+   return
+  endif
+endproc
+ 
+procedure montest
+ put
+  waitfor "amazon","pickpocket","fire beetle","bully","scorpion","mytzle is here","zombie","apprentice","brigand","goblin",5
+   switch found
+    case 1: put "a ama"             
+            engaged=1
+            waitdead "about her weap"  
+    case 2: put "a pick"
+            engaged=1
+            waitdead "soiling him"
+    case 3: put "a fire"
+            engaged=1
+            waitdead "puff of smoke"
+    case 4: put "a bully"
+            engaged=1
+            waitdead "for his mommy"
+    case 5: put "a scorp"
+            engaged=1
+            waitdead "lurches forward"                            
+    case 6: health
+            delay 20    
+    case 7: put "a zomb"
+            engaged=1   
+            waitdead "one final"
+   case 8: put "a app"
+           engaged=1
+           waitdead "clutches at his"
+   case 9: Put "a brig"
+           engaged=1
+           waitdead "his throat"
+   case 10: put "a gob"
+            engaged=1
+            waitdead "lets out a yelp"
+    otherwise:  st2             
+                health
+                ring
+ endswitch
+endproc
+
+
+while connected
+montest
+endwhile

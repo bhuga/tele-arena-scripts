@@ -1,0 +1,780 @@
+integer uhoh
+integer position,move
+string s,n,w,e,sw,ne,nw,se,u,d,f
+    
+;------------------------------------------------------------------------------------------------
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",1
+    Until Found
+    Alarm What
+    Put "Hanging Up In 5 Seconds!"
+    Delay 50
+    Hangup    
+    Stop
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure Soulcheck
+ put "use soul"
+   waitfor "sorry, but","sorry, that",2 
+    switch found
+     case 1: getout "no soul"
+     case 2: Delay 5
+             print "Woo Woo, soul still here."
+    endswitch
+
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure M String Dir, Place
+  Integer OK, Xit
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor "floor.","fall!","no exit",1
+          Switch Found
+            Case 1 : OK = 1
+                      Xit=0
+            Case 2 : delay 30
+                     OK = 0
+                     put "g all"
+            Case 3 : Xit = Xit+1
+          EndSwitch
+          If Xit = 1
+            put ".tumble obi"
+Waitfor " you E."," you W."," you N."," you S."," you NE."," you NW."," you SW."," you SE.",1
+Switch found
+case 1: m w, f
+        put ".ca1 %s UNTUMBLED."
+case 2: m e, f
+        put ".ca1 %s UNTUMBLED."
+case 3: m s, f
+        put ".ca1 %s UNTUMBLED."
+case 4: m n, f
+        put ".ca1 %s UNTUMBLED."
+case 5: m sw, f
+        put ".ca1 %s UNTUMBLED."
+case 6: m se, f
+        put ".ca1 %s UNTUMBLED."
+case 7: m ne, f
+        put ".ca1 %s UNTUMBLED."
+case 8: m nw, f
+        put ".ca1 %s UNTUMBLED."
+endswitch     
+        ElseIf Xit=2
+        Getout "LOST!"
+        endif
+    until OK = 1
+        Soulcheck
+Delay 05
+EndProc
+;------------------------------------------------------------------------------------------------
+procedure anemone
+  put "dr ane" 
+   waitfor "sorry, but",3
+    if found
+     getout "no anemones"
+    endif
+endproc
+;------------------------------------------------------------------------------------------------
+Procedure Kusa
+put "Cast Kusamotu Obi"
+waitfor "damage!","spell.","incantation!",1
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: print "mana low"
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch            
+move=1
+endproc
+;------------------------------------------------------------------------------------------------
+Procedure Healthcheck
+
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "Health"
+          Waitfor "/ 108",3 ;CURRENT MANA PUT HERE
+          If Found
+          get vital
+          strpos vital,"/",position
+          getit=(position-5)
+          substr vital,getit,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 1799 and vit >= 801
+                 Kusa         
+          elseif vit <= 799 and vit > 600   
+                 Anemone
+          elseif vit <= 599 and vit > 0   
+                 Getout "health low!"
+          elseif vit <= 0                
+            Print "Bad Healthcheck!"     
+          EndIf
+          EndIf
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure Movetest
+   
+   Print "Testing Physical Exhaustion"
+   Repeat 
+     Put "Group"
+     Waitfor "Ready",4
+   Until Found
+
+move=0
+EndProc
+;------------------------------------------------------------------------------------------------
+Procedure Attack String Monster
+
+  Integer Staff
+
+    Attacks = 5
+    Staff = 0
+
+    Atks=Attacks-1
+
+          Put "a ",Monster
+      Waitfor "Your attack","don't see",1
+        If Found = 1
+          Repeat
+            Put "a ",Monster
+            Atks=Atks-1
+          Until Atks=1
+          Put "a ",Monster
+          Staff = 1
+        EndIf
+      HealthCheck
+
+EndProc
+;---------------------------------------------------------------------------------- 
+Procedure Dragtest
+  put
+  waitfor "affreet","giant","warlock","hydra","magma","skeleton","minotaur","gargoyle","ogre","chimera","dragon","floor.",1
+  switch found
+  case 1: attack "Aff"
+          Delay 10
+          healthcheck
+          dragtest
+  case 2: attack "Giant"
+          Delay 10
+          healthcheck
+          dragtest
+  case 3: attack "War"
+          Delay 10
+          healthcheck
+          dragtest
+  case 4: attack "Hydra"
+          Delay 10
+          healthcheck
+          dragtest
+  case 5: attack "Magma"
+          Delay 10
+          healthcheck
+          dragtest
+  case 6: attack "Skeleton"  
+           Delay 10
+           healthcheck
+           dragtest
+  case 7: attack "Minotaur"
+           Delay 10
+           healthcheck
+           dragtest
+  case 8: attack "Gargoyle"
+          Delay 10
+          healthchech
+           dragtest
+  case 9: attack "Ogre"
+          Delay 10
+          healthcheck
+          dragtest   
+  case 10: attack "Chimera"
+           Delay 10
+           healthcheck
+           dragtest
+  case 11: attack "Dragon"
+           Delay 10
+           healthcheck
+           dragtest
+  case 12: if move=1
+              movetest
+             endif
+Endswitch
+Endproc
+;---------------------------------------------------------------------------------- 
+Procedure Montest
+  put
+  waitfor "affreet","giant","warlock","hydra","magma","skeleton","minotaur","gargoyle","ogre","chimera","dragon",1
+  switch found
+  case 1: attack "Aff"
+          healthcheck
+          montest   
+  case 2: attack "Giant"
+          healthcheck
+          montest
+  case 3: attack "War"
+          healthcheck
+          montest
+  case 4: attack "Hydra"
+          healthcheck
+          montest
+  case 5: attack "Magma"
+          healthcheck
+          montest
+  case 6: attack "Skeleton"  
+           healthcheck
+           montest
+  case 7: attack "Minotaur"
+           healthcheck
+           montest
+  case 8: attack "Gargoyle"
+          healthchech
+           montest
+  case 9: attack "Ogre"
+          healthcheck
+          montest   
+  case 10: attack "Chimera"
+           healthcheck
+           montest
+  case 11: attack "Dragon"
+           healthcheck
+           montest
+  otherwise: if move=1
+              movetest
+             endif
+Endswitch
+Endproc
+;---------------------------------------------------------------------------------- 
+Procedure Tummy
+Put ".tumble Obi"
+Waitfor "Obi-Wan TUMBLED you W.","Obi-Wan TUMBLED you S.","Obi-Wan TUMBLED you E.","Obi-Wan UNTUMBLED.",1
+Switch found
+Case 1: put ".ca1 %s UNTUMBLED."
+        m e,f
+        healthcheck
+        dragtest
+        Tummy
+Case 2: put ".ca1 %s UNTUMBLED."
+Case 3: put ".ca1 %s UNTUMBLED."
+        m w,f
+        healthcheck
+        dragtest
+        Tummy
+case 4: print "UNTUMBLED"
+        
+endswitch
+
+endproc
+;---------------------------------------------------------------------------------- 
+Procedure Walk1
+;STARTS Ne, Se, of 2 Appys that are W, Sw, Nw, Sw, Sw, Nw, Sw of FGW
+ healthcheck
+ dragtest 
+ m nw,f 
+ healthcheck
+ dragtest
+ m sw,f          ;2 Appys W, Sw, Nw, Sw, Sw, Nw, Sw of FGW
+ Tummy
+ healthcheck
+ dragtest
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest
+ m se,f      
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest
+ m se,f          ;2 FG's W, Sw of FGW
+ healthcheck
+ dragtest
+ m se,f 
+ healthcheck
+ dragtest
+ m e,f           ;3 Appys W, Sw, Se, E of FGW
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m w,f  
+ healthcheck
+ dragtest
+ m nw,f          ;2 FG's W, Sw of FGW
+ healthcheck
+ dragtest
+ m nw,f 
+ healthcheck
+ dragtest
+ m sw,f      
+ healthcheck
+ dragtest
+ m sw,f 
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m sw,f          ;2 Appys W, Sw, Nw, Sw, Sw, Nw, Sw of FGW
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck
+ dragtest  
+ m se,f
+ healthcheck
+ dragtest
+ m e,f     
+ healthcheck
+ dragtest
+ m e,f
+ healthcheck
+ dragtest
+ m e,f
+ healthcheck
+ dragtest
+ m e,f
+ healthcheck
+ dragtest
+ m se,f  
+ healthcheck
+ dragtest
+ m e,f      
+ healthcheck
+ dragtest
+ m e,f  
+ healthcheck
+ dragtest
+ m e,f 
+ healthcheck
+ dragtest
+ m e,f  
+ healthcheck
+ dragtest
+ m e,f     
+ healthcheck
+ dragtest
+endproc
+;---------------------------------------------------------------------------------- 
+Procedure Walk2
+;STARTS 2 Sw of 2 Appys S, Sw, Sw, Se of Corridor Exit Down
+ m ne,f
+ healthcheck
+ dragtest
+ m ne,f          ;2 Appys S, Sw, Sw, Se of Corridor Exit Down
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m nw,f      
+ healthcheck
+ dragtest
+ m ne,f 
+ healthcheck
+ dragtest
+ m nw,f          ;2 Appys S, Sw, Sw, Se of Corridor Exit Down
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m sw,f     
+ healthcheck
+ dragtest
+ m se,f          ;2 Appys S, Sw, Sw, Se of Corridor Exit Down
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m sw,f 
+ healthcheck
+ dragtest
+ m sw,f 
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m e,f
+ healthcheck
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck
+ dragtest  
+ m s,f
+ healthcheck
+ dragtest  
+ m s,f
+ healthcheck
+ dragtest  
+ m se,f          ;2 Appys On the Right of Swelts Map
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck
+ dragtest  
+ m sw,f          ;3 Appys S, Sw, of 2 Previous Appys
+ healthcheck
+ dragtest  
+ Tummy
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest  
+ m n,f           ;2 Appys On Right of Swelts Map
+ healthcheck
+ dragtest  
+ Tummy
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m sw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ Tummy   
+ healthcheck
+ dragtest
+endproc
+;---------------------------------------------------------------------------------- 
+Procedure Walk3
+;Starts Near Appys By Exit Down to Granite Hewn Corridor
+ m ne,f  
+ healthcheck
+ dragtest
+ m ne,f          ;2 Appys S, Sw, Sw, Se of Corridor Exit Down
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m nw,f 
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest
+ m ne,f     
+ healthcheck
+ dragtest
+ m nw,f          ;2 Appys S, Sw, Nw of Corridor Exit Down
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m se,f  
+ healthcheck
+ dragtest 
+ m sw,f
+ healthcheck
+ dragtest
+ m se,f          ;2 Appys S, Sw, Sw, Se of Corridor Exit Down
+ healthcheck
+ dragtest 
+ Tummy
+ healthcheck
+ dragtest
+ m sw,f
+ healthcheck
+ dragtest
+ m sw,f
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f           ;Ends Ne, Se, S, Se of 2 Appys Near FGW
+ healthcheck
+ dragtest
+endproc
+;---------------------------------------------------------------------------------- 
+Procedure Walk4
+;STARTS Ne, Se, S, Se of 2 Appys Near FGW
+ m nw,f  
+ healthcheck
+ dragtest
+ m n,f 
+ healthcheck
+ dragtest
+ m nw,f  
+ healthcheck
+ dragtest
+ m sw,f          ;2 Appys W, Sw, Nw, Sw, Sw, Nw, Sw of FGW
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck 
+ dragtest
+ m se,f
+ healthcheck
+ dragtest
+ m ne,f  
+ healthcheck
+ dragtest
+ m ne,f  
+ healthcheck
+ dragtest
+ m se,f          ;2 FG's W, Sw, of FGW
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m e,f           ;3 Appys W, Sw, Se, E, of FGW
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m nw,f          ;2 FG's W, Sw, of FGW
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m sw,f    
+ healthcheck
+ dragtest
+ m sw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m sw,f          ;2 Appys W, Sw, Nw, Sw, Sw, Nw, Sw of FGW
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+endproc
+;---------------------------------------------------------------------------------- 
+Procedure Travel  
+Check1  
+healthcheck
+dragtest
+Walk1
+Check1
+Walk2   
+Check1
+Walk3   
+Check1
+Walk4   
+Check1
+endproc     
+;---------------------------------------------------------------------------------- 
+When "tumble out of the room to the north!","^m.ca1 %s TUMBLED %s N.^m"
+When "tumble out of the room to the south!","^m.ca1 %s TUMBLED %s S.^m"
+When "tumble out of the room to the east!","^m.ca1 %s TUMBLED %s E.^m"
+When "tumble out of the room to the west!","^m.ca1 %s TUMBLED %s W.^m"
+When "tumble out of the room to the northeast!","^m.ca1 %s TUMBLED %s NE.^m"
+When "tumble out of the room to the southeast!","^m.ca1 %s TUMBLED %s SE.^m"
+When "tumble out of the room to the northwest!","^m.ca1 %s TUMBLED %s NW.^m"
+When "tumble out of the room to the southwest!","^m.ca1 %s TUMBLED %s SW.^m"
+When "Sorry to interrupt here, but the BBS will be shutting","/recent^M"
+When "You intoned the spell for Obi-Wan","Pl^M"
+When "temple","^*"
+When "Wraith","^*"
+When "Paralyzed","^*"
+When "maelstrom","^*"
+When "downpour","^*"
+When "stone shards","^*"
+When "attacked you with a pyrehammer for","^*^*"
+When "attacked you with a broadsword for","^*^*"
+When "attacked you with a levinblade for","^*^*"
+When "attacked you with a rimeax for","^*^*"
+When "attacked you with a halberd for","^*^*"
+When "attacked you with a greatsword for","^*^*"
+When "attacked you with a dagger for","^*^*"
+When "attacked you with a staff for","^*^*"
+When "attacked you with a flail for","^*^*"
+When "attacked you with a warhammer for","^*^*"
+When "attacked you with a morningstar for","^*^*"
+When "attacked you with a mace for","^*^*"
+When "attacked you with a battleax for","^*^*"
+When "attacked you with a shortsword for","^*^*"
+WhenIdle 20, "^*"
+When "Slanter","^*"
+When "Slanter-2","^*"
+When "Jock","^*"
+When "Turbo","^*"
+When "Slasher","^*"
+When "Whittaker","^*"
+When "Pariah","^*"
+When "Iago","^*"
+When "You caught Ravage in the act of trying to rob you!","^*"
+When "You caught Jock in the act of trying to rob you!","^*"
+When "You caught Iago in the act of trying to rob you!","^*"
+When "You caught Ray Stanz in the act of trying to rob you!","^*"
+When "You caught Cabal's Evil Twin Brother Gak in the act of trying to rob you!","^*"
+When "You caught Icon in the act of trying to rob you!","^*"
+When "You caught Ravage in the act of trying to rob you!","^*"
+When "You caught Jock in the act of trying to rob you!","^*"
+When "You caught Iago in the act of trying to rob you!","^*"
+When "You caught Ray Stanz in the act of trying to rob you!","^*"
+When "You caught Cabal's Evil Twin Brother Gak in the act of trying to rob you!","^*"
+When "You caught Icon in the act of trying to rob you!","^*"
+When "You caught Ravage in the act of trying to rob you!","^*"
+When "You caught Jock in the act of trying to rob you!","^*"
+When "You caught Iago in the act of trying to rob you!","^*"
+When "You caught Ray Stanz in the act of trying to rob you!","^*"
+When "You caught Cabal's Evil Twin Brother Gak in the act of trying to rob you!","^*"
+When "You caught Slanter in the act of trying to rob you!","^*"
+When "you're poisoned","^*"
+When "run away run away","^*"                  
+When "blast of frost at you from a rimeax","^*"
+When "blast of flame at you from a pyrehammer","^*"
+When "blast of lightning at you from a levinblade","^*"
+When "stone lying on","get all^M"
+
+; **** MAIN PROGRAM ****
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+uhoh=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+move=0
+put ".ca1 %s UNTUMBLED."
+
+; **** Loop ****
+
+
+While Connected
+travel
+Endwhile
+
+;**** END PROGRAM ****
+

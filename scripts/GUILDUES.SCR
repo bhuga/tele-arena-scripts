@@ -1,0 +1,23 @@
+
+
+procedure setmon
+put "mem"
+ waitfor "al         ) Level:  12 Balance:",4
+  if found
+   get s
+  endif
+ strpos s,"e:",position
+   getit=(position+2) 
+   substr s,getit,8,endmon
+delay 15
+   print endmon
+endproc
+
+   
+
+
+
+while connected
+setmon  
+delay 50
+endwhile

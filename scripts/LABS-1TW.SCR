@@ -1,0 +1,123 @@
+Procedure M String Dir, Place
+  Integer OK, Xit
+    Xit = 0
+    OK = 0
+    Repeat
+      Print "Moving"
+      Put Dir 
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 9
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+           EndSwitch
+          If Xit = 1
+            Put "uh oh LOST!!!!!!"
+            Alarm "Lost."
+          EndIf
+    Until OK = 1
+EndProc
+;---------------------------------------------------
+When "In your hast, you trip","get all^M"
+When "lying on the floor.","get all^M"
+;----------------------------------------------------
+X = 1
+
+Repeat
+
+Print "Beginning Return Trip to First Town From Labs"
+
+m "n","floor."
+m "w","floor."
+m "w","floor."
+m "s","floor."
+m "s","floor."
+m "s","floor."
+m "e","floor."
+m "s","floor."
+m "up","floor."
+m "w","floor."
+m "n","floor."
+m "n","floor." 
+m "w","floor."
+m "w","floor."
+m "n","floor."
+m "e","floor."
+m "n","floor." 
+m "e","floor."
+m "e","floor."
+m "s","floor."
+m "w","floor."
+m "s","see."
+m "s","see."
+m "w","see."
+m "w","see."
+m "s","see."
+m "e","see."
+m "e","see."
+m "s","see."
+m "e","see."
+m "e","see."
+m "n","see."
+m "n","see."
+m "n","see."
+m "w","see."
+m "s","see."
+m "s","see."
+m "up","floor."
+m "s","floor."
+m "s","floor."
+m "s","floor."
+m "s","floor."
+m "s","floor."
+m "e","floor."
+m "e","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+m "w","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+m "w","floor."
+m "w","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+m "e","floor."
+m "e","floor."
+m "s","floor."
+m "e","floor."
+m "s","floor."
+m "e","floor."
+m "e","floor."
+m "e","floor."
+m "s","floor."
+m "e","floor." 
+m "e","floor."
+m "s","floor."
+m "s","floor."
+m "w","floor."
+m "s","floor."
+m "w","floor."
+m "s","floor."
+m "s","floor."
+m "w","floor."
+m "w","floor."
+m "n","floor."
+m "n","floor."
+m "e","floor."
+m "n","floor."
+m "e","floor."
+m "n","floor."
+m "n","floor."
+m "n","floor."
+
+
+x = x + 1
+
+Until x = 2
+
+Script "Sorc-Npl"

@@ -1,0 +1,68 @@
+integer tal,num,pres,move
+move=0
+pres=0
+tal=0
+num=0
+
+
+
+procedure move1
+print "You have stolen ",tal," talismans so far!"
+if move=0
+repeat
+put "e"          
+waitfor "You're walking along the forest r",1
+until found
+put "hid"    
+move=1
+elseif move=1 
+repeat
+put "w"
+waitfor "You're in a quiet l",1
+until found
+put "hid"
+move=0
+endif
+put "y"
+  waitfor "r a nom","two nom",1
+     switch found
+       case 1: pres=1 
+               num=1
+       case 2: pres=1
+               num=1
+     endswitch
+endproc
+
+procedure rob              
+repeat
+put "rob nomad ",num," tal"
+  waitfor "nomad' is n","batt","swo","dag","talis","there aren't","the nomad le",1
+   switch found
+    case 1: num=4
+    case 2: put "drop batt"
+            num=4                
+            move1
+    case 3: put "drop swo"
+            num=4
+            move1
+    case 4: put "drop dag"
+            num=4
+            move1
+    case 5: tal=tal+1     
+            num=num+1 
+    case 6: num=4                                                 
+            move1                                                 
+    case 7: num=4
+           move1
+   otherwise: delay 50
+              rob
+  endswitch
+until num=4
+endproc
+
+while connected 
+if pres=1
+rob
+endif
+move1
+endwhile

@@ -1,0 +1,9 @@
+;
+;Telemate Learn Script generated on 12-17-95
+;
+
+
+Waitfor 0          ; wait until string matched
+
+Set AutoStop,On
+

@@ -1,0 +1,373 @@
+;House of Plixtor Arena script
+#include "toolbox2.scr"
+#include "toolbox3.scr"
+
+when "shillings drop","g 5 si^m"
+when "sovereign drop","g go^m"
+when "sovereigns drop","g go^m"
+when "You were poisoned","g 500 si^m"
+when "you don't see","~~/p mudd *combat disengaged*^m"
+;when "dead","*combat disengaged*^m"
+when ">>> Zoot logged on","./i zoot^m"
+when ">>> Twilight logged on","./i twili^m"
+when "experience hot flashes","quaff snake^m"
+;when "quickly drink down the remaining portion","disc snake^m"
+when "burns with scorpion poison","quaff stingtail^m"
+when "serum[empty]","disc snake^m"
+when "antidote[empty]","disc stingtail^m"
+
+m1="skeleton"
+m2="goblin"
+m3="kobold"
+m4="bat,"
+m5="fox,"
+m6="bandit"
+m7="pickpock"
+m8="amazon"
+m9="fire b"
+m10="zombie"
+m11="rat,"
+m12="frig"
+m13="bully"
+m14="orc"
+m15="gremlin"
+m16="exits:"
+m17="wolf" 
+m18="cyblok"
+m19="snake"
+m20="scorpion"
+m21="fungoid"
+m22="spider"
+m23="bugbear"
+m24="satyr"
+m25="dog,"
+m26="imp,"
+m27="troll"
+m28="hag,"
+m29="bloodhawk"
+m30="brigand"
+m31="cave bear"
+m32="hag"
+m33="manticore"
+m34="stinger"
+nolit="darkness..."
+time start
+
+s="s"
+w="w"
+e="e"
+n="n"
+ne="ne"
+se="se"
+sw="sw"
+nw="nw"
+
+
+procedure gd string vec
+put vec
+waitfor "exits"
+return
+endproc
+
+procedure gofood
+gd "n"
+gd "w"
+gd "w"
+gd "w"
+gd "n"
+gd "n"
+gd "n"
+gd "n"
+gd "e"
+gd "e"
+gd "e"
+gd "e"
+gd "e"
+gd "e"
+gd "e"
+gd "e"
+gd "s"
+gd "s"
+put "buy standard^mbuy water skin^m"
+gd "n"
+gd "n"
+gd "w"
+gd "w"
+gd "w"
+gd "w"
+gd "w"
+gd "w"
+gd "w"
+gd "w"
+gd "s"
+gd "s"
+gd "s"
+gd "s"
+gd "e"
+gd "e"
+gd "e"
+gd "s"
+return
+endproc
+
+
+procedure hunger 
+put "st2"
+waitfor "you"
+waitfor "are getting pretty hungry.","[Hp=",8
+switch found
+case 1: put "eat standard^m~eat standard^m~eat standard^m~eat standard^m~eat standard^m~eat standard^meat standard^m~discard standard"
+        put "drink water^m~drink water^m~drink water^m~drink water^m~drink water^m~drink water^m~drink water^m~discard water"
+        gofood
+;        return
+case 2: return
+endswitch
+endproc
+
+procedure cast string spell, string targ
+put "c ",spell," ",targ
+waitfor "you cast","you summon"
+waitfor "*Casting off*"
+waitfor "ac=1]"
+delay 15
+return
+endproc
+
+procedure health
+put "health"
+waitfor "Hitpoints       :"
+getn raw,15
+strpos raw, "/", endhp
+substr raw, 2, endhp-1, curhp
+atoi curhp, curhpint
+waitfor "Movement points :"
+getn raw2,15
+strpos raw2, "/", endmv
+substr raw2, 2, endmv-1, curmv
+atoi curmv, curmvint
+if curmvint < 500
+waitfor "damage!",30
+if found = 1  
+return
+endif
+endif
+if curhpint < 1150
+cast "minheal","mytzle"
+health
+else
+return
+endif
+return
+endproc
+
+procedure montest
+put
+waitfor m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33,m34,nolit,3
+switch found
+case 1: put "a ",m1
+case 2: put "a ",m2
+case 3: put "a ",m3
+case 4: put "a ",m4
+case 5: put "a ",m5
+case 6: put "a ",m6
+case 7: put "a ",m7
+case 8: put "a ",m8
+case 9: put "a ",m9
+case 10: put "a ",m10
+case 11: put "a ",m11
+case 12: put "a ",m12
+case 13: put "a ",m13
+case 14: put "a ",m14
+case 15: put "a ",m15
+case 16: return  
+case 17: put "a ",m17
+case 18: put "a ",m18
+case 19: put "a ",m19
+case 20: put "a ",m20
+case 21: put "a ",m21
+case 22: put "a ",m22
+case 23: put "a ",m23
+case 24: put "a ",m24
+case 25: put "a ",m25
+case 26: put "a ",m26
+case 27: put "a ",m27
+case 28: put "a ",m28
+case 29: put "a ",m39
+case 30: put "a ",m30
+case 31: put "a ",m31
+case 32: put "a ",m32
+case 33: put "a ",m33
+case 34: put "a ",m34
+case 35: cast "light","mytzle"
+         return
+endswitch           
+waitfor "*Combat disengaged",30
+put                 
+montest             
+return
+endproc
+
+procedure go string dir
+put dir
+waitfor "exits","not yet ready to","darkness..."
+switch found
+case 2: delay 10
+        go dir
+        return
+case 3: cast "light","mytzle"
+        return
+endswitch
+montest
+health
+return
+endproc
+
+
+procedure doforest 
+gd n
+gd w
+gd w
+gd w
+gd s
+gd s
+gd s
+gd s
+gd e
+gd e
+gd e
+gd e
+gd e
+gd e
+gd e
+gd e
+gd e
+gd e
+gd s
+gd s
+gd s
+gd s
+gd s
+gd s
+gd s
+gd s
+gd s
+cast "paura","mytzle"
+go sw
+go sw
+go sw
+go se
+go se
+go nw
+go nw
+go w
+go w
+go w
+go w
+go w
+go w
+go w
+go nw
+go nw
+go nw
+go nw
+go w  ;bugbear cave
+go e
+go se
+go se
+go se
+go se
+go e
+go e
+go e
+go e
+go e
+go e
+go e
+go ne
+go ne
+go ne
+go se
+go se
+go se
+go s
+go s
+go s
+go s    ;first set of satyrs
+go e
+go e
+go e
+go e    ;second set of satyrs
+go w
+go w
+go w
+go w
+go sw
+go sw
+go sw
+go s
+go s
+go sw
+go sw
+go sw
+go w
+go w
+go w
+go e
+go e
+go e
+go ne
+go ne
+go ne
+go n
+go n
+go ne
+go ne
+go ne
+go n
+go n
+go n
+go n
+go nw
+go nw
+go nw
+gd n
+gd n
+gd n
+gd n
+gd n
+gd n
+gd n
+gd n
+gd n
+gd w
+gd w
+gd w
+gd w
+gd w
+gd w
+gd w
+gd w
+gd w
+gd w
+gd n
+gd n
+gd n
+gd n
+gd e
+gd e
+gd e
+gd s
+endproc 
+
+repeat
+put "r g"
+montest
+health
+hunger
+time now
+difftime start, now, secs 
+if secs > 180
+put "i"
+time start
+endif
+until not connected

@@ -1,0 +1,1756 @@
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Variable Declarations ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+INTEGER HEALHP, RESTHP, FLEEHP, FULLHP, Len, BaseExp, RPRCOST, F
+INTEGER HEALSPCOST, STEALTH, STARTSPELL, ENDSPELL, HP, MP, Sec
+INTEGER Pos, BACKWARDS, BANK, HEALSPTIME, HANGONCASH, Sneaking
+INTEGER DEPOSITCASH, DEPOSITENC, PICKLOCKS, HANGHP, AREA, Rez
+INTEGER RUNDIST, E1COST, E2COST, E3COST, E4COST, E5COST, E6COST, Fought
+INTEGER E1TIME, E2TIME, E3TIME, E4TIME, E5TIME, E6TIME, Cash, Enc, Bonks
+STRING El1, El2, El3, El4, El5, El6, Here, DIRFILE, MONFILE, SPELLSTR
+STRING WEAPON1, WEAPON2, ATTACKSPELL, Directions, HANG, Now
+STRING NAME, StartTime, Z, RESTPREP, Lst, BXStr, PREFIX, DIALLIST
+STRING HEALSPELL, Char, Weapon, POISONHEAL, AnswerMachine
+STRING ENCH1, ENCH2, ENCH3, ENCH4, ENCH5, ENCH6, ATTSTR1, ATTSTR2
+STRING BBSNAME, PWORD
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ User Questionaire ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+;WARNING: Do not leave any extra spacing in string variables!
+;Yes or no questions use 1 or 0 for the answer, respectively.
+;If a variable calls for something you don't use, i.e. WEAPON2,
+;simply leave it equal to "".  If you use fists, make the 
+;respective weapon variable equal to "punch", same with
+;"kick" or "jumpkick".  If you use one of these as WEAPON1, make
+;SURE you start the script with no weapon equipped!
+;All cash amounts are in copper.
+
+DIRFILE = "ANCRYPT.NDR"       ;Direction file
+MONFILE = "MUDMONST.TXT"      ;Monster file
+
+FULLHP = 164                  ;maximum hit points
+RESTHP = 110                  ;below this, you rest.
+HEALHP = 0                    ;below this, you use HEALSPELL.
+FLEEHP = 50                   ;below this, you run away.
+HANGHP = 30                   ;below this, you hang up.
+
+NAME = "Zootvis"              ;First name of your character
+WEAPON1 = "glowing warhammer" ;FULL name of main/backstab weapon
+  ATTSTR1 = "smash"           ;Type of attack (eg. "slice")
+WEAPON2 = ""                  ;FULL name of secondary weapon
+  ATTSTR2 = ""                ;Type of attack (eg. "slash")
+ATTACKSPELL = ""              ;4-letter name of attacking spell
+  SPELLSTR = ""               ;Type of cast (eg. "fire", "sing")
+  AREA = 0                    ;1 if Area effect
+  STARTSPELL = 0              ;Start ATTACKSPELL at this mana
+  ENDSPELL = 0                ;Stop ATTACKSPELL below this mana
+HEALSPELL = ""                ;4-letter name of healing spell
+  HEALSPCOST = 0              ;cost of healing spell
+  HEALSPTIME = 0              ;seconds to wait between casting
+POISONHEAL = ""               ;spell for healing poison
+STEALTH = 1                   ;Stealth (1 or 0 will suffice)
+PICKLOCKS = 1                 ;Picklocks (1 or 0 sill suffice)
+BACKWARDS = 1                 ;1 for script to run backwards
+RUNDIST = 7                   ;Number of rooms to run away
+BANK = 1                      ;1 for script to bankrun
+  DEPOSITCASH = 100000        ;above this much copper, bankrun
+  DEPOSITENC = 1800           ;above this encumberance, bankrun
+  HANGONCASH = 0              ;Cash to hang on to on bankrun
+RESTPREP = "Life"             ;Pre-resting spell
+RPRCOST = 10                  ;Cost of resting prep
+PREFIX = "'"                  ;Prefix for experience check
+DIALLIST = "7"                ;Dial list to call the point
+BBSNAME = "Zoot"              ;BBS Name.  Doi.
+PWORD = "-----"               ;BBS Password.  Doi again.
+
+ENCH1 = "valr"                ;Most important enchantment
+  E1TIME = 300                ;Time between castings of ENCH1
+  E1COST = 4                  ;Cost of ENCH1
+ENCH2 = "quik"                ;Second most important enchantment
+  E2TIME = 60                 ;...
+  E2COST = 12
+ENCH3 = "bril"
+  E3TIME = 120
+  E3COST = 4
+ENCH4 = "trav"
+  E4TIME = 240
+  E4COST = 14
+ENCH5 = "mite"
+  E5TIME = 120
+  E5COST = 4
+ENCH6 = "agil"
+  E6TIME = 120
+  E6COST = 4
+
+
+PROCEDURE Retrieve
+;Edit this procedure so it picks up all your stuff and reequips.
+PUT "Get Darkwood Ring^MGet Black and White^M~Eq Black and White"
+PUT "Get glowing warhammer^M~Get Bone Charm^MGet Rusty Iron Key~"
+PUT "Get Black Star Key^MGet Rope^M~Get crimson cloak^MGet Fingerbone~"
+PUT "Get Hard Leather Gauntlets^MGet wyvernhide tunic^M~Get Wavy-bladed"
+PUT "Get Rigid Leather Pants^MGet Hard Leather Helm^M~Get Skiff^MGet Falchion"
+PUT "Get Padded Black Boots^MEq crimson cloak^M~Get armbands^MEq Armbands"
+PUT "Eq Bone Charm^M~Eq Fingerbone^MGEt white gold ring^MEq white gold ring"
+PUT "Eq wyvernhide^M~Eq L^MEq L^M~Eq L^MEq Padded^MRemove glowing warhammer^M~Eq glowing warhammer"
+Sneaking = 0
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Variable Initialization ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Attak = 1
+SET AUTOSTOP, 0
+Bonks = 0
+TIME StartTime
+Lst = StartTime
+FILESIZE DIRFILE, Len
+Pos = 2
+AnswerMachine = "Gb Hello, this is NIFTYMUD.SCR.  I am much cooler than "
+CONCAT AnswerMachine, NAME
+CONCAT AnswerMachine, ", and a better MUD player to boot!^M"
+CONCAT PoisonHeal, "^MA^M"
+HANG = "Break^M^*^M^*^M"
+Z = ATTSTR1
+ATTSTR1 = "You "
+CONCAT ATTSTR1, Z
+IF ATTSTR2 <> ""
+  Z = ATTSTR2
+  ATTSTR2 = "You "
+  CONCAT ATTSTR2, Z
+ELSE
+  ATTSTR2 = "You poink the poop out of"
+ENDIF
+IF SPELLSTR <> ""
+  Z = SPELLSTR
+  SPELLSTR = "You "
+  CONCAT SPELLSTR, Z
+ELSE
+  SPELLSTR = "You cast"
+ENDIF
+El1 = "00:00:00"
+El2 = "00:00:00"
+El3 = "00:00:00"
+El4 = "00:00:00"
+El5 = "00:00:00"
+El6 = "00:00:00"
+Here = "null"
+  
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ WHEN Statements ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+WHEN "latrom", "invite mortal^M"
+WHEN "mortal drops", "aid mortal^MDrag mortal^Minvite mortal"
+WHEN "htebsil", "invite lisbeth^M"
+WHEN "lisbeth drops", "Aid lisbeth^MDrag Lisbeth^MInvite Lisbeth^M"
+WHEN "KURZ", "Invite Gruk^M"
+WHEN "Gruk Drops", "aid Gruk^MDrag Gruk^MInvite Gruk^M"
+WHEN "omzig", "Invite gizmo^M"
+WHEN "gizmo drops", "aid gizmo^MDrag Gizmo^MInvite Gizmo^M"
+WHEN "allerednis", "invite sinderella^M"
+WHEN "Sinderella drops", "Aid sinderella^MDrag Sinderella^Minvite sinderella^M"
+WHEN "HTYD", "Invite Dyth^M"
+WHEN "Dyth drops", "Aid Dyth^MDrag Dyth^MInvite Dyth^M"
+WHEN "HEEL!", "invite akiles^M"
+WHEN "Akiles drops", "Aid akil^MDrag Akil^MInvite Dyth^M"
+WHEN "Selrahc", "invite charles^M"
+WHEN "Charles drops", "Aid Charles^MDrag Charles^MInvite Charles^M"
+IF POISONHEAL <> "^MA^M"
+  WHEN "Poison burns through your veins!^M", POISONHEAL
+  WHEN "You feel ill.^M", POISONHEAL
+ENDIF
+WHENIDLE 15, "^M"
+WHEN "you there?", AnswerMachine
+WHEN "^JSorry to interrupt here, but the BBS will be shutting", "Set Statline Full Custom >TI<%f1-=[HP=%f6%h/%H%f1:MA=%f2%m/%M%f1]=-{%f5%X%f1}:%f3%r^M"
+WHEN "(N)onstop, (Q)uit, or (C)ontinue?", "^M"
+WHEN "Hit any key to continue", "^M"
+WHEN "The skeletal warrior falters, then collapses in a heap.^M", "Get Fine Broadsword^M"
+WHEN "Temple, Halls of the Dead^M", HANG
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Toolbox Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE GetN STRING S, INTEGER N
+INTEGER I
+STRING Ch
+S = ""
+Ch = ""
+I = 0
+
+WHILE I < N AND Ch <> "^M"
+  REPEAT
+    GETCH Ch
+  UNTIL SUCCESS
+  CONCAT S,Ch
+  IF Ch = "^H"
+    IF I = 0
+      PRINT " ",
+    ELSE
+      I = I - 1;
+    ENDIF
+  ELSE
+    I = I + 1
+  ENDIF
+ENDWHILE
+
+ENDPROC
+
+
+PROCEDURE DiffTime STRING Time1, Time2, INTEGER Seconds
+INTEGER H1, M1, S1, H2, M2, S2     
+STRING HH, MM, SS
+SUBSTR Time1, 1, 2, HH
+SUBSTR Time1, 4, 2, MM
+SUBSTR Time1, 7, 2, SS
+ATOI HH, H1
+ATOI MM, M1
+ATOI SS, S1
+SUBSTR Time2, 1, 2, HH
+SUBSTR Time2, 4, 2, MM
+SUBSTR Time2, 7, 2, SS
+ATOI HH, H2
+ATOI MM, M2
+ATOI SS, S2
+IF H2 < H1
+  H2 = H2 + 24
+ENDIF
+Seconds = (H2 - H1) * 3600 + (M2 - M1) * 60 + (S2 - S1)
+ENDPROC
+
+
+PROCEDURE ReadN STRING S, INTEGER N
+;Modified to read ^M's into the string.
+INTEGER I
+STRING Ch
+S = ""
+Ch = ""
+I = 0
+
+WHILE I < N
+  READCH Ch
+  CONCAT S, Ch
+  I = I + 1
+ENDWHILE
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Direction Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE GetNext STRING NextMove
+;Returns the next direction along the track.
+STRING Com1
+INTEGER ComPos, ComPos1
+OPEN DIRFILE
+
+REPEAT
+  IF Pos >= Len
+    Pos = 2
+  ENDIF
+  SEEK Pos - 1
+  ReadN NextMove, 2
+  Pos = Pos + 3
+  SWITCH NextMove
+    CASE "N-", "E-", "S-", "W-", "D-", "U-":
+      SUBSTR NextMove, 1, 1, NextMove
+      Pos = Pos - 1
+    CASE "##":
+      Pos = Pos - 1
+      SEEK Pos - 1
+      ReadN Com1, 200
+      STRPOS Com1, "=", ComPos1
+      STRPOS Com1, "#", ComPos
+      IF ComPos1 > 0 AND ComPos1 < ComPos
+        ComPos = ComPos1
+      ENDIF
+      SUBSTR Com1, 1, ComPos - 1, NextMove
+      STRPOS Com1, "#", ComPos
+      Pos = Pos + ComPos + 2
+  ENDSWITCH
+UNTIL NextMove <> ""
+
+CLOSE
+ENDPROC
+
+
+PROCEDURE BackMove STRING PreMove
+INTEGER ComPos, ComPos1
+STRING Com1
+OPEN DIRFILE
+
+REPEAT
+
+  IF Pos <= 2
+    Pos = Len + 1
+  ENDIF
+  Pos = Pos - 3
+  SEEK Pos - 1
+  ReadN PreMove, 2
+  SWITCH PreMove
+    CASE "-N", "-E", "-W", "-S", "-D", "-U":
+      Pos = Pos + 1
+      SWITCH PreMove
+        CASE "-N": PreMove = "S"
+        CASE "-E": PreMove = "W"
+        CASE "-S": PreMove = "N"
+        CASE "-W": PreMove = "E"
+        CASE "-D": PreMove = "U"
+        CASE "-U": PreMove = "D"
+      ENDSWITCH
+    CASE "NW", "NE", "SE", "SW":
+      SWITCH PreMove
+        CASE "NW": PreMove = "SE"
+        CASE "NE": PreMove = "SW"
+        CASE "SE": PreMove = "NW"
+        CASE "SW": PreMove = "NE"
+      ENDSWITCH
+    CASE "##":
+      REPEAT 
+        Pos = Pos - 1
+        SEEK Pos - 1
+        READCH Com1
+      UNTIL NOT (Com1 <> "=" AND Com1 <> "#")
+  
+      Pos = Pos + 1
+      SEEK Pos - 1
+      ReadN Com1, 200
+      STRPOS Com1, "#", ComPos
+      SUBSTR Com1, 1, ComPos - 1, PreMove
+
+      REPEAT 
+        Pos = Pos - 1
+        SEEK Pos - 1
+        ReadN Com1, 2
+      UNTIL Com1 = "##"
+
+  ENDSWITCH
+UNTIL PreMove <> ""
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Miscellaneous Script Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE DropCarrier
+;Hangs up decisively.
+REPEAT
+  PUT HANG
+  DELAY 20
+UNTIL NOT CONNECTED
+ENDPROC
+
+
+PROCEDURE CallBack
+SET DIALATTEMPT, 0
+SET DIALPAUSE, 360
+PUT "AT M0"
+
+REPEAT
+  DIAL DIALLIST
+  WAITFOR "Choose a number from 1 to 2:", 20
+  IF NOT FOUND
+    DropCarrier
+    STOP
+  ENDIF
+UNTIL FOUND
+              
+PUT "1"
+WAITFOR "(Y/N)?", 50
+PUT "Y"
+WAITFOR "to create an account:"
+PUT BBSNAME
+PUT PWORD
+WHEN "<Return> to Exit:", "^M"
+WHEN "Do you want to see it now (Y/N)?", "N^M"
+WAITFOR "Commands)", "or eXit):", "shall we venture :", 30
+PUT "GJ"
+WAITFOR "[MAJORMUD]:", 100
+PUT "E"
+WAITFOR "Obvious", 30
+ENDPROC
+
+
+PROCEDURE Cast STRING En, INTEGER Cost, Res
+;Casts spell En of cost Cost, and returns 1 for success, 0 for
+;failure.
+IF MP >= Cost AND En <> ""
+  PUT En
+  Sneaking = 0
+  WAITFOR "You attempt to", "You cast", "You sing", "You invoke", "You do not have enough ", "You have already", "Your command had no effect.^M", "You do not see", 3
+  SWITCH FOUND
+    CASE 1, 5, 6:
+      Res = 0
+    CASE 2, 3, 4, 7, 8:
+      Res = 1
+  ENDSWITCH
+ELSE
+  Res = 0
+ENDIF
+ENDPROC
+
+
+PROCEDURE GetOutSafe
+;Exits the game safely in a no-danger situation
+PUT "Set Statline Full Custom %f1-=[HP=%f6%h/%H%f1:MA=%f2%m/%M%f1]=-{%f5%X%f1}:%f3%r"
+PUT "X"
+Sneaking = 0
+WAITFOR "Your character has been", "[MAJORMUD]:", "your meditation has", 20
+IF FOUND < 3
+  DropCarrier
+ELSE
+  PUT "Set Statline Full Custom >TI<%f1-=[HP=%f6%h/%H%f1:MA=%f2%m/%M%f1]=-{%f5%X%f1}:%f3%r"
+ENDIF
+ENDPROC
+
+
+PROCEDURE CheckUhOh INTEGER U
+U = U + 1
+IF U > 7
+  U = 0
+  PRINT "UH-OH!"
+  DropCarrier
+  CallBack
+  Retrieve
+ENDIF
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Experience Display ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE DisplayExp INTEGER ExpA, STRING TimeA
+;Checks the characters experience and says various things about 
+;it into the broadcast channel.
+STRING Tim, Incoming, MinuteStr, M, TotMStr
+INTEGER TillLevel, ScriptExp, TotalTime, Estimate, PerHour, Exp
+INTEGER Posit, Hours, Minutes, L, TotM, TotH
+PUT "Exp"
+WAITFOR "Exp:", 4
+GetN Incoming, 80
+ATOI Incoming, Exp
+STRPOS Incoming, "for next level:", Posit
+SUBSTR Incoming, Posit + 15, 10, Incoming
+ATOI Incoming, TillLevel
+ScriptExp = Exp - ExpA
+TIME Tim
+DiffTime TimeA, Tim, TotalTime
+IF TotalTime > 0
+  PerHour = (ScriptExp * 3600) / TotalTime
+ELSE
+  PerHour = 0
+ENDIF
+IF PerHour > 0
+  Estimate = (TillLevel * 60) / PerHour
+ELSE
+  Estimate = 0
+ENDIF
+Hours = Estimate / 60
+Minutes = Estimate - (Hours * 60)
+ITOA Minutes, MinuteStr
+LENGTH MinuteStr, L
+IF L = 1
+  M = MinuteStr
+  MinuteStr = "0"
+  CONCAT MinuteStr, M
+ENDIF
+TotalTime = TotalTime / 60
+TotH = TotalTime / 60
+TotM = TotalTime - (TotH * 60)
+ITOA TotM, TotMStr
+LENGTH TotMStr, L
+IF L = 1
+  M = TotMStr
+  TotMStr = "0"
+  CONCAT TotMStr, M
+ENDIF
+PUT PREFIX, "Mr. Syko has made me ", ScriptExp, " points in ", TotH, ":", TotMStr, "!"
+PUT PREFIX, "Estimated ", PerHour, " points per hour - ", Hours, ":", MinuteStr, " until level."
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Weapon Switching ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE SwapTo STRING WhichWeapon
+;Equips WhichWeapon and changes the necessary global variables
+Sneaking = 0
+
+REPEAT
+  IF WhichWeapon = "punch" OR WhichWeapon = "kick" OR WhichWeapon = "jumpkick" 
+    IF NOT (Weapon = "punch" OR Weapon = "kick" OR Weapon = "jumpkick")
+      PUT "Remove ", Weapon
+    ELSE
+      Weapon = WhichWeapon
+      RETURN
+    ENDIF
+  ELSE
+    PUT "Eq ", WhichWeapon
+  ENDIF
+  WAITFOR "You are now holding", "You now have no", "You are not wearing", "You do not have", "You fumble", "You writhe", "You are too afraid", 5
+  IF FOUND <> 4
+    Weapon = WhichWeapon
+  ENDIF
+UNTIL FOUND < 5
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Capture Interpretation ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE Interpret STRING Stat, INTEGER Health, Mana
+;Stat should be the Statline starting with at least "HP="
+;Returns Health and Mana as integers.
+INTEGER HealthStart, ManaStart, TestRes
+STRING RawHealth, RawMana
+STRPOS Stat, "HP=", HealthStart
+IF HealthStart > 0
+  SUBSTR Stat, HealthStart + 3, 5, RawHealth
+  ATOI RawHealth, Health
+ENDIF
+STRPOS Stat, "MA=", ManaStart
+IF ManaStart > 0
+  SUBSTR Stat, ManaStart + 3, 5, RawMana
+  ATOI RawMana, Mana
+ENDIF
+ENDPROC
+
+
+PROCEDURE FindMonst STRING AlsoHere, Monster
+;Returns any monsters found in AlsoHere, reading the monsters from a file.
+INTEGER Position
+OPEN MONFILE
+
+REPEAT
+  READ Monster
+  STRPOS AlsoHere, Monster, Position
+UNTIL NOT SUCCESS OR Position > 0
+
+CLOSE
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Hiding, Sneaking, Picking, etc. ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE Hide INTEGER Res
+;Hides, returning 1 if success, 0 if failed after 10 tries, and
+;-1 if interrupted by a monster.
+INTEGER Frustration, UhOh
+Frustration = 0
+UhOh = 0
+
+REPEAT
+  Frustration = Frustration + 1
+  PUT "Hide"
+  WAITFOR "Attempting to hide..", "You may not hide", "You fumble", "You writhe", "You are too afraid", 5
+  SWITCH FOUND
+    CASE 1:
+      WAITFOR "don't think you're hidden", "-=", 1
+      IF FOUND = 2
+        Res = 1
+        RETURN
+      ENDIF
+    CASE 2:
+      Res = -1
+      RETURN
+    CASE 0:
+      CheckUhOh UhOh
+  ENDSWITCH
+UNTIL Frustration > 10
+
+Res = 0
+ENDPROC
+
+
+PROCEDURE Sneak INTEGER Result
+;Attempts to sneak, returning 1 for success, 0 for failure, and
+;-1 for interruption
+INTEGER Frustration, UhOh
+Frustration = 0
+UhOh = 0
+
+REPEAT
+  Frustration = Frustration + 1
+  PUT "Sn"
+  WAITFOR "Attempting to sneak..", "You may not sneak", "You fumble", "You writhe", "You are too afraid", 5
+  SWITCH FOUND
+    CASE 0: CheckUhOh UhOh
+    CASE 1:
+      WAITFOR "You don't think you're sneaking", "-=", 1
+      IF FOUND = 2
+        Result = 1
+        RETURN
+      ENDIF
+    CASE 2:
+      Result = -1
+      RETURN
+  ENDSWITCH
+UNTIL Frustration > 30
+
+Result = 0
+ENDPROC
+
+
+PROCEDURE Bash STRING WhichWay, INTEGER Result
+;Bashes a door in direction WhichWay, returning 1 for success
+;and 0 if failed after 20 tries
+INTEGER Frustration, UhOh
+Frustration = 0
+UhOh = 0
+
+REPEAT
+  PUT "Bash ", WhichWay
+  Sneaking = 0
+  WAITFOR "Your attempts to bash", "You bashed the", "is already open^M", "You fumble", "You writhe", "You are too afraid", 5
+  IF FOUND = 2 OR FOUND = 3
+    Result = 1
+    RETURN
+  ELSEIF NOT FOUND
+    CheckUhOh UhOh
+  ENDIF
+  Frustration = Frustration + 1
+UNTIL Frustration > 20
+
+Result = 0
+ENDPROC
+
+
+PROCEDURE Pick STRING WhichWay, INTEGER Result
+;Picks a door in direction WhichWay, returning 1 for success and
+;0 if failed after 20 tries
+INTEGER Frustration, UhOh
+Frustration = 0
+UhOh = 0
+
+REPEAT
+  PUT "Pick ", WhichWay
+  Sneaking = 0
+  WAITFOR "Your skill fails", "You successfully unlocked", "There is no benefit", "You fumble", "You writhe", "You are too afraid", 5
+  IF FOUND = 2 OR FOUND = 3
+    Result = 1
+    PUT "Open ", WhichWay
+    RETURN
+  ELSEIF FOUND = 0
+    CheckUhOh UhOh
+  ENDIF 
+  Frustration = Frustration + 1
+UNTIL Frustration > 20
+
+Result = 0
+ENDPROC
+
+
+PROCEDURE Search STRING WhichWay, INTEGER Result
+;Searches in the direction WhichWay, returning -1 for
+;interruption, 1 for success, and 0 if failed after 10
+;tries.
+INTEGER Frustration, UhOh
+Frustration = 0
+UhOh = 0
+
+REPEAT
+  PUT "Search ", WhichWay
+  Sneaking = 0
+  WAITFOR "You found an exit", "You notice nothing different", "You may not", "Why would you want to", "You fumble", "You writhe", "You are too afraid", 5
+  IF FOUND = 1
+    Result = 1
+    RETURN
+  ELSEIF FOUND = 3
+    Result = -1
+    RETURN
+  ELSEIF FOUND = 4
+    Result = 0
+    RETURN
+  ELSEIF NOT FOUND
+    CheckUhOh UhOh
+  ENDIF
+  Frustration = Frustration + 1
+UNTIL Frustration > 20
+
+Result = 0
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Resting Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE HandlePoison INTEGER Result
+;Deals with poison, returning 1 if successful, 0 if not, and
+;hangs up if HP gets lower than HANGHP
+INTEGER Res, HideRes, Where1, Where2, UhOh, S
+STRING Incoming, Monst, N, L, C
+HideRes = 0
+UhOh = 0
+IF STEALTH
+  Hide HideRes
+  IF HideRes = -1
+    Result = 0
+    RETURN
+  ENDIF
+ENDIF
+TIME L
+TIME C
+
+REPEAT
+  WAITFOR "says", "gangpaths", "gossips", "Broadcast", "auctions", "yells", "-=", " effects of the poison ", "damage", "at you!^M", "at you,", "at you with", "lso here:", " from the ", "feel ill", "tatline Ful", "has invit", ">>>", 10
+  SWITCH FOUND
+    CASE 1, 2, 3, 4, 5, 6, 15, 16, 17: WAITFOR "^M"
+    CASE 7:
+      GetN Incoming, 20
+      Interpret Incoming, HP, MP
+      IF HP <= HANGHP
+        DropCarrier
+        STOP
+      ELSEIF HideRes <> 1 AND HEALSPELL <> "" AND HP <= HEALHP AND MP >= HEALSPCOST
+        TIME N
+        DiffTime C, N, S
+        IF S > 8
+          Cast HEALSPELL, HEALSPCOST, Res
+          TIME C
+        ENDIF
+      ENDIF
+    CASE 8:
+      Result = 1
+    CASE 9, 10, 11, 12:
+      Result = 0
+      RETURN
+    CASE 13:
+      IF HideRes = 0
+        GetN Here, 255
+        FindMonst Here, Monst
+        Here = "null"
+        IF Monst <> ""
+          Result = 0
+        ENDIF
+      ENDIF
+    CASE 14:
+      IF HideRes = 0
+        PUT
+      ENDIF
+    CASE 15:
+      TIME L
+    CASE 0:
+      PUT
+      WAITFOR "-=", 4
+      IF FOUND
+        GetN Incoming, 20
+        Interpret Incoming, HP, MP
+      ELSE
+        DropCarrier
+        CallBack
+        Retrieve
+        Hide HideRes
+        IF HideRes = -1
+          Result = 0
+          RETURN
+        ENDIF
+      ENDIF
+  ENDSWITCH 
+  TIME N
+  DiffTime L, N, S
+  IF S > 40
+    Result = 1
+  ENDIF
+UNTIL Result = 1
+
+ENDPROC
+
+
+PROCEDURE StartRest INTEGER Result
+;Initiates resting.  Returns 1 for success, 0 for interruption,
+;and -1 for poison or the like.
+INTEGER DummyRes
+Cast RESTPREP, RPRCOST, DummyRes
+Sneaking = 0
+
+REPEAT
+  PUT "Rest Health"
+  WAITFOR "You are now resting.", "(Resting)", "You are too sick", "You cannot", "You fumble", "You writhe", "You are too afraid", 3
+  IF FOUND = 3
+    Result = -1
+  ELSEIF FOUND = 4
+    Result = 0
+  ELSE
+    Result = 1
+  ENDIF
+UNTIL FOUND < 5
+
+ENDPROC
+
+
+PROCEDURE Rest INTEGER RestTill, Result
+;Rests until RestTill is reached or resting is interrupted.
+;Result 1 = Full rest successful
+;Result 0 = Rest interrupted by a found monster
+;Result -1 = Can't rest due to poison, etc.
+;Result -2 = Rest interrupted by an unknown monster
+INTEGER Where, UhOh
+STRING Incoming, Monst
+StartRest Result
+UhOh = 0
+
+WHILE Result = 1
+  WAITFOR "says", "gangpaths", "gossips", "Broadcast", "auctions", "yells", "-=", " damage!^M", " at you!^M", "at you with", "at you,", "Also here:", " from the ", "tatline Ful", "has invit", ">>>", 20
+  SWITCH FOUND
+    CASE 1, 2, 3, 4, 5, 6, 14, 15, 16: WAITFOR "^M"
+    CASE 7:
+      GetN Incoming, 20
+      Interpret Incoming, HP, MP
+      IF HP >= RestTill
+        RETURN
+      ENDIF    
+      WAITFOR "esting)", 1
+      IF NOT FOUND
+        StartRest Result
+      ENDIF
+    CASE 8, 9, 10, 11:
+      Result = 0
+      PUT
+      WAITFOR "Also Here:", "Obvious", 2
+      IF FOUND = 1
+        GetN Here, 255
+        FindMonst Here, Monst
+      ENDIF
+      IF Monst = "" OR FOUND <> 1
+        Here = "null"
+      ENDIF
+    CASE 12:
+      GetN Here, 255
+      FindMonst Here, Monst
+      IF Monst <> ""
+        Result = 0
+      ELSE
+        Here = "null"
+      ENDIF
+    CASE 13: PUT
+    CASE 0:
+
+      REPEAT
+        PUT "Sleeping in the flowers!"
+        WAITFOR "Your command had no effect.^M", "-=", 10
+        IF NOT FOUND
+          CheckUhOh UhOh
+          IF UhOh = 0
+            StartRest Result
+          ENDIF
+        ENDIF
+      UNTIL FOUND
+
+  ENDSWITCH
+ENDWHILE
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Banking Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE GetMoney INTEGER Cash, Encum
+STRING CashCap, EncCap
+
+REPEAT
+  PUT "I"
+  WAITFOR "You are carrying", "You fumble", "You writhe", "You are too afraid", 2
+UNTIL FOUND < 2
+
+WAITFOR "Wealth:", 4
+GetN CashCap, 10
+WAITFOR "cumberance:", 2
+GetN EncCap, 10
+ATOI CashCap, Cash
+ATOI EncCap, Encum
+ENDPROC
+
+
+PROCEDURE Sell STRING Item
+;Sells all of Item on the person unless one of them is
+;their weapon, in which case it hides that one and sells the
+;others.
+INTEGER Posit1, Posit2, UhOh
+UhOh = 0
+Sneaking = 0
+IF WEAPON1 = Item OR WEAPON2 = Item
+  PUT "Hide ", Item
+ENDIF
+REPEAT
+  PUT "Sell ", Item
+  WAITFOR "You don't have", "You cannot sell", "You sold", "You fumble", "You writhe", "You are too afraid", 3
+  IF NOT FOUND
+    CheckUhOh UhOh
+  ENDIF
+UNTIL FOUND <> 3
+
+IF WEAPON1 = Item OR WEAPON2 = Item
+
+  REPEAT
+    PUT "Search"
+    WAITFOR Item, "nothing.^M", "here.^M", 3
+    IF FOUND <> 1
+      CheckUhOh UhOh
+    ENDIF
+  UNTIL FOUND = 1
+
+  PUT "Get ", Item
+  IF Posit1 > 0
+    SwapTo Item
+  ENDIF
+ENDIF
+ENDPROC
+
+
+PROCEDURE R STRING BankDir
+;Walks in direction BankDir
+INTEGER Result, UhOh, Bounces
+Bounces = 0
+UhOh = 0
+IF STEALTH AND NOT Sneaking
+  Sneak Result
+ENDIF
+WAITFOR "]=-{", 2
+PUT BankDir
+Sneaking = 0
+
+REPEAT
+  WAITFOR "Obvious exits:", " is closed!^M", "You do not have enough", "no exit", "You can't see", "You fumble", "You writhe", "You are too afraid", "Sneaking...", 9
+  IF FOUND = 9
+    Sneaking = 1
+    WAITFOR "Obvious exits:", " is closed!^M", "You do not have enough", "no exit", "You can't see", "You fumble", "You writhe", "You are too afraid", 9
+  ENDIF
+  SWITCH FOUND
+    CASE 1, 5: RETURN
+    CASE 2:
+      Bounces = Bounces + 1
+      IF PICKLOCKS
+        Pick BankDir, Result
+      ELSE
+        Bash BankDir, Result
+      ENDIF
+      PUT BankDir
+    CASE 3, 4:
+      PRINT "CRUD!!!"
+      RETURN
+    CASE 5, 6, 7:
+      PUT BankDir
+    CASE 0:
+      CheckUhOh UhOh
+      IF UhOh > 3
+        PUT
+      ENDIF
+  ENDSWITCH
+UNTIL Bounces > 10
+
+PRINT "Script Problemo: Too many bounces!"
+DropCarrier
+STOP
+ENDPROC
+
+
+PROCEDURE BankDeposit
+INTEGER Res, Money, Enc
+GetMoney Money, Enc
+Sneaking = 0
+PUT "Deposit ", Money
+IF HANGONCASH
+  PUT "Withdraw ", HANGONCASH
+ENDIF
+ENDPROC
+
+
+PROCEDURE GotoBank
+R "E"
+R "N"
+R "E"
+R "S"
+R "E"
+R "E"
+R "N"
+R "N"
+R "E"
+R "S"
+R "S"
+R "S"
+R "S"
+R "S"
+R "SE"
+R "S"
+PUT "Go Crack"
+Sneaking = 0
+WAITFOR "into the wide crack", 4
+R "S"
+R "SW"
+R "SW"
+R "W"
+R "S"
+R "S"
+R "S"
+R "S"
+R "S"
+R "E"
+R "E"
+R "E"
+R "E"
+R "E"
+R "S"
+R "S"
+R "S"
+R "S"
+R "S"
+R "S"
+R "S"
+R "W"
+Sell "Fine Broadsword"
+R "E"
+R "S"
+R "S"
+R "S"
+R "S"
+R "W"
+ENDPROC
+
+
+PROCEDURE GotoStart
+R "E"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "W"
+R "W"
+R "W"
+R "W"
+R "W"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "E"
+R "NE"
+R "NE"
+PUT "Go Crack"
+WAITFOR "into the wide crack", 4
+R "N"
+R "N"
+R "NW"
+R "N"
+R "N"
+R "N"
+R "N"
+R "N"
+R "W"
+R "S"
+R "S"
+R "W"
+R "W"
+R "N"
+R "W"
+R "S"
+R "W"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Escape Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE Run STRING WhichWay
+;Runs desperately in direction WhichWay, and hangs up if it
+;encounters any trouble.
+INTEGER Res, UhOh, Bounces
+STRING StatL
+UhOh = 0
+PUT WhichWay
+
+REPEAT
+  WAITFOR "Obvious exi", "is closed!^M", "There is no exit", "You can't see", "You fumble", "You writhe", "You are too afraid", 3
+  SWITCH FOUND
+    CASE 1, 4:
+      WAITFOR "-=", 1
+      IF FOUND
+        GetN StatL, 20
+        Interpret StatL, HP, MP
+      ENDIF  
+      RETURN
+    CASE 2: 
+      Bounces = Bounces + 1
+      IF PICKLOCKS
+        Pick Whichway, Res
+      ELSE
+        Bash WhichWay, Res
+      ENDIF
+      IF Res = 0
+        PRINT "CRUD!"
+        DropCarrier
+        STOP
+      ENDIF
+      PUT WhichWay
+    CASE 3:
+      PRINT "CRUD!"
+      DropCarrier
+      STOP
+    CASE 5, 6, 7:
+      PUT WhichWay
+    CASE 0:
+      CheckUhOh UhOh
+  ENDSWITCH
+UNTIL Bounces > 3
+  
+PRINT "Script Problem: Too many bounces!"
+DropCarrier
+STOP
+ENDPROC
+
+
+PROCEDURE Key STRING KeyStr, INTEGER Result
+STRING KeyCom, KeyDir, Temp
+INTEGER Leng, Res, UhOh
+LENGTH KeyStr, Leng
+SUBSTR KeyStr, 5, Leng - 4, KeyCom
+SUBSTR KeyStr, Leng - 1, 2, KeyDir
+SUBSTR KeyDir, 1, 1, Temp
+IF Temp = " "
+  SUBSTR KeyDir, 2, 1, KeyDir
+ENDIF
+UhOh = 0
+Sneaking = 0
+
+REPEAT
+  PUT "Use ", KeyCom
+  WAITFOR "-=", "You fumble", "You writhe", "You are too afraid", 5
+  IF NOT FOUND
+    CheckUhOh UhOh
+  ENDIF
+UNTIL FOUND = 1
+
+UhOh = 0
+
+REPEAT
+  PUT "Open ", KeyDir
+  WAITFOR "-=", "You fumble", "You writhe", "You are too afraid", 5
+  IF NOT FOUND
+    CheckUhOh UhOh
+  ENDIF
+UNTIL FOUND = 1
+
+IF STEALTH AND NOT Sneaking
+  Sneak Res
+ENDIF
+UhOh = 0
+
+REPEAT
+  PUT KeyDir
+  WAITFOR "There is no exit", "is closed!^M", "Obvious exi", "You can't see", "You fumble", "You writhe", "You are too afraid", 5
+  IF NOT FOUND
+    CheckUhOh UhOh
+  ENDIF
+UNTIL FOUND < 5 AND FOUND > 0
+
+IF FOUND <= 2
+  Result = 0
+ELSE
+  Result = 1
+ENDIF
+ENDPROC
+
+
+PROCEDURE Say STRING Move, INTEGER Res
+;Handles the command Move
+INTEGER UhOh
+STRING Com1
+SUBSTR Move, 1, 7, Com1
+IF Com1 = "Search "
+  SUBSTR Move, 8, 2, Com1
+  Search Com1, Res
+ELSE
+  SUBSTR Move, 1, 4, Com1
+  IF Com1 = "Key "
+    Key Move, Res
+  ELSE
+    Res = 1
+    UhOh = 0
+    Sneaking = 0
+
+    REPEAT
+      PUT Move
+      WAITFOR "-=", "You fumble", "You are too afraid", "You writhe", 3
+      IF NOT FOUND
+        CheckUhOh UhOh
+      ENDIF
+    UNTIL FOUND = 1
+
+  ENDIF
+ENDIF
+ENDPROC
+
+
+
+PROCEDURE Flee INTEGER HowFar
+;Runs along the direction track HowFar rooms.
+INTEGER ComPos, ComPos1, RunCounter, Res, SafeSpot
+STRING Com1, Command, Move
+RunCounter = 1
+SafeSpot = 0
+
+WHILE NOT (RunCounter > HowFar OR SafeSpot)
+  IF BACKWARDS
+    
+    REPEAT
+      BackMove Move
+    UNTIL Move <> "%%"
+
+    SWITCH Move
+      CASE "U", "D", "S", "E", "W", "N", "NW", "NE", "SW", "SE": Run Move
+      CASE "@@": SafeSpot = 1
+      OTHERWISE:
+        IF Move <> ""
+          Say Move, Res
+          IF Res <> 1
+            DropCarrier
+            STOP
+          ENDIF
+        ENDIF
+    ENDSWITCH
+  ELSE
+
+    REPEAT
+      GetNext Move
+    UNTIL Move <> "%%"
+
+    SWITCH Move
+      CASE "D", "U", "N", "E", "S", "W", "NW", "NE", "SE", "SW": Run Move
+      CASE "@@": SafeSpot = 1
+      OTHERWISE:
+        IF Move <> ""
+          Say Move, Res
+          IF Res <> 1
+            DropCarrier
+            STOP
+          ENDIF
+        ENDIF
+    ENDSWITCH
+  ENDIF
+  RunCounter = RunCounter + 1
+  IF HP < HANGHP
+    DropCarrier
+    STOP
+  ENDIF
+ENDWHILE
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Combat Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE InitSpell STRING Monster
+;Starts casting ATTACKSPELL on Monster
+IF AREA
+  PUT ATTACKSPELL
+ELSE
+  PUT ATTACKSPELL, " ", Monster
+ENDIF
+ENDPROC
+
+
+PROCEDURE StartAttack STRING Monster
+;Initiates standard attack (NOT Backstab) on Monster, returning
+;1 for Magik if a spell is cast, and 0 if not.
+
+IF Weapon = "kick"
+  PUT "Kick ", Monster
+ELSEIF Weapon = "jumpkick"
+  PUT "Jumpkick ", Monster
+ELSEIF Weapon = "punch"
+  PUT "Punch ", Monster
+ELSE
+  PUT "Attack ", Monster
+ENDIF
+ENDPROC
+
+
+PROCEDURE HandleCombat STRING Monster, INTEGER Combat
+;Returns 0 for combat if monster is dead, -1 if self-removal 
+;from current combat situation is necessary, -2 if some wierd
+;happening makes you feel like leaving the room.
+INTEGER Magik, Seconds, UhOh, S, Res
+STRING Statline, Last, Now, C
+UhOh = 0
+Magik = 0
+Fought = 1
+IF Combat = 0
+  Sneaking = 0
+
+  REPEAT
+    IF STEALTH AND Weapon = WEAPON1
+      PUT "Backstab ", Monster
+    ELSEIF ATTACKSPELL <> "" AND MP >= STARTSPELL
+      InitSpell Monster
+      Magik = 1
+    ELSE
+      StartAttack Monster
+    ENDIF
+    WAITFOR "*Combat Engaged*^M", "Your command had no effect.^M", "You do not see", "You are overcome with", "To do this action", "You fumble", "You writhe", "You are too afraid", 2
+  UNTIL FOUND < 6
+
+  IF FOUND = 1
+    Combat = 1
+  ELSEIF FOUND = 4 OR FOUND = 5
+    Combat = -2
+  ELSE
+    Combat = 0
+  ENDIF
+ENDIF
+Last = "99:99:99"
+TIME C
+
+WHILE Combat = 1
+  WAITFOR "-=", "You surprise ", SPELLSTR, "You attempt ", ATTSTR1, ATTSTR2, "You critically", "with your", "*Combat Off*", "experience", "says", "gangpaths", "gossips", "Broadcast", "auctions", "yells", "Statline Ful", "has invit", ">>>", 10
+  SWITCH FOUND
+    CASE 11, 12, 13, 14, 15, 16, 17, 18, 19: WAITFOR "^M"
+    CASE 1:
+      GetN Statline, 20
+      Interpret Statline, HP, MP
+      TIME Now
+      DiffTime C, Now, S
+      IF HP < HEALHP AND MP >= HEALSPCOST AND S > HEALSPTIME
+        Cast HEALSPELL, HEALSPCOST, Res
+        TIME C
+        WAITFOR "-=", 2
+        IF FOUND
+          GetN Statline, 20
+          Interpret Statline, HP, MP
+        ENDIF
+        IF Combat = 1
+
+          REPEAT
+            IF Magik = 0 OR MP <= ENDSPELL
+              StartAttack Monster
+            ELSE
+              InitSpell Monster
+            ENDIF
+            WAITFOR "*Combat Engaged*^M", "Your command had no effect.^M", "You do not see", "You fumble", "You writhe", "You are too afraid", 2
+          UNTIL FOUND < 4
+
+          IF FOUND = 2 OR FOUND = 3
+            Combat = 0
+          ENDIF
+        ENDIF
+      ENDIF
+      IF HP <= FLEEHP AND Last <> "99:99:99"
+        Combat = -1
+      ELSEIF Magik = 1 AND MP <= ENDSPELL AND Combat = 1
+        Magik = 0
+        IF WEAPON2 <> ""
+          SwapTo WEAPON2
+        ENDIF
+  
+        REPEAT
+          StartAttack Monster
+          WAITFOR "*Combat Engaged*", "Your command had no effect.^M", "You fumble", "You writhe", "You are too afraid", 3
+          IF FOUND = 2
+            Combat = 0
+          ENDIF
+        UNTIL FOUND < 3
+  
+      ENDIF
+    CASE 2, 3, 4, 5, 6, 7, 8:
+      TIME Last
+      IF ATTACKSPELL <> ""
+        IF MP >= STARTSPELL AND Magik = 0
+
+          REPEAT
+            InitSpell Monster
+            WAITFOR "*Combat Engaged*^M", "Your command had no effect.^M", "You do not see", "You fumble", "You writhe", "You are too afraid", 3
+            IF FOUND = 1
+              Magik = 1
+            ELSEIF FOUND = 2 OR FOUND = 3
+              Combat = 0
+            ENDIF
+          UNTIL FOUND < 4
+
+        ENDIF  
+      ELSEIF WEAPON2 <> "" AND Weapon <> WEAPON2
+        SwapTo WEAPON2
+        
+        REPEAT
+          StartAttack Monster
+          WAITFOR "*Combat Engaged*^M", "Your command had no effect.^M", "You fumble", "You writhe", "You are too afraid", 3
+          IF FOUND = 2
+            Combat = 0
+          ENDIF
+        UNTIL FOUND < 3
+  
+      ENDIF
+    CASE 9, 10:
+      Combat = 0
+    CASE 0:
+      PUT
+      WAITFOR "Obvious exi", 3
+      IF NOT FOUND
+        UhOh = 7
+        CheckUhOh UhOh
+      ENDIF
+  ENDSWITCH
+  TIME Now
+  DiffTime Last, Now, Seconds
+  IF Seconds > 7
+    Combat = 0
+  ENDIF
+ENDWHILE
+
+ENDPROC
+
+
+PROCEDURE HandleMonsters
+INTEGER Fighting, Res, PRes, UhOh, Temp, MonFound
+STRING Monst
+WHEN "copper drop to the ground.^M", "Get Copper^M"
+WHEN "silver drop to the ground.^M", "Get Silver^M"
+WHEN "gold drop to the ground.^M", "Get Gold^M"
+WHEN "platinum drop to the ground.^M", "Get Plat^M"
+UhOh = 0
+Fought = 0
+Fighting = 0
+Temp = STEALTH
+MonFound = 1
+
+REPEAT
+  IF Here = "null"
+    PUT
+    WAITFOR "Also here:", "Obvious exi", "You can't see", 2
+    MonFound = FOUND
+    IF MonFound = 1
+      GetN Here, 255
+      FindMonst Here, Monst
+    ELSE
+      Monst = ""
+    ENDIF
+  ELSE
+    FindMonst Here, Monst
+  ENDIF
+  Here = "null"
+  IF Monst <> ""
+    Fighting = 0
+    HandleCombat Monst, Fighting
+    STEALTH = 0
+    IF Fighting = -1
+
+      REPEAT
+        IF HP <= HANGHP
+          DropCarrier
+          STOP
+        ELSE
+          Flee RUNDIST
+        ENDIF
+        PUT
+        WAITFOR "Also Here:", "Obvious", 3
+        IF FOUND = 1
+          GetN Here, 255
+          FindMonst Here, Monst
+          WAITFOR "Obvious"
+        ELSE
+          Monst = ""
+        ENDIF
+        IF Monst = "" AND HP <= RESTHP
+          IF Temp
+            Hide Res
+            IF Res
+              DELAY 50
+            ENDIF
+          ENDIF
+          Rest FULLHP, Res
+          IF Res = -1
+            HandlePoison PRes
+            IF PRes = 1
+              Rest FULLHP, Res
+            ENDIF
+          ENDIF
+        ELSE
+          IF HP < RESTHP 
+            Res = 0
+          ELSE
+            Res = 1
+          ENDIF
+        ENDIF
+      UNTIL Res = 1 OR HP > RESTHP
+      
+    ENDIF
+  ELSE
+    Fighting = -2
+  ENDIF
+  IF MonFound = 0
+    CheckUhOh UhOh
+    PUT
+  ENDIF
+UNTIL MonFound = 2 OR MonFound = 3 OR Fighting < 0
+
+STEALTH = Temp
+WHEN "copper drop to the ground.^M", ""
+WHEN "silver drop to the ground.^M", ""
+WHEN "gold drop to the ground.^M", ""
+WHEN "platinum drop to the ground.^M", ""
+ENDPROC
+  
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Walking Procedures ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE Walk STRING WhichWay, INTEGER Res
+;Walks in the direction WhichWay.  Returns 0 if failed, 1 if
+;successful.
+INTEGER Result, Len, Result, UhOh, Bounces, Fnd
+UhOh = 0
+Bounces = 0
+IF Weapon <> WEAPON1
+  SwapTo WEAPON1
+ENDIF
+IF STEALTH AND Not Sneaking
+  Sneak Result
+ENDIF
+PUT WhichWay
+Sneaking = 0
+
+REPEAT
+  WAITFOR "There is no exit", "is closed!^M", "Also Here:", "Obvious", "You can't see", "You notice", "You fumble", "You writhe", "You are too afraid", "Sneaking...", 9
+  IF FOUND = 10
+    Sneaking = 1
+    WAITFOR "There is no exit", "is closed!^M", "Also Here:", "Obvious", "You can't see", "You notice", "You fumble", "You writhe", "You are too afraid", 9
+  ENDIF
+  Fnd = FOUND
+  SWITCH Fnd
+    CASE 1: 
+      Res = 0
+    CASE 2:
+      Bounces = Bounces + 1
+      IF PICKLOCKS
+        Pick WhichWay, Result
+      ELSE
+        Bash WhichWay, Result
+      ENDIF
+      IF Result = 0
+        Res = 0
+      ELSE
+        IF STEALTH
+          Sneak Result
+        ENDIF
+        PUT WhichWay
+      ENDIF
+    CASE 3:
+      GetN Here, 255
+      Res = 1
+    CASE 4, 5:
+      Here = ""
+      Res = 1
+    CASE 6:
+      WAITFOR "Platinum piece", "Gold crown", "Silver noble", "Copper farthing", "^M", 2
+      SWITCH FOUND
+        CASE 1: PUT "Get Platinum"
+        CASE 2: PUT "Get Gold"
+        CASE 3: PUT "Get Silver"
+        CASE 4: PUT "Get Copper"
+      ENDSWITCH
+    CASE 7, 8, 9:
+      PUT WhichWay
+    CASE 0:
+      CheckUhOh UhOh
+      PUT
+  ENDSWITCH
+UNTIL Fnd < 5 AND (Fnd <> 2 OR Bounces > 3)
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Room Handling ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PROCEDURE HandleEnch
+;Takes care of enchantments needing to be cast.
+INTEGER T1, T2, T3, T4, T5, T6, Res
+STRING Now
+Res = 0
+TIME Now
+DiffTime El1, Now, T1
+DiffTime El2, Now, T2
+DiffTime El3, Now, T3
+DiffTime El4, Now, T4
+DiffTime El5, Now, T5
+DiffTime El6, Now, T6
+IF T1 > E1TIME AND ENCH1 <> ""
+  Cast ENCH1, E1COST, Res
+  IF Res = 1
+    El1 = Now
+  ENDIF
+ELSEIF T2 > E2TIME AND ENCH2 <> ""
+  Cast ENCH2, E2COST, Res
+  IF Res = 1
+    El2 = Now
+  ENDIF
+ELSEIF T3 > E3TIME AND ENCH3 <> ""
+  Cast ENCH3, E3COST, Res
+  IF Res = 1
+    El3 = Now
+  ENDIF
+ELSEIF T4 > E4TIME AND ENCH4 <> ""
+  Cast ENCH4, E4COST, Res
+  IF Res = 1
+    El4 = Now
+  ENDIF
+ELSEIF T5 > E5TIME AND ENCH5 <> ""
+  Cast ENCH5, E5COST, Res
+  IF Res = 1
+    El5 = Now
+  ENDIF
+ELSEIF T6 > E6TIME AND ENCH6 <> ""
+  Cast ENCH6, E6COST, Res
+  IF Res = 1
+    El6 = Now
+  ENDIF
+ENDIF
+ENDPROC
+
+
+PROCEDURE HandleRoom INTEGER Res
+;Takes care of whatever room you're in at the time and moves on
+;to the next one.  Res 2 = Regen room reached
+STRING StatL, Move, M1
+INTEGER Fou, Len, PRes
+HandleMonsters
+WAITFOR "-=", ">TI<", 1
+IF NOT FOUND
+  PUT
+  WAITFOR "-=", ">TI<", 2
+ENDIF
+Fou = FOUND
+GetN StatL, 20
+Interpret StatL, HP, MP
+IF Fou = 2
+  GetOutSafe
+  IF NOT CONNECTED
+    DELAY 4200            ;Wait 7 minutes.
+    CallBack
+  ENDIF
+ENDIF
+Res = 1
+IF HP < RESTHP
+  Rest FULLHP, Res
+  IF Res = 0 AND Here = "null"
+    PRINT "Attacked by unknown object!"
+    Flee RUNDIST
+  ELSEIF Res = -1
+    HandlePoison PRes
+    Rest FULLHP, Res
+  ENDIF
+ENDIF
+IF Res = 1
+  HandleEnch
+  
+  REPEAT
+    GetNext Move
+  UNTIL Move <> "@@"
+
+  SWITCH Move
+    CASE "N", "S", "E", "W", "U", "D", "NW", "NE", "SE", "SW": Walk Move, Res
+    CASE "%%":
+      Res = 2
+    OTHERWISE:
+      Say Move, Res
+      GetN StatL, 20
+      Interpret StatL, HP, MP
+  ENDSWITCH
+  IF Res <> 1
+    Bonks = Bonks + 1
+  ENDIF
+ENDIF
+ENDPROC
+
+
+PROCEDURE RegenRoom
+;Handles a regen room.
+STRING Move, StatL
+INTEGER Res, Moved
+
+REPEAT
+
+  REPEAT
+    BackMove Move
+  UNTIL Move <> "%%" AND Move <> "@@"
+
+  SWITCH Move
+    CASE "N", "S", "E", "W", "U", "D", "NW", "NE", "SE", "SW": Walk Move, Res
+    OTHERWISE:
+      Say Move, Res
+      GetN StatL, 20
+      Interpret StatL, HP, MP
+  ENDSWITCH
+
+  HandleRoom Res
+  HandleRoom Res
+  PRINT Res, " ", Fought
+UNTIL Fought = 0 OR Res <> 2
+
+ENDPROC
+
+
+;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÍÍÍ[ Main Program ]ÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+PUT "'NIFTYMUD V5.34 ON!"
+FILEEXIST DIRFILE, F
+IF NOT F
+  PRINT "*** Script error: Direction file not found! ***"
+  STOP
+ENDIF
+FILEEXIST MONFILE, F
+IF NOT F
+  PRINT "*** Script error: Monster file not found! ***"
+  STOP
+ENDIF
+PUT "Set Statline Full Custom %f1-=[HP=%f6%h/%H%f1:MA=%f2%m/%M%f1]=-{%f5%X%f1}:%f3%r"
+DELAY 10
+PUT "Exp"
+WAITFOR "Exp:", 2
+GetN BXStr, 20
+ATOI BXStr, BaseExp
+PUT "Remove ", WEAPON1
+SwapTo WEAPON1
+PUT "Talk Slow"
+PUT "Set Tele Off"
+PUT "Set Gos Off"
+PUT "Set Auc Off"
+PUT "Set Warnings On"
+PUT "Set Receive Off"
+WAITFOR "any gifts", 3
+PUT
+WAITFOR "of Godfrey", "Obvious exits:", 3
+IF FOUND = 1
+  WAITFOR "Obvious exits:", 1
+  BankDeposit
+  GotoStart
+ENDIF
+
+REPEAT
+  IF BANK AND (Pos <= 2 OR Pos >= Len)
+    GetMoney Cash, Enc
+    IF Cash >= DEPOSITCASH OR Enc > DEPOSITENC
+      GotoBank
+      BankDeposit
+      GotoStart
+    ENDIF
+  ENDIF
+  TIME Now
+  DiffTime Lst, Now, Sec
+  IF Sec > 60
+    DisplayExp BaseExp, StartTime
+    TIME Lst
+  ENDIF
+  HandleRoom Rez
+  IF Bonks > 20
+    PRINT "These walls are beginning to hurt...  Exiting Major MUD!"
+    GetOutSafe
+    IF NOT CONNECTED
+      DropCarrier
+    ENDIF
+    STOP
+  ENDIF
+  IF Rez = 2
+    RegenRoom
+  ENDIF
+UNTIL NOT CONNECTED
+

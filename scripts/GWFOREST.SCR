@@ -1,0 +1,635 @@
+#include "toolbox2.scr"
+#include "toolbox3.scr"
+whenidle 10,"^m"
+when "the effects of the poison","rest^m"
+when "meditation has been inter","n^me^mne^mse^mx^m"
+when "you feel ill.","cure^m"
+when "platinum p","get plat^m"
+when "gold drop","get gold^m"   
+when "gold crowns here","get gold^m"
+when "gold crown here","get gold^m"
+when "silver drop","get silv^m"
+when "silver nobles here","get silv^m"      
+when "silver noble here","get silv^m"
+when "copper drop","get copp^m"
+when "copper farthings here","get copp^m"
+when "copper farthing here","get copp^m"
+when "druid utters","get staff^m"
+when "1 minute","rest^me^mn^mne^mnw^mx^m"   
+when "poison burns through your veins",".cure^m"
+;when "you feel ill",".cureme^m"
+
+
+String bh,wm,li,ac,ca,ro,sk,hb,gh
+
+String ko,zo,th,ar,sh,cu,oc,me,os,do,ba,ob,now,start
+
+String pa,sp,pr,cl,cw,ta,gb,p        
+
+; *** STRING DECLARATION ***
+
+bh="bounty hunter"
+wm="warlock mercenary"
+li="lightning"
+ac="acid"
+ca="carrion"
+ro="rogue"
+sk="skeleton"
+th="thug"
+gh="ghoul"
+ko="kobold"
+zo="zombie"
+ba="bandit"
+ar="giant"
+sh="shaman"
+do="hellhound"
+cu="cultist"        
+me="mercenary"
+oc="captain"
+os="sentry"      
+hb="goblin"                             
+pa="WizKid"
+sp="spider"
+pr="priest"
+cl="cleric"
+cw="archer"
+ta="dog"
+gb="druid"
+ob="obvious"
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Detect and Attack~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Procedure bs String Monster
+  Put "a ",Monster
+  delay 30
+  put "exp"
+  Waitfor "You gain","Your Command","bounty hunter","warlock mercenary","lightning",15
+endproc
+
+Procedure Montest
+    Put
+    Waitfor bh,wm,li,ac,ca,ro,sk,th,gh,ko,zo,ba,ar,sh,do,cu,me,oc,os,hb,pa,sp,pr,cl,cw,ta,gb,ob,25
+    Switch Found
+      Case 1,2,3: Return
+      Case 4: bs Ac
+              Montest
+      Case 5: bs Ca
+              Montest
+      Case 6: bs Ro
+              Montest
+      Case 7: bs Sk
+              Montest
+      Case 8: bs Th
+              Montest
+      Case 9: bs Gh
+              Montest
+      Case 10: bs Ko
+               Montest
+      Case 11: bs Zo
+               Montest
+      Case 12: bs Ba
+               Montest
+      Case 13: bs Ar
+               Montest
+      Case 14: bs Sh
+               Montest
+      Case 15: bs Do
+               Montest
+      Case 16: bs Cu                                     
+               Montest
+      Case 17: bs Me
+               Montest
+      Case 18: bs Oc
+               Montest
+      Case 19: bs Os
+               Montest
+      Case 20: bs Hb
+               Montest
+      Case 21: bs Pa
+               Montest
+      Case 22: bs Sp
+               Montest
+      Case 23: bs Pr
+               Montest
+      Case 24: bs Cl
+               Montest
+      Case 25: bs Cw
+               Montest
+      Case 26: bs Ta
+               Montest
+      Case 27: bs Gb
+               Montest
+      Case 28: Return 
+   endswitch
+endproc 
+;~~~~~~~~~~~~~~~~~~~~~~~~~Health and Healing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Procedure Health
+      put "health"
+      waitfor "Health: "
+      getN Raw,15
+      strpos Raw,"/",end
+      Substr raw,1,end-1,health1
+      atoi health1,health2
+      if health2 <= 50
+      put ""
+      put "rest"
+      waitfor "HP=136","at you","damage!","from the",545 
+       switch found
+       case 1: return
+       case 2: montest
+       case 3: montest
+      endswitch
+   endif
+Endproc
+
+Procedure Mana
+      put "health"
+      waitfor "Mana: "
+      getN Raw,15
+      strpos Raw, "/", end
+      Substr raw, 1, end-1,mana1
+      atoi mana1,mana2
+      if mana2 <= 30
+      put "rest"
+      waitfor "MA=30","at you","damage!","from the",545 
+       switch found
+       case 1: return
+       case 2: montest
+       case 3: montest
+      endswitch
+   endif
+Endproc
+
+
+Procedure Group
+     put "party"
+     waitfor "] R -","]P  -","]   -","you are not",5
+     Switch Found
+          Case 1: put "rest"
+               waitfor "at you","damage!","zyx",545
+               if found = 1
+               Montest
+               if found = 2 
+               Montest
+               if found = 3
+               return
+               endif
+               endif
+               endif
+           Case 2: put "cure flame^m"
+               waitfor "at you","damage!","zyx",545
+               if found = 1
+               Montest
+               elseif found = 2
+               Montest
+               elseif found = 3
+               return
+               endif
+          Case 3: return
+          Case 4: return
+     endswitch
+endproc
+
+
+Procedure Cash
+put "i"
+waitfor "encumberance",2
+waitfor "heavy","meduim",2
+if found=1
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "bash w"
+   waitfor "lab",3
+   put "bash w"
+   waitfor "lab",3
+   put "bash w"
+   waitfor "lab",3
+   put "bash w"
+   waitfor "lab",3
+   put "bash w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "s"
+   waitfor "lab",3
+   put "w"
+   waitfor "lab",3
+   put "i"
+   waitfor "wealth: ",2
+   getN Raw,10
+   strpos Raw, "c", end
+   substr Raw, 1, end-2,mon
+   waitfor "lab",3
+   put "dep ",mon
+   waitfor "lab",3
+   put "wit 1000"
+   waitfor "lab",3
+   ;put "give 10 gold to tink"
+   ;waitfor "lab",3
+   put "bal"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "n"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "bash e"
+   waitfor "lab",3
+   put "bash e"
+   waitfor "lab",3
+   put "bash e"
+   waitfor "lab",3
+   put "bash e"
+   waitfor "lab",3
+   put "bash e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "e"
+   waitfor "lab",3
+   put "damage!"
+   elseif found=2
+   put "damage!"
+   endif
+endproc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Movement~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Procedure Sneak
+      delay 5
+endproc
+Procedure N
+  group
+  put "n"
+  montest
+  health
+  mana
+endproc
+
+Procedure E
+  group
+  put "e"
+  montest
+  health
+  mana
+endproc
+
+Procedure S
+  group
+  put "s"
+  montest
+  health
+  mana
+endproc
+
+Procedure W
+  group
+  put "w"
+  montest
+  health
+  mana
+endproc
+
+Procedure NE
+  group
+  put "ne"
+  montest
+  health
+  mana
+endproc
+
+Procedure SE
+  group
+  put "se"
+  montest
+  health
+  mana
+endproc
+
+Procedure SW
+  group
+  put "sw"
+  montest
+  health
+  mana
+endproc
+
+Procedure NW
+  group
+  put "nw"
+  montest
+  health
+  mana
+endproc
+
+Procedure Move
+se
+e
+e
+se
+se
+e
+put "go path"
+sw
+s
+w
+w
+sw
+ne
+e
+e
+se
+nw
+n
+ne
+put "go path"
+se
+se
+e
+se
+se
+s
+se
+se
+se
+se
+se
+se
+se
+e
+e
+se
+se
+se
+nw
+nw
+nw
+w
+w
+nw
+nw
+nw
+nw
+nw
+nw
+put "go path"
+sw
+sw
+w
+sw
+nw
+w
+sw
+w
+nw
+sw
+sw
+se
+sw
+sw
+s
+n
+ne
+se
+e
+ne
+e
+e
+ne
+n
+ne
+ne
+e
+s
+sw
+s
+s
+sw
+s
+w
+w
+s
+w
+put "get ring"
+e
+n
+e
+e
+n
+ne
+n
+n
+ne
+n
+ne
+ne
+put "go path"
+nw
+n
+put "go path"
+ne
+n
+n
+ne
+ne
+nw
+n
+nw
+nw
+n
+n
+n
+nw
+nw
+sw
+nw
+ne
+nw
+se
+sw
+se
+sw
+s
+sw
+s
+se
+se
+sw
+s
+n
+ne
+se
+e
+w
+nw
+nw
+nw
+n
+ne
+n
+ne
+ne
+se
+se
+s
+s
+s
+se
+se
+s
+se
+e
+ne
+e
+e
+se
+ne
+ne
+ne
+ne
+e
+se
+e
+w
+nw
+w
+sw
+sw
+se
+e
+se
+s
+sw
+s
+sw
+w
+nw
+w
+w
+nw
+se
+e
+s
+s
+s
+w
+e
+e
+se
+sw
+sw
+se
+s
+n
+nw
+nw
+w
+n
+nw
+nw
+n
+ne
+ne
+nw
+nw
+w
+sw
+sw
+s
+s
+sw
+put "go path"
+nw
+nw
+w
+nw
+nw
+w
+nw
+nw
+w
+w
+nw
+w
+w
+w
+w
+w
+w
+e
+e
+e
+e
+e
+e
+cash
+endproc
+
+; *** MAIN PROGRAM ***
+put "talk slow"       
+put "bow"
+put "set page on"
+put "=p on"
+put "brief"
+repeat
+move
+until not connected

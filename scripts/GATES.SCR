@@ -1,0 +1,168 @@
+        
+when "oh no! cabal the","send boy does THAT ever suck!!^m^*^*"
+mana = "body"
+vlh=40
+seth=140
+counter=0
+
+Procedure Heal
+ sell=0
+ put "e^me^me^me^mn^mw^mn^me^mn^me"
+ delay 20
+ put "e^ms^msel 9^my^msel 9^my^msel 9^my^msel 9^my^msel 9^my^msel 9^my^msel 9^my^msel 9^my^msel 9^my^msel 9^my"
+ delay 20
+ put "out^me^mgo aca^mtrain 4"
+ delay 10
+ put "out^mw^mw^mw^ms^mw^ms^mw^mw^ms^mw^mw^m"
+ delay 50
+endproc
+
+
+Procedure Health
+   Integer vit3,back,pos
+   String vit1,vit2
+   Vit1="none"
+   Vit2="none"
+   Vit3=0
+   Pos=0
+   Back=0
+   Put "Hea"
+   Waitfor "body",7
+     If found
+       Get vit1
+       Strpos vit1,"/",pos
+       Back=(pos-3)
+       Substr vit1,back,5,vit2
+       Atoi vit2,vit3     
+       If vit3 < vlh and vit3 > 0   
+          heal
+       elseif vit3 < seth and vit3 >=vlh
+              counter=0
+              heal
+       Elseif vit3 >= seth
+              counter=0
+              delay 2
+              Print "Health: ",vit3
+       Elseif vit3 <= 0
+         Delay 20                            
+         Clear Com 
+         counter=counter+1
+         if counter > 3
+            alarm "RLOGIN FAILURE!"
+            hangup
+            put ".couldn't get health right,rlogin failure."
+            stop 
+         endif            
+         Health
+       Endif
+     Endif
+     temp=vit3
+Endproc
+
+Procedure Leave
+  integer room
+  room=0
+  repeat
+  delay 10
+  put "s"
+  waitfor "You're where Eagle Road","follows",20
+   switch found
+    case 1: room=1
+    case 2: heal 
+    endswitch
+  until room=1
+endproc
+
+
+Procedure Fight String mon
+   integer dead
+   dead=0
+   repeat
+   put "cast li on ",mon
+      waitfor "killed","flees","leaves","not here","next","weak","dodges!",40
+          switch found
+          case 1,2,3,4: dead=1
+                        put "get 1^mget 1^mget 1^mget 1"
+          case 5,6,7: put
+          endswitch
+   until dead=1
+endproc
+
+
+  
+       
+
+
+Procedure Roomtest
+   waitfor "nomad","trader","merchant","noblem","scout","turf",999
+    switch found
+    case 1: fight "nom"
+            leave
+    case 2: fight "tr"
+            leave
+    case 3: fight "me"
+            leave
+    case 4: leave
+    case 5: leave
+    case 6:    waitfor "nomad","trader","merchant","noblem","scout","turf",999
+                    switch found
+                    case 1: fight "nom"
+                            leave
+                    case 2: fight "tr"
+                            leave
+                    case 3: fight "me"
+                            leave
+                    case 4,5: leave
+                    case 6: put "y"
+                            roomtest     
+                    endswitch
+               endswitch
+endproc                                           
+
+Procedure Rob
+ put "out"
+  roomtest
+endproc
+  
+
+
+Procedure quest
+  put "exp"
+  waitfor "thief",">",10
+   switch found
+   case 1: print "sigh...more ep, always more ep!"
+   case 2: put "out^me^mgo aca^mtrain 6"
+           delay 40
+           put "out^mw^ms"
+   endswitch
+endproc
+
+
+
+;Procedure Sell
+;put "sell 3"
+;   waitfor "y/n","don't have",10
+;    switch found
+;    case 1: put "y"
+;            sell
+;    case 2: print "yay"
+;   endswitch
+;endproc
+
+Procedure Central
+   integer sell
+   put "n^mhide^my^m"
+   roomtest
+   health
+   sell=sell+1
+   if sell >= 5
+    heal
+   endif
+endproc
+
+
+while connected
+central
+delay 10
+endwhile
+

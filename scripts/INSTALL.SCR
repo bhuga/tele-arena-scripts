@@ -1,0 +1,90 @@
+; Auto Validator 1.12
+
+label main
+  begin
+  Product   = Auto Validator
+  FreeSpace = 1 megabyte
+  HuntFile  = MAJORBBS.EXE
+
+  Commons   = HVSAVSYS.DOC HVSBUILD.BAT HVSBUILX.EXE HVSAVNEW.DOC HVSAUTOV.DLL HVSAUTOV.DOC HVSAUTOV.MDF HVSAUTOV.MSG
+  VirFiles  = HVSPHONE HVSUSER
+  SrcFiles  = HVSAUTOV.C HVSAVS.H HVSPHONE.BCR HVSUSER.BCR HVSVER.H HVSAUTOV.MAK
+
+  Path
+
+  echo Checking current installation...
+
+  exist HVSAUTOV.MSG
+    alert The Auto Validator is already installed!  Press <Esc> to abort or <Return> to continue.
+
+  ; Begin main installation stuff.
+
+  echo Copying common files...
+
+  for Commons ThisFile
+    copy $ThisFile$
+
+  echo Copying empty data files...
+
+  exist HVSUSER.DAT
+    query KillDats Do you want to reset your data files with empty ones?
+  else
+    KillDats = Yes
+
+  if $KillDats$ = Yes
+    for VirFiles ThisFile
+      begin
+      copy $ThisFile$.VIR
+      copy $DestPath$$ThisFile$.VIR $ThisFile$.DAT
+      end
+
+  query DoSrc Do you want to install the source code?
+
+  if $DoSrc$ == Yes
+    begin
+    DestSrc = $DestPath$HVS
+    mkdir $DestSrc$
+    DestSrc = $DestSrc$\
+
+    echo Copying source files...
+
+    for SrcFiles ThisFile
+      copy $ThisFile$ $DestSrc$$ThisFile$
+
+    end
+
+  exist $SourcePath$HVSCAT.EXE
+    query InstCat Do you want to install the HVS Graphic Catalog?
+  else
+    InstCat = No
+
+  if $InstCat$ == Yes
+    copy HVSCAT.EXE
+
+  exist HVSAUTOV.CFG
+    query InstCfg Do you want to over-write your existing configuration?
+  else
+    InstCfg = Yes
+
+  if $InstCfg$ == Yes
+    copy HVSAUTOV.CFG
+
+  ; Everything went according to plan.
+
+  echo Installation completed!
+  end
+
+label abort
+  begin
+  alert Aborting installation!$N$Reason: $Fail$
+  terminate
+  end
+
+
+
+
+
+
+
+
+

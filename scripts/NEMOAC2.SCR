@@ -1,0 +1,419 @@
+;Mytzleplix Productions Priest Worm Script v1.1 
+integer skel,moan,startxp,currxp,earnxp,logs,tester,runner
+time start
+
+#include "toolbox2.scr"
+#include "toolbox3.scr"
+when "ted because of [Remote reset connection].","^M^Mj^Me^M"
+;when "you for 4","mihe^ma^m"
+;when "you for 5 ","mihe^ma^m"
+;when "you for 6","mihe^ma^m"
+;when "you for 7","mihe^ma s^m"
+;when "you for 8","mihe^ma s^m"
+when "you for 9","mahe^ma sk^m"
+when "you for 10","mahe^ma sk^m"
+when "you for 11","mahe^ma sk^m"
+when "you for 12","mahe^ma sk^m"
+when "you for 13","mahe^ma sk^m"
+;when "you for 14","mahe^ma^m"
+;when "you for 15","mahe^ma^m"
+;when "body for 4","mihe^ma^m"
+;when "body for 5 ","mihe^ma m^m"
+;when "body for 6","mihe^ma m^m"
+when "body for 7","mihe^ma m^m"
+when "body for 8","mihe^ma m^m"
+when "body for 9","mahe^ma m^m"
+when "body for 10","mahe^ma m^m"
+when "body for 11","mahe^ma m^m"
+when "body for 12","mahe^ma m^m"
+;when "body for 13","mahe^ma^m"
+;when "body for 14","mahe^ma^m"
+;when "body for 15","mahe^ma^m"
+when "you notice fine","get fine^m"
+when "(n)onstop","^m"
+when "Gruk moves to","a^m"
+when "gsgs","invite gruk^m"
+when "you gain","rest^M"      
+when "you punch","wield black^Ma^M"
+when "(N)onstop, (Q)uit, or (C)ontinue?","^m"
+when "[E] . Enter the Realm","e^M"
+
+;Strings 
+dr="n"
+cw="skeletal"
+pr="spirit"
+e="tai"
+pl="cube"
+cl="minotaur" 
+d="ne0"
+yg="You gain"
+ow="em"
+n="o" 
+sav="cap"
+yc="Your command"               
+sm="showmana"
+cxp="chkxp"
+
+
+procedure dler
+when "new mail","n^M"
+when "RLogin: ...Au revoir...","j^M~~e^M"
+cleanup=0
+x=0
+dial "4" 
+delay 100
+put "1"
+put "y"                                      
+delay 20
+put dr,
+put ow,
+put n
+put sav,
+put e,
+put d
+waitfor "online:",100
+put "gj"
+delay 30
+;put "e"
+waitfor "dead","crypt",500
+  switch found
+   case 1: hangup
+           stop
+   case 2: return
+  endswitch 
+endproc
+
+
+procedure stash         
+put "drop platinum"
+put "stash fine broadsword"
+   waitfor "you hid","no effect",8
+    switch found
+        case 1: stash
+                return
+        case 2:  put "get platinum"
+                 put "wear platinum"
+;                return
+    endswitch
+endproc
+
+
+procedure watch
+        time current
+        difftime start,current,doit
+        minutes = doit/60
+        put "exp"
+        waitfor "Exp: ",8
+        getN Raw,15
+        strpos Raw, " Level", end
+        Substr raw, 1, end-1,daxp1
+        atoi daxp1,daxp2
+        currxp = daxp2
+        earnxp = (currxp - startxp)
+        put "br I have made ",earnxp," experience in ",minutes," minutes"
+        return
+endproc
+
+
+procedure mana
+        put "he"
+        waitfor "Mana: ",8
+        getN Raw,15
+        strpos Raw, "/", end
+        Substr raw, 1, end-1,mana1
+        atoi mana1,mana2
+        if mana2 <= 22
+        put "rest"
+        waitfor "from the",150
+        switch found
+         case 1: return
+        endswitch
+        endif 
+        return 
+Endproc     
+
+procedure checkmana
+        put "he"
+        waitfor "Mana: ",8
+        getN Raw,15
+        strpos Raw, "/", end
+        Substr raw, 1, end-1,mana1
+        atoi mana1,mana2
+        put "he"
+        waitfor "Mana:",8
+        waitfor "/",8
+        getN Raw,15
+        strpos Raw, "  [", end
+        Substr raw, 1, end-1,maxman1
+        atoi maxman1,maxman2
+        put "br ",mana2," out of ",maxman2," mana"
+        return 
+Endproc     
+
+
+Procedure Health
+ 
+procedure rest
+ repeat
+if connected
+ put "he"
+ waitfor "Health: ",10
+      getN Raw,15
+      strpos Raw, "/", end
+      Substr raw, 1, end-1,check1
+      atoi check1,check2
+      if check2 <= 190
+      tester=1
+      waitfor "from the",15
+      rest
+      elseif check2 > 170
+      tester=0
+      return
+      endif
+else 
+dler
+endif
+    until tester=0
+
+Endproc       
+if connected
+      put "health"
+      waitfor "Health: ",10
+      getN Raw,15
+      strpos Raw, "/", end
+      Substr raw, 1, end-1,health1
+      atoi health1,health2
+      if health2 <= 170
+          put "rest"
+          rest
+      endif 
+else 
+dler
+endif
+Endproc     
+
+
+
+
+
+;Exp: 523058 Level: 13 Exp needed for next level: 153762 (676820) [77%]
+
+procedure chkexp
+        put "exp"
+        waitfor "next level: ",8
+        getN Raw,15
+        strpos Raw, " (", end
+        Substr raw, 1, end-1,maxxp
+        atoi maxxp,maxxp2
+        put "exp"
+        waitfor "Exp: ",8
+        getN Raw,15
+        strpos Raw, " Level", end
+        Substr raw, 1, end-1,mana1
+        atoi mana1,mana2
+        put "br Current Experience: ",mana2,"   Exp till I Level: (",maxxp2,")"
+        return 
+Endproc     
+
+
+
+
+procedure chkln
+if connected
+return
+else
+dler
+endif
+endproc
+
+procedure mobtest                                                                                                  
+
+procedure battle
+chkln
+waitfor yg,yc,sm,cxp,"just left",100
+  switch found
+     case 1: mobtest             
+     case 2: mobtest
+     case 3: checkmana
+             return
+     case 4: chkexp
+             return
+     case 5: mobtest                            
+  endswitch 
+ return
+endproc
+
+put      
+waitfor sm,cxp,cw,pr,pl,cl,"obvious",8
+switch found
+        case 1: checkmana
+                return
+        case 2: chkexp
+                return
+        case 3: skel= skel+1
+                put "bs ",cw
+                battle
+        case 4: moan = moan+1
+                put "bs ",pr
+                battle
+        case 5: put "bs ",pl
+                battle
+        case 6: put "bs ",cl
+                battle     
+       case 7: return
+otherwise: chkln
+return
+endswitch
+endproc
+
+procedure east
+chkln
+put "sneak"
+put "e"
+mobtest
+health
+;mana
+endproc
+
+procedure west
+chkln
+put "sneak"
+put "w"
+mobtest
+health
+;mana
+endproc
+
+procedure north
+chkln
+put "sneak"
+put"n"
+mobtest
+health
+;mana
+endproc
+          
+procedure south
+chkln
+put "sneak"
+put "s"
+mobtest
+health
+;mana
+endproc  
+
+procedure nw
+chkln
+put "sneak"
+put "nw"
+mobtest
+health
+;mana
+endproc
+
+procedure ne
+chkln
+put "sn"
+put "ne"
+mobtest
+health
+;mana
+endproc
+
+procedure sw
+chkln
+put "sneak"
+put "sw"
+mobtest
+health
+;mana
+endproc
+
+procedure se
+chkln
+put "sneak"
+put "se"
+mobtest
+health
+;mana
+endproc
+
+procedure startup
+put "auc"
+put "set tele on"
+put "/p off"
+iter=0
+moan=0
+skel=0
+time start
+        put "exp"
+        waitfor "Exp: ",8
+        getN Raw,15
+        strpos Raw, " Level", end
+        Substr raw, 1, end-1,begin1
+        atoi begin1,begin2
+        startxp=begin2
+        return
+endproc
+          
+procedure chkbls
+put "st"
+waitfor "you feel lucky",3
+if found
+return
+elseif not found
+put "bles"
+endif
+endproc
+
+startup
+mobtest    
+runner=0
+repeat
+chkbls
+delay 50
+put "-",iter," loops"
+put "-",skel," skeletons smited ",moan," moaning spirits vanquished"
+put "prev"
+delay 50
+west
+north
+east
+north
+west
+west
+west
+north
+north
+east
+chkbls
+south
+north
+west
+south
+south
+east
+east
+east
+south
+west  
+chkbls
+west
+west
+south
+east
+south
+south
+east
+east
+north
+west
+stash
+north
+east
+watch
+iter = iter+1
+until runner=5
+; not connected
+
+

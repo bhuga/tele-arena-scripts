@@ -1,0 +1,16 @@
+procedure active
+waitfor "rothar just entered",1
+if found
+put
+waitfor "rothar",5
+put "bs rothar"
+endif
+
+
+if connected
+active
+endif
+if not connected
+dialer
+endif
+whenidle 10,"^M"

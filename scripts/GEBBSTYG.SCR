@@ -1,0 +1,338 @@
+Integer HealLvl
+
+;****************
+;Set this value at what Vitality you wish to be healed.
+HealLvl = 250
+
+;--------------------------------------------------------------------------
+Procedure GetOut
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",5
+    Until Found             
+    Put "^M"
+    Stop
+EndProc
+;--------------------------------------------------------------------------
+Procedure PLCheck
+  Put "Poke Magic^mpoke Repent"
+  Waitfor "Poke!",2
+  If Found
+    Put "^*^*"
+  EndIf
+EndProc
+;--------------------------------------------------------------------------
+Procedure SoulCheck
+   Put "I"
+   Waitfor "soulstone",2
+   If Not Found
+     GetOut
+   EndIf
+   Delay 10
+EndProc
+;--------------------------------------------------------------------------
+Procedure DrinkWater
+  Put "Drink Water"
+  Waitfor "The water quenches your thirst.","The waterskin is empty!","Sorry, but you don't seem to have one.",2
+  Switch Found
+     Case 1:
+     Case 2: put "Drop Waterskin"
+             DrinkWater
+     Case 3: GetOut
+  EndSwitch
+EndProc
+;---------------------------------------------------------------------
+Procedure DrinkBarrel
+  Put "Drink Barrel"
+  Waitfor "The water quenches your thirst.","The small barrel is empty!","Sorry, but you don't seem to have one.",2
+  Switch Found
+     Case 1:
+     Case 2: put "Drop Barrel"
+             DrinkBarrel
+     Case 3: GetOut
+  EndSwitch
+EndProc
+;---------------------------------------------------------------------
+Procedure EatRation
+  Put "Eat Ration"
+  Waitfor "You feel much better after eating a meal.","Sorry, but you don't seem to have one.",2
+  Switch Found
+     Case 1:
+     Case 2: GetOut
+  EndSwitch
+EndProc
+;---------------------------------------------------------------------
+Procedure Movetest              
+   WhenIdle 35,"^*^*^*"
+   Put "Gr"
+   Waitfor "% ST:Resting]","% ST:Ready]"
+   Switch Found
+     Case 1: Delay 20
+             MoveTest
+     Case 2:
+   EndSwitch
+EndProc      
+;---------------------------------------------------------------------
+Procedure BugOut
+    Put "c gimotu geb"
+EndProc
+;---------------------------------------------------------------------
+Procedure CheckHealth
+  String C, Health, Vital
+  Integer Pos, BugLvl, Hlth, Vit  
+    BugLvl = HealLvl                        ;Maybe change...
+    Pos = 0     
+    Repeat 
+      Put "he"
+        Waitfor " / 22",15           ;Definately change w/level
+          Get C
+      Waitfor "Healthy","Thirsty","Hungry","Poisoned",1
+        Switch Found
+          Case 0:
+          Case 1:
+          Case 2: 
+          Case 3: 
+          Case 4: GetOut
+        EndSwitch
+      Strpos C,"/",Pos
+    Until Pos > 4
+    SUBSTR C, Pos-5, 4, Health                  ;When 1000 hps, this change
+    SUBSTR C, Pos+2, 4, Vital
+    ATOI Health, Hlth
+    ATOI Vital, Vit
+      If Hlth < BugLvl
+        BugOut
+        Hlth = Vit
+      EndIf
+EndProc
+;---------------------------------------------------------------------
+Procedure Attack String Monster
+MoveTest
+SoulCheck
+Put "A ",Monster    
+Put "A ",Monster      
+Put "A ",Monster      
+Put "A ",Monster
+Put "A ",Monster
+Put "L ",Monster
+Delay 10
+Put "ep"
+Delay 20
+PLCheck
+EndProc
+;---------------------------------------------------------------------
+Procedure DragonAttack
+   MoveTest
+   Put "ex"
+   Waitfor "There is a stygian dragon here.","Exits: n,w.","Exits: e,sw.","Exits: ne,sw.","Exits: n,s.",2
+   Switch Found
+     Case 1:
+     Case 2:  
+     Case 3: MoveTest
+             Put "E"
+     Case 4: MoveTest
+             Put "NE"
+             Put "E"
+     Case 5: MoveTest
+             Put "S"
+   EndSwitch
+   Attack "Dragon"
+EndProc   
+;---------------------------------------------------------------------
+Procedure MonTest
+   Put
+   Waitfor "dragon","troll","cyclops","gargoyle","lord","minotaur","lion","giant","ogre","chimera","warlock",1
+   Switch Found
+     Case 0: 
+     Case 1: DragonAttack
+             MoveTest
+             MonTest
+     Case 2: Attack "Troll"
+             MoveTest
+             MonTest
+     Case 3: Attack "Cyclops"
+             MoveTest
+             MonTest
+     Case 4: Attack "Gargoyle"
+             MoveTest
+             MonTest
+     Case 5: Attack "Lord"
+             MoveTest
+             MonTest
+     Case 6: Attack "Minotaur"
+             MoveTest
+             MonTest
+     Case 7: Attack "Lion"
+             MoveTest
+             MonTest
+     Case 8: Attack "Giant"
+             MoveTest
+             MonTest
+     Case 9: Attack "Ogre"
+             MoveTest
+             MonTest
+     Case 10: Attack "Chimera"
+              MoveTest
+              MonTest
+     Case 11: Attack "Warlock"
+              MoveTest
+              MonTest
+   EndSwitch
+EndProc
+;---------------------------------------------------------------------
+Procedure Move String Dir
+   Put Dir
+   WaitFor "a cave.","a grand hall.","of a stairwell."," cavern.","an intersection.","In your haste, you trip and fall!","Sorry, you'll have to rest ","no exit in that direction.",1
+   Switch Found
+     Case 1,2,3,4,5:
+     Case 6: Put "Get All"
+             Move Dir
+     Case 7: Delay 10
+             Move Dir
+     Case 8: GetOut
+   EndSwitch
+   MonTest
+   CheckHealth
+EndProc
+;---------------------------------------------------------------------
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                                   ;MAIN    
+
+when "attacked you with a pyrehammer","^*^*"
+when "attacked you with a broadsword","^*^*"
+when "attacked you with a levinblade","^*^*"
+when "attacked you with a rimeax","^*^*"
+when "attacked you with a halberd","^*^*"
+when "attacked you with a greatsword","^*^*"
+when "attacked you with a dagger","^*^*"
+when "attacked you with a staff","^*^*"
+when "attacked you with a flail","^*^*"
+when "attacked you with a warhammer","^*^*"
+when "attacked you with a morningstar","^*^*"
+when "attacked you with a mace","^*^*"
+when "attacked you with a battleax","^*^*"
+when "attacked you with a shortsword","^*^*"
+when "attacked you with a longsword","^*^*"
+when "you awaken after","^*^*"     
+when "in the act of ","^*^*"
+
+;*************************************************************************
+While Connected
+WhenIdle 50,"^*^*^*"
+
+
+CheckHealth
+MonTest
+Print "First Set of Two Stone Giantesses"
+
+Move "SE"               ;First Set of Two Stone Giantesses
+Move "D"
+Move "N"
+Move "N"
+Move "NW"
+Move "NW"
+Move "NE"
+Move "NE"
+Move "E"
+Move "E"
+Move "SE"
+Move "E"
+Move "E"
+Move "E"
+Move "SE"
+Move "SE"
+Print "Second Set of Two Stone Giantesses"
+Move "SE"               ;Second Set of Two Stone Giantesses
+Move "NW"
+Move "NW"
+Move "NW"
+Move "W"
+Move "W"
+Move "W"
+Move "NW"
+Move "W"
+Move "W"
+Move "SW"
+Move "SW"
+Move "W"
+Move "W"
+Move "W"
+Print "The Two Trolls"
+Move "N"                ;Two Trolls
+Move "NW"
+Move "NE"
+Move "NE"
+Move "NE"
+Move "E"
+Print "The Gargoyle"
+Move "E"                ;Gargoyle
+Move "N"
+Move "S"
+Move "E"
+Move "E"
+Move "E"
+Move "N"
+Move "N"
+Move "N"
+Move "E"
+Move "E"
+Move "NE"
+Move "NE"
+Move "NE"
+Print "The All Mighty Dragon!"
+Move "E"                ;Stygian Dragon (Be careful about tumbling.)
+Move "W"
+Move "SW"
+Move "SW"
+Move "SW"
+Move "W"
+Move "W"
+Move "N"
+Move "N"
+Move "NW"
+Move "NW"
+Move "NW"
+Move "W"
+Move "W"
+Print "Skeleton Lords"
+Move "W"                ;Two Skeleton Lords
+Move "E"
+Move "E"
+Move "E"
+Move "SE"
+Move "SE"
+Move "SE"
+Move "S"
+Move "S"
+Move "S"
+Move "S"
+Move "S"
+Move "W"
+Move "W"
+Print "Gargoyle, Again"
+Move "W"                ;Gargoyle Again
+Move "W"
+Move "W"
+Move "SW"
+Move "SW"
+Move "SW"
+Move "SE"
+Print "Two Trolls Again"
+Move "S"                ;Two Trolls Again
+Move "E"
+Move "E"
+Move "E"
+Move "SE"
+Move "SE"
+Move "S"
+Move "S"
+Move "U"
+Print "The Begining"
+Move "NW"               ;First Two Stone Giantesses, Again
+Move "N"
+Move "S"
+
+EndWhile
+
+
+

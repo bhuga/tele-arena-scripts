@@ -1,0 +1,10 @@
+x=0
+while connected
+whenidle 30,"^M"
+delay 30
+x=x+1
+if x=10
+put "hid"
+x=1
+endif
+endwhile

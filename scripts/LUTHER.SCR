@@ -1,0 +1,784 @@
+;SEWER SLAUGHTER by: Venom/hOppErbOY
+;Level 4 - 8, silver, gold
+
+#include "toolbox2.scr"
+        
+integer t,r,temp,temp2
+
+when "farthings here.","get cop^m"
+when "nobles here.","get sil^m"
+when "you do not see","^M"   
+when "you say","^M"
+when "per drop","get silver^M"
+when "silver drop","get silver^M"
+when "The room is very dark - you can't see anything","Light torch^M"
+when "your command","^M"
+when "gold drop to","Get gold^m"
+when "them in E-mail to Sysop. Thanks.","^*^M"
+when "hp=10/","^*^M"
+when "hp=9/","^*^M"
+when "hp=8/","^*^M"
+when "hp=7/","^*^M"
+when "hp=6/","^*^M"
+when "hp=5/","^*^M"
+when "hp=4/","^*^M"
+when "hp=3/","^*^M"
+when "hp=2/","^*^M"
+when "hp=1/","^*^M"
+when "hp=-","^*^M"
+when "luther drops to the","^*^M"        ; Substitute your name here.
+
+Procedure Montest
+  put
+  waitfor "acid slime","kobold thief","giant rat","carrion beast","filthbug","lashworm","thug","orc","obvious",3
+  switch found
+  case 1: put "a acid"
+          waitfor "You gain","Your command","you say",100
+          Montest
+  case 2: put "a kobold"                     
+          waitfor "You gain","Your command","you say",100
+          Montest
+  case 3: put "a rat"
+          waitfor "You gain","Your command","you say",100
+          Montest
+  case 4: put "a beast"
+          waitfor "You gain","Your command","you say",100
+          Montest
+  case 5: put "a filthbug"
+          waitfor "You gain","Your command","you say",100
+          Montest
+  case 6: put "a lashworm"
+          waitfor "You gain","Your command","you say",100
+          Montest
+  case 7: put "a thug"
+          waitfor "you gain","your command","you say",100
+          montest                              
+  case 8: put "a orc"
+          Waitfor "You gain","Your command","you say",100
+          Montest
+
+endswitch
+endproc
+
+Procedure Health
+      delay 1
+      put "health"
+      waitfor "Health: ",1
+      getN Raw,15
+      strpos Raw, "/", end
+      Substr raw, 1, end-1,health1
+      atoi health1,health2
+      if  health2 < 79 and health2 >= 30 
+      put "mihe"       
+      elseif health2 < 24
+      put "rest health"
+      put
+      waitfor "hp=91/ma=28","you for","at you",200 ;лллл
+       switch found
+       case 1: return
+       case 2: montest
+       case 3: montest
+      endswitch  
+   endif
+Endproc     
+
+repeat
+montest
+health
+put "N"
+montest
+health
+put "N"
+montest
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health                    
+put "N"
+montest
+health
+put "N"
+montest
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest                      
+health
+put "E"
+montest
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest                      
+health
+put "E"
+montest
+health
+put "E"
+montest       
+health
+put "SE"
+montest       
+health
+put "SE"
+montest       
+health
+put "S"
+montest                      
+health
+put "S"
+montest
+health
+put "S"
+montest       
+health
+put "S"
+montest      
+health
+put "SW"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest                      
+health
+put "W"
+montest
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "SE"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "W"         
+ 
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "S"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "W"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "N"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "E"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health
+put "S"
+montest       
+health 
+delay 10                           
+put "u"
+put "s" 
+delay 10
+put "w"
+delay 20
+put "dep 800"
+put "dep 400"
+put "dep 300"
+delay 10
+put "dep 200"
+put "dep 100"
+put "dep 40"
+delay 20
+put "e"
+put "n"
+put "go manhole"        
+until not connected

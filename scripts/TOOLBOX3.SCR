@@ -1,0 +1,402 @@
+;
+; TOOLBOX3.SCR (c) Copyright 1990-1992 by White River Software.
+; All right reserved.
+;
+; Date written: 10 May 1990
+; Revision:      1 Jan 1992
+;
+;
+; This toolbox defines several procedures to access the phone
+; directory and two procedures to calcuate the difference between
+; two date/time strings.
+;
+; To use this toolbox, you should add the line
+;    #include "toolbox3.scr"
+; at the beginning of your script file.  This will increase the file
+; size of the compiled script file .TMS by about 6K.  To minimum the
+; overhead, you should cut and paste the procedures that you used into
+; your script file.  For example, the <DiffTime> and <DiffDate>
+; procedures may be excluded.
+;
+; The <PhoneDirectory> variable tells the Phone's procedures which
+; phone directory is to be access.  Default is the TM.FON.
+;
+; Summary:
+;
+;   PhoneSize size
+;   ; return the number of entries in the phone directory
+;
+;   PhoneFind name,number,startPoint
+;   ; find an entry by <name> and return the entry number in <number>
+;   ; starting from <startPoint>
+;
+;   PhoneRead number,name,password,linkscript,logfile,phone,total,last
+;   ; read the <number>-th entry of <PhoneDirectory>
+;   ; <total> is an integer variable
+;
+;   PhoneWrite number,name,linkscript,logfile,password,phone,total,last
+;   ; write the <number>-th entry of <PhoneDirectory>
+;   ; <total> is an integer
+;
+;   ConvertDate format1,date1,format1,date2
+;   ; convert the date string <date1> of format <format1> to
+;   ; <date2> of <format2>
+;
+;   DiffDate date1,date2,days
+;   ; <days> = <date2> - <date1>
+;
+;   DiffTime time1,time2,seconds
+;   ; <seconds> = <time2> - <time1>
+;
+
+string PhoneDirectory
+
+PhoneDirectory = "TM.FON"     ; phone directory to be accessed by
+                              ; the following procedures
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; PhoneSize size
+; function: calcuate the number of entires in the phone directory
+;           <PhoneDirectory>
+;
+Procedure PhoneSize integer size
+filesize PhoneDirectory,size
+size = size / 131             ; each entry is 131 bytes
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; PhoneFind name,number,startPoint
+; function: find an entry by <name> and return the entry number in <number>
+;           starting from <startPoint>
+; remark:   <number> is set to 0 if <name> is not found
+;           <success> is FALSE if the phone directory cannot be open
+;           To find from the beginning of the phone directory, use
+;               PhoneFind name,number,1
+;           To continue the search, use
+;               PhoneFind name,number,number+1
+; caution:  this function will close the formly opened file since the
+;           OPEN command is used.  You should close the file before
+;           issuing this command and reopen the file after this command
+;
+Procedure PhoneFind string name,integer number,startPoint
+string entry
+integer pos,size
+PhoneSize size
+if startPoint>size            ; no more entries
+   number = 0                 ; report as not found
+   return
+endif
+number = startPoint-1
+if number<0
+   number = 0
+endif
+pos = 0
+open PhoneDirectory
+if success
+   seek number*131
+   While success and pos=0 and number<size
+      number = number+1
+      read entry                 ; read a phone entry
+      if success
+         strpos entry,name,pos   ; search for <name>
+         if pos>30
+            pos = 0              ; not in name field
+         endif
+      endif
+   EndWhile
+   close
+endif
+if pos=0
+   number = 0                 ; set <number> to 0 if not found
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; PhoneRead number,name,password,linkscript,logfile,phone,total,last
+; function: read the <number>-th entry of <PhoneDirectory>
+; remark:   <success> is FALSE if the phone directory cannot be open
+;           tailing spaces in each field are discarded
+;           <total> is an integer variable, the others are string
+;           variables
+; caution:  this function will close the formly opened file since the
+;           OPEN command is used.  You should close the file before
+;           issuing this command and reopen the file after this command
+;
+Procedure PhoneRead integer number,string name,password,linkscript,logfile,phone,integer total,string last
+string entry,totalstr
+integer size
+
+   Procedure GetField string field,integer FieldLength,FieldOffset
+   integer len,orglen
+   string ch
+   substr entry,FieldOffset+1,FieldLength,field ; get the field
+   len = FieldLength
+   orglen = FieldLength       ; delete tailing space
+   ch = " "
+   While len>0 and ch=" "
+      substr field,len,1,ch
+      if ch=" "
+         len = len-1
+      endif
+   EndWhile
+   if orglen>len
+      strdel field,len+1,orglen-len
+   endif
+   EndProc
+
+PhoneSize size
+open PhoneDirectory
+if success
+   if number<1
+      seek 0
+   elseif number>size
+      seek (size-1)*131
+   else
+      seek (number-1)*131     ; each entry is 131 bytes
+   endif
+   read entry
+   GetField name,30,0
+   GetField password,15,30
+   GetField linkscript,8,46
+   GetField logfile,8,55
+   GetField phone,20,64
+   GetField totalstr,5,96
+   atoi  totalstr,total
+   GetField last,8,103
+   close
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; PhoneWrite number,name,linkscript,logfile,password,phone,total,last
+; function: write the <number>-th entry of <PhoneDirectory>
+; remark:   <success> is FALSE if the phone directory cannot be open
+;           <total> is an integer, the others are strings
+;           To change only a field of the entry, you should use the
+;           PhoneRead procedure to read the other fields of the entry,
+;           otherwise, the other fields will be erased.
+; caution:  this function will close the formly opened file since the
+;           OPEN command is used.  You should close the file before
+;           issuing this command and reopen the file after this command
+;
+Procedure PhoneWrite integer number,string name,password,linkscript,logfile,phone,integer total,string last
+integer EntryPos,size
+
+   Procedure WriteField string field,integer FieldLength,FieldOffset,LeftJustify
+   integer len
+   string space
+   seek EntryPos+FieldOffset
+   length field,len
+   if len>FieldLength
+      strdel field,len+1,FieldLength-len
+   endif
+   if not LeftJustify and len<FieldLength
+      strset space," ",1,FieldLength-len
+      write space,
+   endif
+   write field,
+   if LeftJustfiy and len<FieldLength
+      strset space," ",1,FieldLength-len
+      write space,
+   endif
+   EndProc
+
+PhoneSize size
+if number<1
+   EntryPos = 0
+elseif number>size
+   EntryPos = (size-1)*131
+else
+   EntryPos = (number-1)*131
+endif
+open PhoneDirectory
+if success
+   WriteField name,30,0,1
+   WriteField password,15,30,1
+   WriteField linkscript,8,46,1
+   WriteField logfile,8,55,1
+   WriteField phone,20,64,1
+   itoa  total,totalstr
+   WriteField totalstr,5,96,0
+   WriteField last,8,103,1
+endif
+close
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; ConvertDate format1,date1,format2,date2
+; function: convert the date string <date1> of format <format1> to
+;           <date2> of <format2>
+;
+Procedure ConvertDate integer format1,string date1,integer format2,string date2
+string mm,dd,yy,separator,ch
+integer len
+length date1,len
+date2 = date1
+if format1<>format2 and len=8 and format1<=8 and format2<=8
+  switch format2        
+    case 0,1,2: separator = "-"         ; determine which separator
+    case 3,4,5: separator = "/"
+    case 6,7,8: separator = "."
+  endswitch
+  switch format1                        ; extract mm,dd,yy from date1
+    case 0,3,6: substr date1,1,2,mm
+                substr date1,4,2,dd
+                substr date1,7,2,yy
+    case 1,4,7: substr date1,1,2,dd
+                substr date1,4,2,mm
+                substr date1,7,2,yy
+    case 2,5,8: substr date1,1,2,yy
+                substr date1,4,2,mm
+                substr date1,7,2,dd
+  endswitch
+  substr mm,1,1,ch                      ; set " 1" to "01", etc
+  if ch=" "
+     strset mm,"0",1,1
+  endif
+  substr dd,1,1,ch
+  if ch=" "
+     strset dd,"0",1,1
+  endif
+  substr yy,1,1,ch
+  if ch=" "
+     strset yy,"0",1,1
+  endif
+  switch format2                        ; form the date string
+    case 0,3,6: date2 = mm
+                concat date2,separator
+                concat date2,dd
+                concat date2,separator
+                concat date2,yy
+    case 1,4,7: date2 = dd
+                concat date2,separator
+                concat date2,mm
+                concat date2,separator
+                concat date2,yy
+    case 2,5,8: date2 = yy
+                concat date2,separator
+                concat date2,mm
+                concat date2,separator
+                concat date2,dd
+  endswitch
+  substr date2,1,1,ch                   ; set "01-01-01" to " 1-01-01"
+  if ch="0"
+    strset date2," ",1,1
+  endif
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; DiffDate date1,date2,days
+; function: calcuate the number of days between <date1> and <date2>
+;           as if <days>=<date2>-<date1>
+; remark:   <date1> and <date2> in MM-DD-YY format
+;           if <date2> is less then <date1>, it is assumed that <date2>
+;           pass a century
+;           <days> is always a non-negative integer
+;
+Procedure DiffDate string date1,date2,integer days
+
+   ; calcuate the elapsed days from 1st Jan 1800
+   Procedure CalcDays string dateStr,integer days
+   string yy,mm,dd
+   integer y,m,d
+   substr dateStr,7,2,yy      ; <dateStr> in MM-DD-YY format
+   substr dateStr,1,2,mm
+   substr dateStr,4,2,dd
+   atoi yy,y
+   atoi mm,m
+   atoi dd,d
+   days = (y+100)*365 + (y+99)/4
+   if m>1                     ; January
+      days = days + 31
+   endif                      ; Febrary
+   if m>2
+      if y = y/4*4
+         days = days + 29
+      else
+         days = days + 28
+      endif
+   endif
+   if m>3                     ; March
+      days = days + 31
+   endif
+   if m>4                     ; April
+      days = days + 30
+   endif
+   if m>5                     ; May
+      days = days + 31
+   endif
+   if m>6                     ; June
+      days = days + 30
+   endif
+   if m>7                     ; July
+      days = days + 31
+   endif
+   if m>8                     ; August
+      days = days + 31
+   endif
+   if m>9                     ; September
+      days = days + 30
+   endif
+   if m>10                    ; October
+      days = days + 31
+   endif
+   if m>11                    ; November
+      days = days + 30
+   endif
+   days = days + d
+   EndProc
+
+CalcDays date1,z1             ; calculate elapsed days from 1st Jan 1800
+CalcDays date2,z2
+days = z2 - z1
+if days<0
+   days = days + 36500 + 25   ; pass a century
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; DiffTime time1,time2,seconds
+; function: calcuate the number of seconds between <time1> and <time2>
+;           as if <seconds>=<time2>-<time1>
+; remark:   <time1> and <time2> in HH:MM:SS format
+;           if <time2> is less then <time1>, it is assumed that <time2>
+;           pass mid-night
+;           <seconds> is always a non-negative integer
+;
+Procedure DiffTime string time1,time2,integer seconds
+integer h1,m1,s1,h2,m2,s2     ; <time1> and <time2> in "HH:MM:SS" format
+string hh,mm,ss
+substr time1,1,2,hh           ; get hour part
+substr time1,4,2,mm           ; get minuate part
+substr time1,7,2,ss           ; get second part
+atoi hh,h1                    ; convert to integer
+atoi mm,m1
+atoi ss,s1
+substr time2,1,2,hh           ; get hour,minuate and second from <time2>
+substr time2,4,2,mm
+substr time2,7,2,ss
+atoi hh,h2
+atoi mm,m2
+atoi ss,s2
+if h2<h1                      ; <time2> pass mid-night
+   h2 = h2 + 24
+endif
+seconds = (h2-h1)*3600 + (m2-m1)*60 + (s2-s1)
+EndProc
+

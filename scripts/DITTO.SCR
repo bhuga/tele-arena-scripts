@@ -1,0 +1,60 @@
+; The Ditto Script by Pharaoh Enterprises (c)1995
+;
+; This fun script just repeats what anyone else says.
+; This version works for farwest trivia...
+;
+
+
+S = " "       
+NAM = " "
+pos = 0
+OLD = " "
+
+when "has requested the next question.", "n^m"
+
+
+
+while connected
+
+   waitfor "-",2
+   if found
+      get S
+ 
+   
+      strpos S, ": ", pos      
+      if pos > 0
+         substr S, 1, pos-1, NAM
+         substr S, pos+2 , 80, S
+
+         BOO = 0
+         strpos S, "sysop", pos
+         if pos > 0 
+            BOO = 1
+         endif
+         strpos S, "transfer", pos
+         if pos > 0
+            BOO = 1
+         endif
+
+         if S = "x"
+            BOO = 1
+         endif
+
+         if S = OLD
+            BOO = 100
+         elseif BOO = 0
+            put NAM,
+            put " just said, '",
+            put S,
+            put ",' but ",
+            put NAM,
+            put " is a fool!^m",
+         else
+            put "I'm not typing THAT!^m",
+         endif
+      endif
+
+      OLD = S
+      delay 5
+   endif
+endwhile

@@ -1,0 +1,267 @@
+String s,n,w,e,y
+
+Wep = 0
+Lst = 0
+OK  = 0
+Emp = 0
+Bah = 0
+
+Procedure M String Dir, Place
+
+  Repeat
+   Put Dir
+    Waitfor Place, "You cannot go that way.",4    
+     Switch Found
+      Case 1 : OK = 1   
+               Delay 1
+      Case 2 : Lst = Lst + 1
+    EndSwitch
+    
+      If Lst >= 5
+       HANGUP
+       STOP
+      EndIf
+
+      If OK = 1
+       Lst = 0
+      EndIf
+ 
+  Until OK = 1
+
+OK = 0
+
+EndProc
+;------------------------------------------------------------------------------------------------------------------
+Procedure Grab
+             
+ Repeat
+  Put "Get 1"
+  Waitfor "OK, picked up","You are already carrying 20 items!","on the ground!",1
+   Switch Found
+    Case 2 : Bah = 1  
+             Print "Bah = 1"
+             Emp = 1
+    Case 3 : Emp = 1 
+   Endswitch
+ Until Emp = 1   
+
+ Emp = 0
+
+EndProc
+;---------------------------------------------------------------------------------------------------------------
+Procedure GoNS
+
+m e,y
+m e,y
+m n,y
+m e,y
+m e,y
+m n,y
+m e,y
+m n,y
+m e,y
+m e,y  
+m e,y
+Delay 5
+Put "Go A"
+Put "Train 2"
+Delay 5
+Put "O^Mw"
+m s,y
+
+EndProc
+;---------------------------------------------------------------------------------------------------------------
+Procedure GoGate
+
+m w,y
+m s,y
+m w,y
+m s,y
+m w,y
+m w,y
+m s,y
+m w,y
+m w,y
+
+
+EndProc
+;-----------------------------------------------------------------------------------------------------------------
+Procedure GoShop
+
+m "out",y
+m w,y
+m n,y
+m w,y
+m n,"robin"
+m w,y
+m n,y
+m n,y
+m n,y
+Put "go e"
+
+Delay 5
+Put "Buy 1"
+Put "Use Broa"
+Delay 5
+
+Wep = 0
+
+EndProc
+;--------------------------------------------------------------------------------------------------------------
+Procedure ShopToNS
+
+Put "o"
+m s,y
+m s,y
+m s,y
+m e,y
+m s,y
+m e,y
+m s,y
+
+EndProc
+;-------------------------------------------------------------------------------------------------------------------
+Procedure Gr String Monster
+
+  Integer Gr
+
+  smk = 0
+            
+  Repeat
+    Put "Gr ",monster
+    Waitfor "is not here.","you killed","punch",1 
+     Switch Found
+      Case 1,2 : smk = 1
+      Case 3   : Wep = 1
+                 smk = 1
+     EndSwitch
+  Until smk = 1
+                       
+ Grab
+          
+ m s,y
+
+EndProc
+;---------------------------------------------------------------------------------------------------------------
+Procedure Weaponcheck
+
+ Put "Inven"
+ Waitfor "(right) (cracking)",2
+  If Found
+   Wep = 1
+  EndIf
+  
+If Wep = 1
+ Bah = 1
+Endif
+
+EndProc
+;------------------------------------------------------------------------------------------------------------------
+Procedure Item
+
+Print "Item Check"
+     
+x = 0
+
+  If Bah = 1       
+   Print "Bah = 1"       
+   Bah = 0
+   GoNS
+    Repeat
+     x = x + 1
+     Put "Sell 11^My"    
+     Delay 2
+    Until x = 12     
+     If Wep = 1
+      Put "Sell Broa^My"
+      Delay 10
+       GoShop
+       ShopToNS    
+     ElseIf Wep = 0  
+      Delay 10
+      Put "o^Mw"
+     EndIf
+     GoGate
+  EndIf 
+
+
+
+EndProc
+;-------------------------------------------------------------------------------------------------------------------- 
+Procedure Fight
+ 
+ m n,y
+ Put "Hide"      
+
+EndProc
+;--------------------------------------------------------------------------------------------------------------------
+Procedure RoomCheck2
+                     
+Print "RoomCheck2"
+
+ Put "Look"
+ Waitfor "Noble","Scout","Merchant","Trader","Nomad",1
+  Switch Found
+   Case 1    : Gr "Noble"
+   Case 2    : Gr "Scout"
+   Case 3    : Gr "Merchant"
+   Case 4    : Gr "Trader"
+   Case 5    : Gr "Nomad"
+   Otherwise : Put "Yell"
+               RoomCheck2 
+  EndSwitch
+
+EndProc
+;--------------------------------------------------------------------------------------------------------------
+Procedure Healthcheck
+
+ Put "Hea"
+ Waitfor "608/608 Magic",1
+  If Not Found
+   GoNS
+   Delay 10
+   Put "o^Mw"
+   Delay 10
+   GoGate
+  EndIf
+
+EndProc
+;------------------------------------------------------------------------------------------------------------------
+Procedure AggroCheck 
+
+Print "AggroCheck"
+
+ Put "Look"
+ Waitfor "attacking you!",1
+  If Found
+   Bah = 1
+  EndIf
+
+EndProc
+;---------------------------------------------------------------------------------------------------------------
+Procedure Safecheck
+                        
+Print "Safecheck"
+
+ AggroCheck
+ Weaponcheck
+ Item
+ Healthcheck
+ Fight
+ Roomcheck2
+
+EndProc
+;------------------------------------------------------------------------------------------------------------------
+
+s="s"
+n="n"
+e="e"
+w="w"
+y="You're"
+
+
+While Connected
+
+ Safecheck
+
+Endwhile

@@ -1,0 +1,10 @@
+x=15
+repeat    
+x=x+1  
+put "join ",x
+put "-"
+waitfor "diamond",1
+if found 
+put "-did I offend you somehow?  please, I did not want you to leave!"
+endif
+until found

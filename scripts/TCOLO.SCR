@@ -1,0 +1,30 @@
+while connected
+when "stop in this","^M"
+put "c" 
+delay 10
+put "b" 
+delay 10
+put "1"
+put "y",   
+delay 10
+put "l" 
+delay 10
+put    
+delay 10         
+put 
+put "4605",
+waitfor "Do you want to engage",15
+put "y",
+waitfor "You do not have any fighters","Locating beam pinpoint",15
+  switch found
+    case 1: stop
+    case 2: put "y",
+            delay 60
+  endswitch
+
+put "l",
+put "67"
+put "snl2"
+delay 10
+put "tnt145"
+endwhile

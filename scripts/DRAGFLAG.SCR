@@ -1,0 +1,450 @@
+integer round,count,travel,position,killed,gol4,yar,failed,start,new,g
+integer hmin,hsec,hours,minutes,seconds,begin,drank,buyyar
+string time1,time2,timebeg,s,n,w,e,sw,ne,nw,se,u,d,f
+    
+
+
+Procedure DiffTime string time1,time2,integer hours,minutes,seconds
+integer h1,m1,s1,h2,m2,s2     ; <time1> and <time2> in "HH:MM:SS" format
+string hh,mm,ss
+substr time1,1,2,hh           ; get hour part
+substr time1,4,2,mm           ; get minute part
+substr time1,7,2,ss           ; get second part
+atoi hh,h1                    ; convert to integer
+atoi mm,m1
+atoi ss,s1
+substr time2,1,2,hh           ; get hour,minute and second from <time2>
+substr time2,4,2,mm
+substr time2,7,2,ss
+atoi hh,h2
+atoi mm,m2
+atoi ss,s2
+ if h2 < h1            ; if <time2> pass mid-night
+   h2 = h2 + 24        ; then add 24 hours
+ endif                 ;
+ if s2 = s1            ; if seconds are the same, then add a minute
+  m2 = m2 + 1          ;
+ endif                 ;
+ if m2 = m1            ; if minutes are the same, then add an hour
+  if h2 <> h1
+   h2 = h2 + 1          ;
+  endif                 ;
+ endif
+ if s2 < s1            ; if seconds are less than 60 seconds apart
+  s2 = s2 + 60         ; then take one minute and break it down to
+  m2 = m2 - 1          ; seconds and add this to the 2nd seconds.
+ endif                 ;
+ if m2 < m1            ; if minutes are less than 60 min. apart, then
+   m2 = m2 + 60        ; take one hour, break it down to minutes, and
+   h2 = h2 - 1         ; add this to the 2nd minutes.
+ endif                 ;
+   seconds = s2 - s1   ; gets total # of seconds
+   minutes = m2 - m1   ; gets total # of minutes
+   hours = h2 - h1     ; gets total # of hours
+EndProc
+
+
+Procedure Timeon               ;time1 & timebeg are defined at the start
+   time time2                  ;gets current time
+   difftime timebeg,time2,hours,minutes,seconds
+    if hours >= 1
+     print " ",hours," Hour(s) ",minutes," Minute(s) and ",seconds," Second(s)."
+    elseif minutes >=1
+     print " ",minut period
+NO4106 > open cybercom.com
+Xyplex -201- Connection to CYBERCOM.COM not established
+             No response within timeout period
+NO4106 > open cybercom.com
+Xyplex -201- Connection to CYBERCOM.COM not established
+             No response within timeout period
+NO4106 > open cybercom.com
+Xyplex -101- 1 other session(s) active
+Xyplex -010- Session 2 to CYBERCOM.COM establiopen cybercom.com
+
+Display ANSI graphics (Y/N)? y
+
+                     CyberComm Online Services Presents:
+                         Cyber/Chat!   (#92834817)
+                          Connected at 38400 Baud
+
+Internet Class callers - Here's your chance to test true SLIP and see
+if you prefer it over TIA - See the Shell forum on the BBS for details.
+***Outside work for our new lines has been completed (100 pair cable).
+We will be installing a minimum of 32 - 28.8 lines and will be prewired 
+for more for fast line additions in the future. We're just waiting for
+the inside work to be completed. 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³ ÖÄÄÄ      É     ÖÄÄ  ÖÄÄÄ· ÖÄÄÄ ÖÄÄÄ· ÖÄ·ÖÄ· ÖÄ·ÖÄ· ³ ³
+          ³ º    º  º ÇÄÄÄ· ÇÄÄ  ÇÄÄÒ½ º    º   º º Ó½ º º Ó½ º ³ ³
+          ³ ÓÄÄÄ ÓÄÄ¶ ÓÄÄÄ½ ÓÄÄÄ È  ¼  ÓÄÄÄ ÓÄÄÄ½ È    ¼ È    ¼ ³ ³
+          ³ ÄÄÄÄ ÄÄÄ½ ÄÄÄÄÄONLINEÄSERVICESÄÄÄ(908)506Ä6651ÄÄÄÄÄ ³ ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³
+           ÄÄÄÄÄÄÄÄÄÄÍÍÍÍÍÍÍÍÍÍÍCyber/Chat!ÍÍÍÍÍÍÍÍÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             (Cyber/Chat! - C/C! - Trademarks Cybercomm Online)
+                    P.O.Box 5252 Toms River, NJ 08753-5252
+    With +98 Lines and Over 18 Gigs of Files, We are the Largest BBS in NJ
+     Toms River (908)506-0610 (908)506-7637 Lakewood/Howell (908)363-8511
+            -=>> Jackson (908)363-8511  Freehold (908)308-3371 <<=-
+           -=>> Matawan (908)290-1908  Manahawkin (609)597-6902 <<=-
+         -=>> Point Pleasant 892-2893 - Sayreville (908) 390-4728 <<=-
+              MajorNet Mail and Interlink Node Address I.D. - COS
+           Full Service Internet Provider - Full T1 Fiber Optic Feed
+
+Enter Your User-ID and press ÄÄÙ now,
+Otherwise type NEW to create an account: nemo
+
+Enter your password: ******
+
+Greetings, Nemo, we're glad to see you back again.
+
+
+You have a telegram waiting!  Type == to read it!
+
+
+Time: 05:34:00                    Date: 22-JUL-95
+User-ID         Location        Class               Sex Mins Ln Flags
+------------------------------------------------------------------------------
+Snakeman        Internet_Shell  INTERNET      ***** (M)   3  18 Busy          
+Hotdogger       Internet_Shell  INTERNET      ***** (M)  10  26 Busy          
+Acid Dreams     Tradewars_2002  MONTHLY9      ***** (M)  11  47 Busy          
+Spaceboy        Trivia Forum    MONTHLY       ***** (M)   1  70               
+Nemo            Command Center  MONTHLY       ***** (M)  <1  71               
+
+
+
+You are caller number 1226127!
+
+You have not yet filled out your MajorNet Registry Entry.
+
+There is mail in your mailbox!
+
+(N)onstop, (Q)uit, or (C)ontinue?q
+
+(TOP)
+Make your selection (A,B,E,F,I,L,M,N,O,R,S,T,@,U,1,2,3,P,9,C,Q,+,G,? for help,
+or X to exit): o*
+***
+Entering Tele-Arena...
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+i
+***
+You are carrying 190 gold crowns, a glowstone, a bronze key, a coil of rope, a
+waterskin(0), an anemone potion, an anemone potion, and a bronze key.
+ne
+***
+Sorry, there's no exit in that direction.
+se
+***
+Sorry, there's no exit in that direction.
+e
+***
+Sorry, there's no exit in that direction.
+he
+***
+Mana:         6 / 8
+Vitality:     86 / 192
+Status:       Hungry
+he
+***
+Mana:         6 / 8
+Vitality:     86 / 192
+Status:       Hungry
+ne
+***
+Sorry, there's no exit in that direction.
+n
+***
+You are in a huge cavern.
+There is nobody here.
+There is nothing on the floor.
+s
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+***
+You're hungry.
+sw
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+s
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+sw
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+nw
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+w
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+nw
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+w
+***
+You're in a cave.
+There is nobody here.
+There is nothing on the floor.
+sw
+***
+In your haste, you trip and fall!
+
+***
+You're in a cave.
+There is nobody here.
+There is a coil of rope lying on the floor.
+get r
+***
+Ok, you got a coil of rope.
+sw
+***
+You are inside the dungeon entrance.
+There is nobody here.
+There is nothing on the floor.
+up
+***
+You're in the arena.
+There is nobody here.
+There is nothing on the floor.
+w
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+w
+***
+You're in the temple.
+There is a blue robed priest here.
+There is nothing on the floor.
+e
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+c gimotu nemo
+***
+You intoned the spell for Nemo which healed 46 damage!
+? exp1
+ep
+***
+You're hungry.
+
+    Acolyte &             Druid &
+LV  Necrolyte  Archer     Sorceror   Hunter     Rogue      Warrior
+--------------------------------------------------------------------
+ 1)         0          0          0          0          0          0
+ 2)      1150       1125       1180       1125       1120       1125
+ 3)      3490       3240       3800       3240       3200       3240
+ 4)      9025       8025      10290       8025       7860       8025
+ 5)     20640      17890      24160      17890      17440      17890
+ 6)     42200      36000      50000      36000      35000      36000
+ 7)     78200      66300      93500      66300      64400      66300
+ 8)    134300     113400     161400     113400     109900     113400
+ 9)    216900     182600     261500     182600     177000     182600
+10)    333500     280200     402700     280200     271500     280200
+11)    492000     413000     595000     413000     400000     413000
+12)    701800     588700     849600     588700     570100     588700
+13)    972800     815600    1178400     815600     789600     815600
+14)   1315900    1102800    1594900    1102800    1067600    1102800
+15)   1742800    1460100    2113200    1460100    1413500    1460100
+
+***
+Level:        8
+Experience:   182067
+Rune:         None
+***
+You're hungry.
+i
+***
+You're hungry.
+***
+You are carrying 190 gold crowns, a glowstone, a bronze key, a coil of rope, a
+waterskin(0), an anemone potion, an anemone potion, and a bronze key.
+
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
++++
+OK
+AT S0=1
+OK
+
+NO CARRIER
+T S0=0 Q0 E1 X4AT&C1
+OK
+atm0
+OK
+o NOT Proceed Unless Access Has Been Authorized by LSUMC
+
+
+
+NO4106 > open cybercom.com
+Xyplex -010- Session 1 to CYBERCOM.COM established
+* MajorTCP/IP by Vircom Inc. *
+
+Connecting...Please Wait...
+
+Auto-sensing...
+    isplay ANSI graphics (Y/N)? y
+
+                     CyberComm Online Services Presents:
+                         Cyber/Chat!   (#92834817)
+                          Connected at 38400 Baud
+
+Internet Class callers - Here's your chance to test true SLIP and see
+if you prefer it over TIA - See the Shell forum on the BBS for details.
+***Outside work for our new lines has been completed (100 pair cable).
+We will be installing a minimum of 32 - 28.8 lines and will be prewired 
+for more for fast line additions in the future. We're just waiting for
+the inside work to be completed. 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³ ÖÄÄÄ      É     ÖÄÄ  ÖÄÄÄ· ÖÄÄÄ ÖÄÄÄ· ÖÄ·ÖÄ· ÖÄ·ÖÄ· ³ ³
+          ³ º    º  º ÇÄÄÄ· ÇÄÄ  ÇÄÄÒ½ º    º   º º Ó½ º º Ó½ º ³ ³
+          ³ ÓÄÄÄ ÓÄÄ¶ ÓÄÄÄ½ ÓÄÄÄ È  ¼  ÓÄÄÄ ÓÄÄÄ½ È    ¼ È    ¼ ³ ³
+          ³ ÄÄÄÄ ÄÄÄ½ ÄÄÄÄÄONLINEÄSERVICESÄÄÄ(908)506Ä6651ÄÄÄÄÄ ³ ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³
+           ÄÄÄÄÄÄÄÄÄÄÍÍÍÍÍÍÍÍÍÍÍCyber/Chat!ÍÍÍÍÍÍÍÍÍÍÍÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             (Cyber/Chat! - C/C! - Trademarks Cybercomm Online)
+                    P.O.Box 5252 Toms River, NJ 08753-5252
+    With +98 Lines and Over 18 Gigs of Files, We are the Largest BBS in NJ
+     Toms River (908)506-0610 (908)506-7637 Lakewood/Howell (908)363-8511
+            -=>> Jackson (908)363-8511  Freehold (908)308-3371 <<=-
+           -=>> Matawan (908)290-1908  Manahawkin (609)597-6902 <<=-
+         -=>> Point Pleasant 892-2893 - Sayreville (908) 390-4728 <<=-
+              MajorNet Mail and Interlink Node Address I.D. - COS
+           Full Service Internet Provider - Full T1 Fiber Optic Feed
+
+Enter Your User-ID and press ÄÄÙ now,
+Otherwise type NEW to create an account: nemo
+
+Enter your password: ******
+
+Greetings, Nemo, we're glad to see you back again.
+
+
+You have a telegram waiting!  Type == to read it!
+
+
+Time: 05:36:34                    Date: 22-JUL-95
+User-ID         Location        Class               Sex Mins Ln Flags
+------------------------------------------------------------------------------
+Snakeman        Internet_Shell  INTERNET      ***** (M)   5  18 Busy          
+Hotdogger       Internet_Shell  INTERNET      ***** (M)  13  26 Busy          
+Acid Dreams     Tradewars_2002  MONTHLY9      ***** (M)  13  47 Busy          
+Spaceboy        Trivia Forum    MONTHLY       ***** (M)  <1  70               
+Nemo            Command Center  MONTHLY       ***** (M)  <1  71               
+
+
+
+You are caller number 1226130!
+
+You have not yet filled out your MajorNet Registry Entry.
+
+There is mail in your mailbox!
+
+(N)onstop, (Q)uit, or (C)ontinue?q
+
+(TOP)
+Make your selection (A,B,E,F,I,L,M,N,O,R,S,T,@,U,1,2,3,P,9,C,Q,+,G,? for help,
+or X to exit): o*
+***
+Entering Tele-Arena...
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+ne
+***
+You're in the tavern.
+There is a barkeep, and a barmaid here.
+There is nothing on the floor.
+b drink
+***
+The barmaid brings you a drink for 1 crowns.
+sw
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+n
+***
+You're in the guild hall.
+There is a master sorceror here.
+There is nothing on the floor.
+s
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+s
+***
+You're in the south plaza.
+There is nobody here.
+There is nothing on the floor.
+s
+***
+You're in the magic shop.
+There is a crimson mage here.
+There is nothing on the floor.
+***
+You're hungry.
+b an
+***
+Ok, you bought an anemone potion for 29 crowns.
+n
+***
+You're in the south plaza.
+There is nobody here.
+There is nothing on the floor.
+n
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+ne
+***
+You're in the tavern.
+There is a barkeep, and a barmaid here.
+There is nothing on the floor.
+b meal
+***
+The barmaid brings you a meal for 2 crowns.
+sw
+***
+You're in the north plaza.
+There is nobody here.
+There is nothing on the floor.
+s
+***
+You're in the south plaza.
+There is nobody here.
+There is nothing on the floor.
+s
+***
+You're in the magic shop.
+There is a crimson mage here.
+There is nothing on the floor.
+b row
+***
+Ok, you bought a rowan potion for 11 crowns.
+b hy

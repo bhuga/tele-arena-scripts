@@ -1,0 +1,249 @@
+string sc,ad,pl,ba,me,p,pls,mes,n,e,s,w,o
+integer enuf,enough,weapbReak,trip,xit
+enough=0                                 
+xit=0
+n="n"
+s="s"
+e="e"
+w="w"
+o="o"
+enuf=0
+p="turf"
+sc="scout"
+pl="plainsman"
+pls="plainsmen"
+me="mercenary"
+mes="mercenaries"              
+ba="barbarian"
+ad="adventurer"
+Procedure m string dir,place
+xit=0
+repeat
+xit=xit+1
+if xit=20
+hangup
+stop
+Endif
+delay 1
+put dir
+waitfor place,2
+until Found
+EndProc       
+Procedure shop 
+integer num                       
+num=0
+m e,p 
+m n,p
+m e,p 
+m s,p
+put "sell broad"
+put "y"
+repeat
+delay 1 
+num=num+1
+put "sell 3"
+put "y"
+until num=17
+delay 3
+m o,p
+m e,p
+put "go a"
+put "train 5"
+m o,p
+m w,p
+m w,"is safe"
+m w,p
+m s,p
+m w,p
+EndProc
+Procedure shield
+m w,"safe haven"
+m n,p
+put "go e"      
+put "drop shield"
+put "drop armor"
+put "buy 4"
+put "buy 6"
+put "use shield"
+delay 50
+put "use armor"
+delay 30
+m o,p
+m s,"safe haven"
+m e,p
+EndProc
+Procedure weap
+m n,p
+m n,p
+m n,p
+if trip=4 
+trip=0
+shield
+Endif
+m n,p
+put "go e"
+put "buy 1"
+put "use broad"
+m o,p
+m s,p
+m s,p
+m s,p
+m s,p
+EndProc
+Procedure goback
+trip=trip+1
+m n,p 
+m e,p
+m e,p       
+put "hid"
+xit=0
+repeat
+put "co 11 on gate"
+waitfor p,"you don't see",6
+switch found
+case 1: xit=1
+case 2: hangup
+        stop
+endswitch    
+until xit=1
+m n,p 
+m e,p
+m n,p
+m e,p
+m e,p
+m s,p
+m e,p
+m n,p
+shop           
+weap
+m s,p
+m w,p
+m n,p
+m w,p
+m w,p
+m s,p
+m w,p
+m s,p                        
+delay 15
+repeat
+put "co 11 on gate"
+waitfor "You're walking along the f",6
+until Found
+m w,p
+m w,p
+m s,p
+put "hid"
+EndProc
+Procedure yell
+if weapbReak>=35
+weapbReak=0
+goback
+Endif   
+put "look"
+ waitfor "tavern","trail across",1
+  switch found
+   case 1:  put "s"
+   case 2: 
+ endswitch
+put "hid"
+put "y"
+waitfor "suddenly","encounter two",1
+if Found
+put "n"
+put "s"
+yell
+Endif
+EndProc
+Procedure gettoy   
+repeat
+put "get 1"
+   waitfor "ok","20","y i",1
+       Switch Found
+         case 1: enuf=1
+         case 2: goback
+                 enuf=0
+         case 3: enuf=0
+        EndSwitch
+until enuf=0
+EndProc
+Procedure attack string monster
+put "ber"
+put "gr ",monster
+put "ber"     
+waitfor "you hit","you killed","is not here","punch",1
+  Switch Found
+   case 1: enough=1 
+           delay 40
+           weapbReak=1+1
+   case 2: enough=0   
+           weapbReak=1+1
+   case 3: enough=0                                  
+   case 4: goback
+           enough=0
+  EndSwitch                                        
+EndProc                 
+Procedure health
+string s,Ends
+integer getit,gold
+gold=0
+s="none"
+Ends="none"
+getit=0
+position=0
+put "hea"              
+  waitfor "body",3
+   if Found
+    get s
+   Endif
+put "hea"        
+ waitfor "body",4
+strpos s,"ody",position             
+getit=(position+6)
+substr s,getit,4,Ends
+atoi Ends,gold                                             
+put
+delay 10
+print "You have ",gold," hit poits"
+if gold>=500
+print "everything is going find"
+elseif gold > 0 and gold < 500
+goback          
+elseif gold<=0 
+health
+Endif
+EndProc
+Procedure montest
+if weapbReak>=40
+weapbreark=0
+goback
+Endif
+put "look"
+   waitfor "two","three","Four","five","mes","pls","six",sc,ad,pl,ba,me,2
+      Switch Found
+        case 1,2,3,4,5,6,7: m n,p       
+                            delay 20
+                            m s,p
+                            put "hid"
+       case 8: attack sc
+       case 9: attack ad
+       case 10: attack pl
+       case 11: attack ba
+       case 12: attack me
+       otherwise: gettoy 
+                  ;health
+                  yell   
+       EndSwitch
+EndProc
+when "ains west of elf","n^M"    
+when "g across a rolling, grassy plain. You see a small gr","n^M"
+when "noises from the west!","^*"
+when "noises from the north!","^*"
+when "You're at the base of a hill near a","n^Mhid^M"
+when "You're at a bEnd in the road.","s^Ms^Mhid^M"
+while connected
+montest
+Endwhile
+
+
+
+

@@ -1,0 +1,404 @@
+#include "toolbox2.scr"
+#include "toolbox3.scr"
+string start,now,starttime,finishtime,name,password,place,today1,today2
+integer x,t,r,current,HPSET,movementdelay,a,exp3,exp4,exp5,exp6,point
+string a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,exp1,exp2
+string m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26
+integer currpos
+string firstpath,middlepath,lastpath,nextmove,travelpath,cavepath,islandpath
+
+a=0
+middlepath="wseswwnnwneeenwwwnnesnwsseeeswse1x"
+islandpath="wseswwnnwneeenwwwnnesnwsseeeswsejesseeennwwnweennneseeennneseeswwssswweenwwwwsssswwwnnkw1x"
+currpos=1
+point=1
+
+       travelpath=islandpath     ;put location of scripting here
+
+
+
+  HPSET     = 200             ;SET HP HERE FOR REST AND BLEED
+  starttime = "06:05:00"
+  finishtime= "17:30:00"
+  name      = "Kiki"
+  password  = ""
+
+m1 = "Your attempts to bash through fail"
+m2 = "The door is closed"
+m3 = "The gate is closed"
+m4 = "You fumble in confusion"
+m5 = "You can't seem to move"
+m6 = "There is no exit in that direction"
+
+m7 = "You bashed the"
+m8 = "The gate is already"
+m9 = "The door is already"
+
+m10= "Filthy Passage"
+m11= "Labyrinth"
+m12= "Ancient Crypt"
+m13= "Narrow Plateau"
+m14= "Circular Tunnel"
+m15= "Huge Cave"
+m16= "Stone Passage"
+m17= "Chamber"
+m18= "Dark Cell"
+m19= "Barrack"
+m20= "Tunnel"
+m21= "Elder"
+m22= "Thornwalled"
+m23= "Summoning Room"
+m24= "Black Fortress"
+m25= "You don't see"
+m26= "You have invited"
+
+  a1="death dog"     
+  a2="cube"          
+  a3="skeletal warrior" 
+  a4="moaning spirit"   
+  a5="minotaur"         
+  a6="stone golem"      
+  a7="beetle"           
+  a8="gigantic black ooze"  
+  a9="bashee"        
+  a10="roc"         
+  a11=" orc"        
+  a12="goblin"      
+  a13="half-ogre"   
+  a14="slave"      
+  a15="dire wolf"  
+  a16="werewolf"
+  a17="slime beast"
+  a18="archer"
+  a19="forest spider"
+  a20="thug"
+  a21="bandit"
+  a22="druid"
+  a23="tree"
+  a24="plant"
+  a25="vampire"
+  a26="golem"
+  a27="elemental"
+
+  when "You can see again","^M"
+  when " experience.","^m"
+  when "Your command had no effect","^m"
+  when "The room is very dark - you can't see anything","use lan^M"
+ 
+when "effects of the poison wear off!","rest^M"
+
+
+  when "The minotaur falls dead with an agonized bellow!","g gold^Mg silver^M"  
+  when "The gelatinous cube dissolves into a sloppy puddle.","g jew^Mg gold^Mg tar^M"
+  when "The skeletal warrior falters, then collapses in a heap.","g fine^M"
+  when "The black orc captain falls, spitting up dark blood!","g scim^M"
+  when "The slime beast dissolves into a mass of reeking flesh.","g carv^M"
+  when "The slave-master topples to the ground with an indignant cry!","g serpent^Mg green^M"
+  when "The werewolf grows loudly, and falls, reverting to his human form!","g wolf^Mg iron^M"
+  when "The dark druid utters a low groan, and collapses.","g gold^Mg silver^Mg oak^M"
+
+
+Procedure Bash string Direction 
+  put "bash ",Direction
+  nextmove=" "
+endproc
+
+Procedure Callback
+put "atdt4555986"
+delay 600
+waitfor "Otherwise type ""new"":","(H=","NO CARRIER","BUSY","NO DIALTONE"
+  switch found
+case 1:put name
+       waitfor "Enter your password:"
+       put password
+       delay 100
+       put "^M"
+       delay 100
+       put "^M"
+       delay 100
+       put "^M"
+       delay 100
+       put "^M"
+       delay 100
+       put "^M"
+       delay 100
+       put "^M"
+       delay 100
+       put "^M"
+       put "232"
+       delay 100
+       put "e"
+       put "^M"
+       put "^M"
+       put "invite snake"
+case 2: return
+case 3,4,5: Callback
+        
+endswitch
+endproc
+
+Procedure Rest
+put "rest"
+waitfor "You are now resting","You fumble in confusion","You are too afraid to do that!",10
+if found=2
+  Rest
+endif 
+if found=3
+  Rest
+endif
+
+endproc
+
+Procedure Montest
+waitfor a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,"Obvious","Cody","tvwxopkfds","NO CARRIER",a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,10
+  switch found
+    case 1: put "backstab deat"
+    case 2: put "backstab cub"
+    case 3: put "backstab war"
+    case 4: put "backstab moan"
+    case 5: put "backstab mino"
+    case 6: put "backstab ston"
+    case 7: put "backstab beet"
+    case 8: Hangup
+    case 9: put "backstab bans"
+    case 10: put "backstab ro"
+    case 11: put "backstab or"
+    case 12: put "backstab gobl"
+    case 13: put "backstab half"  
+    case 14: put "backstab slav"
+    case 15: put "backstab dire"  
+    case 17: put "exp"
+           waitfor "Exp: ",2
+           getN neRaw,15
+           strpos neRaw, "Level", end2
+           Substr neraw, 1, end2-1,exp2
+           atoi exp2,exp4
+           exp5= exp4 - exp3
+           totalexp= exp4 - exp6
+           put "- Total Exp = ",totalexp
+           put "' Exp gained = ",exp5
+           time today2
+           put "' Started = ",today1
+           put "' Now     = ",today2
+           return
+    case 18: HANGUP
+           return
+    case 19: Callback
+           return
+    case 20: put "backstab were"
+    case 21: put "backstab sli"
+    case 22: put "backstab arch"
+    case 23: put "backstab spi"
+    case 24: put "backstab thu"
+    case 25: put "backstab ban"
+    case 26: put "backstab dru"
+    case 27: put "backstab tre"
+    case 28: put "backstab pla"
+    case 29: put "backstab vam"
+    case 30: put "backstab gol"
+    case 31: put "backstab ele"
+
+    OTHERWISE: return
+  endswitch
+ 
+  waitfor "You say"," experience.","Your command had no effect.","You fumble in confusion!","Cody","You are too afraid to do that!",10
+     if found=4
+        put "a"
+     endif
+     if found=6
+        put "a"
+     endif
+      
+   if found=5
+        put "exp"
+        waitfor "Exp: ",2
+        getN neRaw,15
+        strpos neRaw, "Level", end2
+        Substr neraw, 1, end2-1,exp2
+        atoi exp2,exp4
+        exp5= exp4 - exp3
+        totalexp= exp4 - exp6
+        put "- Total Exp = ",totalexp
+        put "' Exp gained = ",exp5
+        time today2
+        put "' Started = ",today1
+        put "' Now     = ",today2
+     endif
+  montest 
+endproc              
+
+Procedure Health
+      put "health"
+      waitfor "You fumble in confusion","You are too afraid to do that!","Health: "
+        if found=1
+          Health
+        endif
+        if found=2
+          Health
+        endif
+      getN Raw,15
+      strpos Raw, "/", end
+      Substr raw, 1, end-1,health1
+      atoi health1,health2
+   if health2 <HPSET
+     Rest
+     waitfor "[Hp=260/","[Hp=259/","[Hp=258/",a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,"Cody","Obvious","tvwxopkfds","NO CARRIER",a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,220
+     switch found
+       case 1,2,3: return
+       case 4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,23,24,25,26,27,28,29,30,31,32,33,34: montest
+       case 19: put "exp"
+                 waitfor "Exp: ",2
+                 getN neRaw,15
+                 atoi exp2,exp4
+                 exp5= exp4 - exp3
+                 totalexp= exp4 - exp6
+                 put "- Total Exp = ",totalexp
+                 put "' Exp gained = ",exp5
+                 time today2
+                 put "' Started = ",today1
+                 put "' Now     = ",today2
+               return
+       case 20: return
+       case 21: HANGUP
+               return
+       case 22: Callback
+               return
+    endswitch
+  endif
+Endproc     
+
+Procedure Bash string Direction 
+  put "bash ",Direction
+  nextmove=" "
+endproc
+ ; firstpath covers dreary, weed and entrance floor
+ ; middlepath bottom floor and to top floor
+ ; lastpath top floor back to dreary
+
+
+procedure move
+
+  
+       substr travelpath,currpos,1,nextmove
+      
+   switch nextmove
+      case "a": nextmove = "nw"
+      case "b": nextmove = "ne"
+      case "c": nextmove = "sw"
+      case "d": nextmove = "se"
+      case "g": nextmove ="hide 20 gold^Mhid 150 silver^Mhid 100 copper^Mhid scimitar^Mhide metal^Mhide iron^M"
+      case "h": Bash "n" 
+                nextmove =" "
+      case "i": Bash "s"     
+                nextmove =" "
+      case "j": Bash "e" 
+                nextmove =" "
+      case "k": Bash "w"     
+                nextmove =" "
+      case "q": Bash "u" 
+                nextmove =" "
+      case "r": Bash "d"     
+                nextmove =" "
+  
+     case "u": nextmove = "up"
+      case "v": nextmove = "down"
+
+     
+endswitch   
+
+   put nextmove
+   waitfor m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,10
+     switch found
+     case 1,4,5: 
+             delay 10
+             montest
+             return
+     case 2,3,6:
+             point=point-1
+             currpos = currpos -1
+             montest
+     case 7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26:
+             point=point+1 
+             currpos = currpos + 1
+             montest
+     OTHERWISE:point=point+1 
+             currpos = currpos + 1
+             montest
+     endswitch
+ 
+   health
+endproc 
+
+Procedure outtahere
+a=1
+put "q"
+delay 100
+put "x"
+put "^M"
+delay 100
+put "=x"
+put "^M"
+put "=x"
+put "^M"
+put "=x"
+put "q"
+delay 100
+put "x"
+put "^M"
+delay 100
+put "=x"
+put "^M"
+put "=x"
+put "^M"
+put "=x"
+put "q"
+delay 100
+put "x"
+put "^M"
+delay 100
+put "=x"
+put "^M"
+put "=x"
+put "^M"
+put "=x"
+Endproc
+
+    
+Procedure timecheck
+Time Now
+If Now >=finishtime AND Now <=starttime 
+  a=1
+  Outtahere
+Endif
+Endproc
+
+
+; *** MAIN PROGRAM    
+put "exp"
+      waitfor "Exp: ",2
+      getN Raw,15
+      strpos Raw, "Level", e
+      Substr raw, 1, e-1,exp1
+      atoi exp1,exp6
+repeat
+      put "talk slow"
+      put "exp"
+      waitfor "Exp: ",2
+      getN Raw,15
+      strpos Raw, "Level", e
+      Substr raw, 1, e-1,exp1
+      atoi exp1,exp3
+      time today1
+repeat
+repeat
+  move
+until nextmove = "1"
+    currpos = 1
+    point=1
+   timecheck
+until a=1
+  a=0
+Waituntil starttime
+Callback
+until not connected                                                               
+

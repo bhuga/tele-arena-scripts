@@ -1,0 +1,39 @@
+procedure ring
+rung=0
+repeat
+put "ri g"
+waitfor "you just rang",3
+if found
+rung=rung+1
+endif
+until rung>=2
+rung=0     
+endproc
+
+procedure waitplyer
+waitfor "nemo ring","healus",3
+switch found
+case 1: ring
+case 2: put "c kusamotumaru"
+endswitch
+endproc
+              
+;when "attacked the flame","a gi^Ma gi^Ma gi^Ma gi^Ma gi^M"
+;when "attacked the app","a ap^Ma ap^Ma aP^Ma ap^Ma ap^M"
+when "go ne","ne^M"
+when "go se","se^M"
+when "go nw","nw^M"
+when "go sw","sw^M"
+when "go south","s^M"
+when "go north","n^M"
+when "go e","e^M"
+when "go w","w'^M"
+when "darmok is ask","add da^M"
+when "alam-2 is aski","add ma^M"
+when "mo-2 is asking","add nemo-^M"
+when "cabal is ask","add cab^M"
+
+while connected
+waitplyer
+endwhile  
+

@@ -1,0 +1,5 @@
+while connected
+when "per drop to the ground","get copper^M"
+when "gold drop to the ground","get gold^M"
+when "ver drop to the ground","get silver^M"
+endwhile

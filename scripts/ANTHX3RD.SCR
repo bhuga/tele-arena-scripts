@@ -1,0 +1,378 @@
+integer life,temp,curexp,zar,yar,giant,dragon,try
+integer hmin,hsec,hours,minutes,seconds,heal1
+string time1,time2,timebeg,answer,n,s,e,w,ne,nw,sw,se,f,d,u
+
+
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup
+    Stop
+EndProc
+
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+    put "i"
+    waitfor "a soulstone",3
+    if found
+      delay 2
+    elseif not found
+      GetOut "No Soulstone! <Hanging Up>"
+    Endif
+EndProc
+
+Procedure Movetest
+   put "E"
+   Waitfor "can move.", "direction.","battle!","fall!",10
+   switch found
+     case 1,3,4: Delay 25
+                 Movetest
+     case 2: Print ""
+   endswitch
+endproc
+
+
+procedure buyyar
+  movetest
+  print "Uh-Oh! Time to buy more Yarrows!"
+  m sw,f
+  m se,f
+  m se,f
+  m se,f
+  put "b yarrow"
+  put "b yarrow"
+  yar=0
+  m nw,f
+  m nw,f
+  m nw,f
+  m ne,f
+endproc
+
+
+procedure yarrow
+  put "drink yarrow"
+  waitfor "have one.","drinking the potion.",4
+  switch found
+    case 1: buyyar
+    case 2: yar=yar+1
+  endswitch
+endproc
+
+
+procedure zary
+   put "drink zary"
+   waitfor "potion.",5
+   if not found
+     GetOut "No Zaryanthium!"
+   elseif found                                        
+     zar=zar-1
+   endif
+endproc            
+
+
+procedure magictest
+  put "c test"
+  waitfor "mentally","no such spell",4
+   switch found
+     case 1: delay 25
+             magictest
+   endswitch
+endproc
+
+
+
+
+
+procedure stats
+  movetest
+  m sw,f
+  m nw,f
+  put "b meal"
+  Put "b drink"
+  m se,f
+  m se,f
+  m se,f
+  delay 30
+  m se,f
+  put "b rowan"
+  put "b hyssop"
+  m nw,f
+  m nw,f
+  delay 30
+  m nw,f
+  put "dr rowan"
+  put "dr hyssop"
+  m ne,f
+endproc
+
+
+procedure check1
+  put "he"
+  waitfor "Healthy","Thirsty","Hungry",5
+  switch found
+    case 1:    Print "I'm Healthy! <YAY!>"
+    case 2:    Put "<Cough> <Gasp> WATER! WATER!"
+               stats
+    case 3:    Put "I need a Rally Burger!"
+               stats
+  endswitch
+endproc
+
+
+procedure buyzary
+  movetest
+  print "Uh-Oh! time to buy more Zarynthiums!"
+  m sw,f
+  m se,f
+  m se,f
+  m se,f    
+  if zar=1
+   put "b zary"
+   put "b zary" 
+  elseif zar=0
+   put "b zary"
+   put "b zary"
+   put "b zary"
+  endif
+  zar=3
+  m nw,f
+  m nw,f
+  m nw,f
+  m ne,f
+endproc
+
+
+procedure check3
+  if yar = 2
+    Buyyar
+  endif
+endproc
+
+
+procedure check2
+  if zar <= 1 
+    Buyzary
+  endif
+endproc
+
+procedure kusamotu
+  put "c kusamotu dr"
+  waitfor "damage!","spell.","incantation!",5
+  switch found
+    case 1:  print ""
+    case 2:  Yarrow
+             Kusamotu
+    case 3: Print ""
+  endswitch
+endproc
+
+procedure kusatami
+  put
+  waitfor "dragon here","giant here","tess here","nobody here","with you",5
+  switch found
+  case 1: dragon=1
+          put "c kusatami dragon"
+  case 2,3: giant=1
+          put "c kusatami flame"
+  case 4:  giant=0 and dragon=0
+    print "Nothing Here!"
+  endswitch
+  if giant=1 or dragon=1
+  waitfor "damage!","spell.","fails.","incantation!","nearby.","defenses!",5
+   switch found
+     case 1:  Print ""
+     case 2:  Yarrow
+              Kusatami
+     case 3:  Print ""
+     case 4:  Print ""
+     case 5:  Print ""
+     case 6:  Print ""
+   endswitch
+   endif
+endproc
+
+
+Procedure Health
+   integer vit3,back,pos
+   string vit1,vit2
+   vit1="none"
+   vit2="none"
+   vit3=0
+   pos=0
+   back=0
+   put "he"
+   waitfor "/ 5","/ 6","/ 7","/ 8","/ 9","/ 10","/ 11",3
+     if found
+       get vit1
+       strpos vit1,"/",pos
+       back=(pos-5)
+       substr vit1,back,4,vit2
+       atoi vit2,vit3
+       if vit3 < 399 and vit3 > 0
+         print "Health: ",vit3
+         print "Health Very Low!"
+         Zary
+         heal1=1
+       elseif vit3 < 700 and vit3 >= 400
+         print "Health: ",vit3
+         print "Health Low!"
+         Kusamotu
+         heal1=1
+       elseif vit3 >= 701
+         print "Health: ",vit3
+         ;Kusatami
+       elseif vit3 <= 0
+         print "Bad Health Check! <Retrying>"
+         clear com
+         delay 20
+         health
+       endif
+     endif
+   Endproc
+
+
+
+procedure ring
+put 
+waitfor "dragon","giant",3
+if not found
+         put "ri g"
+         waitfor "dragon appears","giant appears","giantess appears",3
+         switch found
+            case 1: dragon=1
+            case 2,3: giant=1
+         otherwise: ring
+         endswitch
+endif
+endproc
+
+
+procedure attacktest
+  put "a test"
+  waitfor "previous activities!","nearby.",3
+  switch found
+    case 1:  delay 20
+             health
+             attacktest
+    case 2:  Print ""
+  endswitch
+endproc
+
+
+procedure montest
+  health
+  put
+  waitfor "dragon","giant","nobody here",3
+  switch found
+  case 1:  attacktest
+             put "a dragon^ma dragon^ma dragon^ma dragon^ma dragon"
+             dragon=1
+  case 2:  attacktest
+                 put "a flame^ma flame^ma flame^ma flame^ma flame"
+                 giant=1
+  case 3:     giant=0
+              dragon=0
+              check1
+              check2
+              check3
+              ring
+  otherwise: giant=0
+              dragon=0
+              check1
+              check2
+              check3
+              ring
+              
+endswitch
+endproc
+
+
+Procedure testmon
+  put
+  waitfor "dragon here","dragons here","giant here","giants here","tess here","tesses here","nobody here",3
+    switch found
+    case 1,2: dragon=1
+              montest
+    case 3,4,5,6: giant=1
+                  montest
+    case 7:      check1
+                 check2
+                 check3
+                 ring
+                 dragon=0
+                 giant=0 
+    otherwise : check1
+                check2
+                check3
+                ring
+                giant=0
+                dragon=0
+
+  endswitch
+endproc
+
+; ******* MAIN PROGRAM *******
+zar=3
+yar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+
+when "in the act","x^M^*^*"
+when "attacked you with a","Fuck you!^mx^m~~x^m^*^*"
+when "Misery is asking","add misery^M"
+when "turbo is asking","add turbo^m"
+when "wally is asking","add wally^m"
+when "Slasher is asking","add slasher^m"
+when "nemo is asking","add nemo^m"
+when "cabal is asking","add cabal^m"
+when "trel is asking","add kes^m"
+when "wan is asking","add obi^m"
+when "tot is asking","add tat^m"
+when "ter-2 is asking","add slanter^m"
+when "slanter is asking","add slanter^m"
+when "mok is asking","add dar^m"
+when "zor is asking","add zor^m"
+when "from darmok: temple party","c kusamotu dar^m"
+when "mator is asking","add deci^m"
+when "mentis is asking","add non^m"
+when "heubler is asking","add heu^m"
+when "pharoah is asking","add pha^M"
+whenidle 20, "^*^*^*~~~^*^*~^*"
+when "guit the game","^*^*^*^*^*^*^*^*^*~~~~~~~^*^*"
+while connected
+flame=0
+dragon=0
+testmon
+endwhile
+
+

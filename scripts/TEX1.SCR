@@ -1,0 +1,18 @@
+#include "toolbox2.scr"
+put "exp"
+waitfor "t level: ",3
+getN raw,15
+strpos raw,"(",end
+substr raw,end-1,7,exp
+print ""
+print ""
+print ""
+print ""
+delay 10
+print exp," exp earned"
+                      waitfor "wealth: ",3
+   getN Raw,10
+   strpos Raw, "c", end
+   substr Raw, 1, end-2,mon
+   waitfor "lab",3
+   put "dep ",mon 

@@ -1,0 +1,54 @@
+STRING Directions, Command
+
+Directions = "-"
+
+PROCEDURE N
+  CONCAT Directions, "N-"
+ENDPROC
+
+PROCEDURE S
+  CONCAT Directions, "S-"
+ENDPROC
+
+PROCEDURE E
+  CONCAT Directions, "E-"
+ENDPROC
+
+PROCEDURE W
+  CONCAT Directions, "W-"
+ENDPROC
+
+PROCEDURE U
+  CONCAT Directions, "U-"
+ENDPROC
+
+PROCEDURE D
+  CONCAT Directions, "D-"
+ENDPROC
+
+PROCEDURE NE
+  CONCAT Directions, "NE-"
+ENDPROC
+
+PROCEDURE NW
+  CONCAT Directions, "NW-"
+ENDPROC
+
+PROCEDURE SE
+  CONCAT Directions, "SE-"
+ENDPROC
+
+PROCEDURE SW
+  CONCAT Directions, "SW-"
+ENDPROC
+
+PROCEDURE Say STRING Command
+  CONCAT Directions, "##"
+  CONCAT Directions, Command
+  CONCAT Directions, "##-"
+ENDPROC
+
+;Enter the directions here.  Put Say before all extra commands
+;I.E. Say "Buy Healing"  I suggest putting the directions in a 
+;separate script and using #Include. 
+PRINT Directions

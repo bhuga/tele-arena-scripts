@@ -1,0 +1,699 @@
+
+; Script : the Dungeon Level 3 route (ver3.5)
+;          -Use only as a hunter with a barrel.
+;          -Works with a group following.
+; Start  : Any of the waypoints on this route (even N plaza)
+
+string monster, attackcode, endstring, tmp
+
+integer walk,pos,roundnum,buff
+integer dead,expbeg
+integer DR
+
+Procedure FindMonster STRING Monster
+        s = Monster
+
+        Monster = "Butthead"              ;for wrong type lines
+
+        STRPOS s, "is nobody here.", pos       ;for empty rooms
+        if pos > 0 
+          Monster = "nobody"
+        endif
+        STRPOS s, "on the floor", pos       ;for room with only
+        if pos > 0                          ;another player.
+           Monster = "nobody"
+        endif
+ 
+        STRPOS s, "stone giant", pos
+        if pos > 0
+          Monster = "giant"
+        endif
+        STRPOS s, "giantess", pos
+        if pos > 0
+          Monster = "giantess"
+        endif
+        STRPOS s, "troll", pos
+        if pos > 0
+          Monster = "troll"
+        endif
+        STRPOS s, "cave lion", pos
+        if pos > 0
+          Monster = "lion"
+        endif
+        STRPOS s, "gargoyle", pos
+        if pos > 0
+          Monster = "gargoyle"
+        endif
+        STRPOS s, "skeleton", pos
+        if pos > 0
+          Monster = "warrior"
+        endif
+        STRPOS s, "ogre", pos
+        if pos > 0
+          Monster = "ogre"
+        endif
+        STRPOS s, "chimera", pos
+        if pos > 0
+          Monster = "chimera"
+        endif
+        STRPOS s, "minotaur", pos
+        if pos > 0
+          Monster = "minotaur"
+        endif
+        STRPOS s, "cyclop", pos
+        if pos > 0
+          Monster = "cyclops"
+        endif
+        STRPOS s, "imp", pos
+        if pos > 0
+          Monster = "imp"
+        endif
+        STRPOS s, "hobgoblin", pos
+        if pos > 0
+          Monster = "hobgoblin"
+        endif
+        STRPOS s, "bear", pos
+        if pos > 0
+          Monster = "bear"
+        endif
+        STRPOS s, "kobold", pos
+        if pos > 0
+          Monster = "kobold"
+        endif
+        STRPOS s, "lizard man", pos
+        if pos > 0
+          Monster = "man"
+        endif
+        STRPOS s, "lizard woman", pos
+        if pos > 0
+          Monster = "woman"
+        endif
+        STRPOS s, " orc", pos
+        if pos > 0
+          Monster = "orc"
+        endif
+        STRPOS s, "skeleton lord", pos
+        if pos > 0
+          Monster = "lord"
+        endif
+        STRPOS s, "giant bat", pos
+        if pos > 0
+          Monster = "bat"
+        endif
+        STRPOS s, "huge rat", pos
+        if pos > 0
+          Monster = "rat"
+        endif
+        STRPOS s, "stygian dragon", pos
+        if pos > 0
+          Monster = "dragon"
+        endif
+        STRPOS s, "warlock", pos
+        if pos > 0
+           Monster = "warlock"
+        endif
+        STRPOS s, "spider", pos
+        if pos > 0
+           Monster = "spider"
+        endif
+
+;add here***
+
+        STRPOS s, "chimeras", pos
+        if pos > 0
+          Monster = "chimera"
+        endif
+
+        STRPOS s, "skeleton lords", pos
+        if pos > 0
+           Monster = "lord"
+        endif
+        STRPOS s, "mages", pos
+        if pos > 0
+           Monster = "mage"
+        endif
+endproc
+
+
+Procedure Attack STRING Monster                    ;Attack creature
+
+  AttackCode = "a "
+;  AttackCode = "act: leaps at the "
+;  Concat AttackCode, Monster
+;  Concat AttackCode, " with a great battle cry!^ma "
+  Concat AttackCode, Monster
+;  Concat AttackCode, "^Muse rimeax "
+;  Concat AttackCode, Monster
+  Concat AttackCode, "^Ma "
+  Concat AttackCode, Monster
+  Concat AttackCode, "^Ma "
+  Concat AttackCode, Monster
+  Concat AttackCode, "^ma "
+  Concat AttackCode, Monster
+  Concat AttackCode, "^ma "
+  Concat AttackCode, Monster
+
+  Concat AttackCode, "^ml "
+  Concat AttackCode, Monster
+
+  put AttackCode
+endproc
+
+
+procedure HealthCheck STRING S
+   HitsS = "none"
+   HitsI = 0
+   Grab = 0        ;position to start getting hits at
+   Pos = 0         ;position of the constant [HE:
+
+   STRPOS S, "[HE:", Pos
+   Grab = Pos + 4
+   substr S, grab, 3, HitsS
+
+   atoi HitsS, HitsI
+
+   ;*** This is the HEAL part
+   if HitsI = 0
+      put "Script Error: Misread health data.^m",
+   elseif HitsI < 15
+      put "*** MUCHO EMERGENCY!  DEATH IMMINENT!^m",
+      put "drink anemone^m",
+   elseif HitsI < 50
+;      put "Boy, do I need a heal!  (Add an ANEMONE here)^m",
+      put "drink anemone^m",
+   endif
+
+endproc ;HealthCheck
+
+
+procedure Ready INTEGER Tired
+  R = 0
+  POS = 0
+  S = ""
+
+;  while R = 0
+     put "gr^m",
+     Waitfor "Pharaoh",5
+     get S
+
+     HealthCheck S
+
+     strpos S, "eady", POS
+
+     if POS > 1
+        R = 1
+     endif
+
+     if R = 0
+        delay 20
+        put "^m",
+     endif
+
+     Tired = R
+;   endwhile
+
+endproc
+     
+
+procedure ReadyToAttack
+   Tired=0
+   While Tired=0
+;      put "Checking if I'm ready to move yet...^m",
+      Ready Tired
+   endwhile
+endproc
+
+
+procedure ReadyToMove    ;checks on whole group
+   Tired=0
+   While Tired=0
+
+     Tired = 1
+     S1 = ""
+     S2 = ""
+     S3 = ""
+     S4 = ""
+     S5 = ""    ;allowing for up to 5 people in the group.
+
+     put "gr^m",
+     Waitfor "group currently",1
+     get S1 ;clear rest of line
+
+     get S1       ;me
+     get S2
+
+     strpos S2, "Ready", Pos
+     if Pos > 1               ;don't look for 3 if not 2
+        get S3  
+     endif
+     strpos S3, "Ready", Pos
+     if Pos > 1               ;don't look for 4 if not 3
+        get S4  
+     endif
+     strpos S4, "Ready", Pos
+     if Pos > 1               ;don't look for 5 if not 4
+        get S5  
+     endif
+
+     strpos S1, "Ready", POS1   ;make SURE I'm absolutely ready
+     strpos S2, "Resting", POS2
+     strpos S3, "Resting", POS3
+     strpos S4, "Resting", POS4
+     strpos S5, "Resting", POS5
+
+     if (POS1=0) or (POS2>0) or (POS3>0) or (POS4>0) or (POS5>0)
+        Tired = 0
+     endif
+
+     if Tired = 0
+        delay 20
+        put "^m",
+     endif
+
+   endwhile
+
+   put "^m",
+endproc
+
+
+procedure Move STRING Directions
+            
+   I = 1
+   while I > 0
+      Current = "  "
+      Next = "  "
+      substr Directions, I, 2, Current
+      
+      put "~",
+
+      if Current = ".."
+        I = -10        
+        put "^m",
+      elseif Current = "n "
+        put "n^m",
+      elseif Current = "s "  
+        put "s^m",
+      elseif Current = "e "
+        put "e^m",
+      elseif Current = "w "  
+        put "w^m",
+      elseif Current = "ne"  
+        put "ne^m",
+      elseif Current = "se"  
+        put "se^m",
+      elseif Current = "nw"  
+        put "nw^m",
+      elseif Current = "sw"  
+        put "sw^m",
+      elseif Current = "u "  
+        put "u^m",
+      elseif Current = "d "  
+        put "d^m",
+      else
+        put "Script Error:  Unidentified movement."
+      endif
+
+      Checker = 0       ;for double checking emptiness
+      AttRound = 1      ;Number of rounds spent attacking
+      DoBattle = 1      ;boolean whether to continue fight
+
+      While DoBattle = 1      
+         
+         if AttRound > 1 
+;            put "DING!  Next round!"
+            delay 20
+            put "^m",
+         endif
+
+         waitfor "***",2
+         waitfor "You",2
+         if found
+            get Monster    ;clear the rest of the line
+            get Monster    ;get the line with the monster(s) in it
+
+;to compensate if someone else is in the room
+           STRPOS Monster, "is here.", pos       
+           if pos > 0 
+             get Monster
+           endif
+           STRPOS Monster, "are here.", pos       
+           if pos > 0 
+             get Monster
+           endif
+
+
+            FindMonster Monster
+         
+
+            ;to keep reading till it gets right line
+            while Monster = "Butthead"
+               put "Script Error: Line misread.  Retrying.^m",
+               delay 15
+               put "^m",
+
+               waitfor "***",2
+               waitfor "You",2
+                  if found
+                     get Monster    ;clear the rest of the line
+                     get Monster    ;get the line with the monster(s) in it
+                     
+                     STRPOS Monster, "is here.", pos       
+                     if pos > 0 
+                        get Monster
+                     endif
+                     STRPOS Monster, "are here.", pos       
+                     if pos > 0 
+                        get Monster
+                     endif
+
+                     FindMonster Monster
+                  endif
+            endwhile ;of while Monster = "Butthead"
+
+
+            if Monster = "nobody"
+               DoBattle = 0
+            else   
+               DoBattle = 1
+
+               ReadyToAttack
+                  Attack Monster
+
+;**************
+; TEST SECTION 
+; to help when 
+; thrown out a
+; room...
+;**************
+                  waitfor ", you don't see",2
+                  if found
+                     put ".tumble pharaoh^m~",
+
+                     waitfor "TUMBLED you ",2
+                        if found
+                           put ".ca3 %s is just where he should be!^m",
+                        endif
+
+                     delay 10 
+                  endif
+
+
+                  delay 10
+                  AttRound = AttRound + 1
+
+               delay 10
+            endif
+         else
+            put "Script Error: Room information not recieved."
+            put "^m",
+         endif  ;of the if "You" found
+
+      endwhile
+
+      if AttRound > 1
+         put "Killed everything in this room, resting.^m",
+         delay 15
+         ReadyToMove
+      endif
+
+      I = I + 2
+   endwhile
+
+endproc
+
+
+procedure GoDown
+
+   put "Bye folks... be back later!^m",
+
+   ;to the cyclopes
+   move "e d nee see senen nen .."      ;** extra N to help if tumbled
+
+   ;to the chimera
+   move "ned s swswswsww nwnww u s .."
+
+   ;to the poison trap
+   move "s swseses see senee seswsws .."
+
+   put "Poisoned.  Drinking potion to cure.^m",
+;  taken care of by the WHILE, hopefully
+;   put "drink verbena^m",
+   put "~~",
+
+   move "s s .."
+
+   put "I'm here and ready to kick ass!^m",
+
+endproc
+
+procedure CheckRoom STRING RoomDesc
+   delay 5
+   put "^m",
+   waitfor RoomDesc, 3
+   if found
+      RoomDesc = "Y"
+   else
+      put "./pharaoh This is not the ",
+      put RoomDesc,
+      put "!^m",
+      RoomDesc = "N"
+   endif
+;   delay 5
+endproc
+
+
+procedure ChkFood
+   put "~~i^m",
+   waitfor "ration",3
+   if found
+      delay 5
+      put "Good.  I have food, too!^m",
+      delay 5
+   else
+      put "hunt^m",
+      delay 30
+      ReadyToMove
+   endif
+endproc
+
+procedure ChkAnemone
+   put "~~i^m",
+   waitfor "anemone",3
+   if found
+      delay 5
+      put "Good.  I have healing potions.^m",
+      delay 5
+   else
+      put "No more anemones.  Time to go!^m",
+      delay 30
+
+      ;do the stuff here to go back to town
+      RoomDesc = "grand hall"
+      CheckRoom RoomDesc
+      if RoomDesc = "Y"
+         Put "All aboard!  Going back to town!^m",
+         Move "n n .."
+      else
+         put "You MUST be in the grand hall.^m",
+         stop  ;don't do if not right starting point   
+      endif
+
+      put "Poisoned.  Drinking potion to cure.^m",
+;     taken care of by WHILE statement, hopefully
+;      put "drink verbena^m",
+      put "~~",
+
+      ;from trap to chimera
+      Move "n nenenww swnww nwn nwnwnen .."
+
+      ;from chimera to cyclops
+      Move "n e u sesee nenenenen u sw.." ;**extra N to help if tumble
+
+      ;from cyclops to plaza
+      Move "s sws swnww nww swu w .."
+  
+      put "I'm back!^m",
+
+
+      ;To prepare for the next dungeon run...
+      put "eat ration^m~~",
+      put "s^m~~s^m~~b verb^m~b verb^m~",
+      put "b anem^m~",
+      put "b anem^m~",
+      put "b anem^m~",
+      put "b anem^m~",
+      put "b anem^m~",
+      put "n^m~~n^m~~w^m~~",
+      put "b healing^m~e^m~~",
+
+      put "Preparing to go back down...^m",
+      delay 30
+
+      GoDown
+
+   endif
+endproc
+
+
+
+
+;ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+;บ                             Main Program                               บ
+;ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+when "You're hungry.", "eat ration^M"
+when "You're thirsty.","drink barr^M"
+when "You're poisoned", "drink verb^M"
+when "falls to the ground", "act: holds up his rimeax in celebration of a glorious victory!^m"
+when "healing spell for you", "Thanks for the heal!^m"
+
+whenidle 10, "^m"
+
+when "tumble out of the room to the north!", "^m.ca3 %s TUMBLED %s N.^m"
+when "tumble out of the room to the south!", "^m.ca3 %s TUMBLED %s S.^m"
+when "tumble out of the room to the east!", "^m.ca3 %s TUMBLED %s E.^m"
+when "tumble out of the room to the west!", "^m.ca3 %s TUMBLED %s W.^m"
+when "tumble out of the room to the northeast!", "^m.ca3 %s TUMBLED %s NE.^m"
+when "tumble out of the room to the southeast!", "^m.ca3 %s TUMBLED %s SE.^m"
+when "tumble out of the room to the northwest!", "^m.ca3 %s TUMBLED %s NW.^m"
+when "tumble out of the room to the southwest!", "^m.ca3 %s TUMBLED %s SW.^m"
+when ">>> Pharaoh TUMBLED you N.", "s^m"
+when ">>> Pharaoh TUMBLED you S.", "n^m"
+when ">>> Pharaoh TUMBLED you E.", "w^m"
+when ">>> Pharaoh TUMBLED you W.", "e^m"
+when ">>> Pharaoh TUMBLED you NE.", "sw^m"
+when ">>> Pharaoh TUMBLED you NW.", "se^m"
+when ">>> Pharaoh TUMBLED you SE.", "nw^m"
+when ">>> Pharaoh TUMBLED you SW.", "ne^m"
+
+; Sysop says NO to royals while scripting.
+;when "You are expecting your taxes(credits)", ".taxes^m"
+;when "ou will still do time", ".accept^m"
+when "Sysop", "/p phar LOOK OUT!^m~/p phar IT'S THE BOSS!^m"
+
+when "found 2 gold crowns", "share 2^m"
+when "found 3 gold crowns", "share 3^m"
+when "found 4 gold crowns", "share 4^m"
+when "found 5 gold crowns", "share 5^m"
+when "found 6 gold crowns", "share 6^m"
+when "found 7 gold crowns", "share 7^m"
+when "found 8 gold crowns", "share 8^m"
+when "found 9 gold crowns", "share 9^m"
+when "found 10 gold crowns", "share 10^m"
+when "found 11 gold crowns", "share 11^m"
+
+
+
+
+
+
+
+
+put "The Ultra-Hi-Tech, New and Improved, Better than Ever...^m",
+delay 5
+put "Almost perfect, Non-Royal-Using, Tumbling, Running, Jumping...^m",
+delay 5
+put "The ULTIMATE DUNGEON SCRIPT!      by Pharaoh Enterprises^m",
+delay 10
+
+put ".cw3 tumble^m",
+put ".ca3 %s is just dandy!^m",
+delay 10
+
+ReadyToMove
+
+RoomDesc = "north plaza"
+CheckRoom RoomDesc
+if RoomDesc = "Y"
+   GoDown
+endif
+
+While Connected
+
+
+   RoomDesc = "grand hall"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+
+      ;If I'm out of anemones, head back to town!
+      ChkAnemone
+
+      ;Make sure I have a ration (and water) else hunt
+      ChkFood
+
+      Put "Going from the Grand Hall to the Enormous Cavern!^m",
+      Move "n s sed n n nwnwnenee e see e e sesese.."
+   endif
+
+   RoomDesc = "enormous cavern"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from the Enormous Cavern to the Grand Hall!^m",
+      Move "nwnwnww w w nww w swswseses s u nw.."
+   endif
+
+   RoomDesc = "grand hall"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from the Grand Hall the the TROLLS.^m",
+      Move "sed n n nwnww w w .."
+   endif
+
+   RoomDesc = "small cavern"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from the TROLLS to the GARGOYLE.^m",
+      Move "n nwnenenee e .."
+   endif
+
+   RoomDesc = "intersection"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from the GARGOYLE to the DRAGON!^m",
+      Move "e e e n n n e e nenenee .." 
+   endif
+
+   RoomDesc = "enormous natural cavern"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from DRAGON to SKELETON LORDS.^m",
+      Move "w swswsww w n n nwnwnww w w .."
+   endif
+
+   RoomDesc = "dark cavern"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from SKELETON LORDS to DRAGON.^m",
+      Move "e e e seseses s e e nenenee .." 
+   endif
+
+   RoomDesc = "enormous natural cavern"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from DRAGON to GARGOYLE.^m",
+      Move "w swswsww w s s s w w w .."
+   endif
+
+   RoomDesc = "intersection"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from GARGOYLE to TROLLS.^m",
+      Move "w w swswswses .."
+   endif
+
+   RoomDesc = "small cavern"
+   CheckRoom RoomDesc
+   if RoomDesc = "Y"
+      Put "Going from TROLLS to the Grand Hall.^m",
+      Move "e e e seses s u nw.."
+   else
+      put "Ugh!  I'm not at one of my waypoints!^m",
+   endif
+
+   put "~ep^m",
+
+
+endwhile
+
+
+

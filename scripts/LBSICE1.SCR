@@ -1,0 +1,605 @@
+;#include "toolbox1.scr"
+#include "toolbox2.scr"
+#include "toolbox3.scr"
+when "gold drop","g go^m"
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;Variable declarations
+integer der,mace,room,moba,mobb,mobc,mobd,mobe,mobf,needrest,logged,attacked 
+integer iter,fleeroom,begin,fought,xpstyle,startxp,mresper,hresper
+string there,forward,manahpstr,expline,mona,monb,monc,mond,mone,monf
+time start
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+when "don't let me die","mahd nev^M"
+when "tain guts","drink potion^Ma^M"
+when "nnnn","invite nev^M"        
+when "nevyn moves to attack","a^M"            
+when "moves to attack you","drink potion^M"
+when "gsgs","invite gruk^m"  
+when "you notice oak","get oak^m"
+when "slanter moves to attack you","hold slanter^M"
+whenidle 15,"gredew^M"
+
+;Path string declarations
+path="ahles4sss33ee241nwwee2nw1nn3e2eesswhles4w13e3s4seeeew11n2es334hl233s324ee22w124w1w4nnn1weneehl24eew4s3s3e3eeee2nwe1whl4sn2ne2essnn1w1ssnnw44221hlw1snwww4s4nnwww1ww4w1wwz"
+;lava1pathpath="ahls4sss33ee1n2nw1nnhl3e2eesss43s4seeee211nhleen2n2eeess4w4s3s3hle3e2n2nnnn3e3hlw4wse3s4www44hlww1n1nnn1nnnwww1sss4w1w1nnwz"
+flee="8wcswwwsssss3sks44ww1z"
+;path="aennnnnssssswz"
+;flee="esswz"
+;         N
+;       1 | 2  P = Go path       -Z = reset string
+;     W --+-- E                   -L = exp watch (will be timed)
+;       4 | 3  -Direction Legend  -A = Show all mobs at start of loop
+;         S
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;Mob Declarations
+mona="hellhound."
+monb="a man."
+monc="jelly."
+mond="bat."  
+mone="elemental."
+monf="plant."
+mong="er bush."
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;Strings of phrases used in script
+yg="You gain"
+yc="your command"               
+sm="showmana"
+cxp="chkxp"
+;needs stabs     acid on you for...bites you for...thorny stem for...swarm on you for...acid jes on you for...stones at you for
+sr="surprise crushes you"
+sc="surprise chops you"
+sl="surprise slices you"
+sb="surprise bludgeons you"
+su="surprise punches you"    
+ss="surprises slashses you"
+sp="surprise pounds you"
+mta="moves to attack you"
+jlf="just left"
+oex="obvious"
+ft="from the"
+yf="you for"
+ay="at you"
+snk="sneaking"
+mksnd="make a sound"
+ah="also here"
+yf1="magma at you for"
+yf2="fist for"
+yf3="pseudopod for"
+yf4="fire on you for"
+yf5="rips you for"
+yf6="bites you for"
+yf7="arm for"
+yf8="a heavy limb for"
+yf9="with its arm for"
+yf10="cleaves you for 21"
+yf11="cleaves you for 22"
+yf12="cleaves you for 23"
+yf13="cleaves you for 24"
+yf14="cleaves you for 25"
+yf15="cleaves you for 26"
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;+                        Beginning of Procedures                     +
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++    
+procedure getxpline
+   put "exp"
+  waitfor "Exp:"
+     getN expline,75
+  return
+endproc
+;----------------------------------------------------------------------
+procedure getstats
+put "he"
+waitfor "Heal",5
+    getN manahpstr,48
+  return
+endproc
+;----------------------------------------------------------------------
+procedure startup
+string star1, star2
+integer star3
+
+  getxpline
+star1=expline
+        strpos star1,"Level",end
+        Substr star1, 2, end-3,star2
+        atoi star2,star3
+        startxp=star3
+endproc
+;----------------------------------------------------------------------
+procedure cure                                                         
+put "cure"
+   waitfor "you cast","but fail","enough mana",8
+    switch found
+        case 1: put "rest"
+                return
+        case 2: delay 50
+                cure
+                return
+        case 3: put "sigh"
+                delay 30
+                cure
+    endswitch
+endproc
+;----------------------------------------------------------------------
+procedure rester
+;print "^Mresting procedure"
+string health1
+ put "rest"
+needrest=1
+   waitfor "(resting)","too sick",8
+     switch found
+        case 1: put "smile"
+        case 2: cure
+     endswitch
+    repeat
+     waitfor ft,mta,yf,ay,sr,sc,sl,sb,su,ss,sp,14
+        switch found
+           case 1,3,4: return
+           case 2,5,6,7,8,9,10,11: attacked=1
+                     return
+           endswitch
+       getstats
+        Substr manahpstr, 18, 3,health1
+    until health1="100"
+  needrest=0
+ return
+endproc
+;----------------------------------------------------------------------
+;----------------------------------------------------------------------
+procedure gmon
+put "i"
+waitfor "ying",5
+getN curwel,20
+strpos curwel,"gold",end
+substr curwel,2,end-3,whatgot
+atoi whatgot,gold
+put "stash ",gold-5," gold"
+repeat
+put "stash staff"
+   waitfor "you hid","no effect",8
+    switch found
+        case 1:  nfnd=0
+        case 2:  nfnd=1
+                 return
+    endswitch
+until nfnd=1
+return
+endproc 
+
+procedure chkbls
+put "st"
+waitfor "lucky",3
+if not found
+put "bles"
+endif     
+return
+endproc
+
+procedure checkmana
+integer end, curman, maxman, end2
+string mana1, mana2, working
+        getstats
+working=manahpstr
+        strdel working,1,29
+        strpos working, "/",end
+        substr working, 1,end-1,mana1
+        strpos working, "  [",end2
+        strpos working,"/",end2
+        substr working,end2+1,end-1,mana2
+        atoi mana1,curman
+        atoi mana2,maxman
+        put "br ",curman," out of ",maxman," mana"
+      return       
+endproc            
+
+procedure bash string der
+   put "bash ",der
+   waitfor "you bashed","already","your command","attempt",1
+    switch found
+      case 1,2,3: return
+      case     4: bash der
+     endswitch 
+return
+endproc
+;----------------------------------------------------------------------        
+procedure chkexp                    
+if mobd < 1
+return
+endif
+getxpline                           
+integer con, end, end2, curxp2, tnlxp2, onfor, minutes, earnxp, tnltme, tnltme2, avg, thing, hour
+string xplin1,xplin2,curxp1,tnlxp1 
+xplin1=expline
+xplin2=expline
+con=60
+        strpos xplin1,"Level",end
+        Substr xplin1, 2, end-3,curxp1
+        atoi curxp1,curxp2
+        strdel xplin2,1,45
+        strpos xplin2, "(", end2
+        Substr xplin2, 2, end2-3,tnlxp1
+        atoi tnlxp1,tnlxp2
+        if xpstyle=1
+        put "br Current Experience: ",curxp2,"   Exp till I Level: (",tnlxp2,")"
+        xpstyle=0
+        return
+        elseif xpstyle=2
+        time current
+        difftime start,current,onfor
+        minutes = onfor/60            
+if minutes >=1
+        earnxp = (curxp2 - startxp)   
+        avg = (earnxp / minutes) * 60
+        tnltme = (tnlxp2 / avg)   
+        else
+        endif
+        put "br I have made ",earnxp," experience in ",minutes,". Time to next level approx ",tnltme," hours at about ",avg,"xp per hour."
+        xpstyle=0
+        return
+        put "-Problems with exp check, please consult the author"
+        return 
+endif
+Endproc     
+;----------------------------------------------------------------------
+procedure newloop
+integer doit
+time current
+difftime start,current,doit
+minutes=doit/60
+put "-",iter," loops so far in ",minutes,"."
+put "-I have killed ",moba," spirit's ",mobb," skeleton's ",mobc," chieftan's and last but not least ",mobd," minotaur's"
+delay 30
+put
+iter=iter+1
+put "prev"
+return
+endproc
+;----------------------------------------------------------------------
+procedure gohome
+forward=""
+   repeat
+    substr flee,fleeroom,1,mover
+     switch mover 
+        case "n","s","e","w","u","d": forward=mover
+        case "1": forward="nw"
+        case "2": forward="ne"
+        case "3": forward="se"
+        case "4": forward="sw"
+        case "z": forward="z"
+                  put "x"
+                  waitfor "[MAJORMUD]",15
+                  hangup
+                  safe=1
+                  stop
+        case "p": forward="go path"
+        case "5": forward=""
+                  bash "n"
+        case "6": forward=""
+                  bash "e"
+        case "7": forward=""
+                  bash "s"
+        case "8": forward=""
+                  bash "w"        
+        case "c":forward=""
+                 put "close e"  
+      endswitch
+     put forward
+     delay 9
+     fleeroom=fleeroom+1
+   until safe=1
+endproc
+;----------------------------------------------------------------------
+procedure mana
+;th:    99/99    [100%]  Mana:  58/58  [100%]
+;Mana:  58/58  [100%]
+string locma
+locma=manahpstr
+        strdel locma,1,25
+        strpos locma,"[",pos
+        Substr locma, pos+1, 3,mana1
+        if mana1 = "100"
+        return
+        else
+        mana2=mana1
+        concat mana2,"^H"
+        atoi mana2,mana3
+        if mana3 < 01
+        put "-Mana at ",mana2,"%  Now resting"
+;        put "rest" 
+;        waitfor ft,mta,yf,ay,sr,sc,sl,sb,su,ss,sp,150
+;        switch found
+;           case 1,3,4: return
+;           case 2,5,6,7,8,9,10,11: attacked=1
+;                     return
+;        endswitch
+        return
+        else 
+        return
+        endif
+        endif
+return
+endproc     
+;----------------------------------------------------------------------
+procedure health
+;th:    99/99    [100%]  Mana:  58/58  [100%]
+string loche
+loche=manahpstr
+        strpos loche,"[",pos
+        Substr loche, pos+1, 3,health1
+        if health1 = "100"
+        return
+        else
+        health2=health1
+        concat health2,"^H"
+        atoi health2,health3
+        if health3 < 75
+        put "-Low on hp (",health2,"%)"
+        rester
+        else 
+        return
+        endif
+        endif
+endproc
+;----------------------------------------------------------------------
+procedure runner
+forward=""
+repeat
+    room=room-1
+    substr path,room,1,mover
+     switch mover 
+        case "n": forward="s"
+        case "s": forward="n"
+        case "e": forward="w"
+        case "w": forward="e"
+        case "u": forward="d"
+        case "d": forward="u"
+        case "1": forward="se"
+        case "2": forward="sw"
+        case "3": forward="ne"
+        case "4": forward="nw"
+        case "l": forward=""
+                  chkexp    
+        case "5": forward=""
+                  bash "s"
+        case "6": forward=""
+                  bash "w"
+        case "7": forward=""
+                  bash "n"
+        case "8": forward=""
+                  bash "e"        
+        case "z": forward="z"
+        case "a": forward="a"
+                  gohome
+        case "p": forward="go path"
+      endswitch
+     put forward 
+     delay 9
+until forward="a"
+endproc
+;----------------------------------------------------------------------
+procedure mobtest    
+procedure bstab                             
+waitfor "you swing","you surprise pound",mta,jlf,sm,yc,yg,cxp,"you pound",ft,sr,sc,sl,sb,su,ss,sp,8
+ switch found 
+  case 1,2,9: put "wield ice"
+              put "a"
+              mace=0
+              return
+  case     3,11,12,13,14,15,16,17: attacked=1
+              return
+  case 4,6,10: put
+              mobtest
+              return
+  case     5: checkmana
+              return
+  case     7: fought=1
+              sneaky=2
+              put
+              mobtest
+              return   
+  case     8: xpstyle=1
+              chkexp
+              return  
+otherwise: put "wield bone-"
+              put "a m"
+              mace=0
+              return
+ endswitch
+endproc
+
+procedure battle
+waitfor yg,yc,sm,cxp,jlf,mta,yf1,yf2,yf3,yf4,yf5,yf6,yf7,yf8,yf9,yf10,yf11,yf12,yf13,yf14,yf15,sr,sc,sl,sb,su,ss,sp,100
+  switch found
+     case 1: fought=1
+             print "^Mmonster just died, will it detect?"
+             sneaky=2
+             put
+             mobtest             
+             return
+     case 2: put
+             mobtest
+             return
+     case 3: checkmana
+             return
+     case 4: xpstyle=1
+             chkexp
+             return
+     case 5: put
+             mobtest
+             return
+     case 6,22,23,24,25,26,27,28: attacked=1
+             return
+     case 7,8,9,10,11: put "mahe"
+                       put "a"
+                       battle                                                                            
+     case 12,13,14,15,16,17,18,19,20,21: put "mahe"
+                                         put "a" 
+                                         battle
+  endswitch 
+ return
+endproc
+waitfor sm,cxp,mona,monb,monc,mond,oex,mta,yg,yc,mksnd,sr,sc,sl,sb,su,ss,sp,mone,monf,mong,8  
+ switch found
+        case 1: checkmana
+                return
+        case 2: xpstyle=1
+                chkexp
+                return
+        case 3: mobd= mobd+1
+                put "bs greater"
+                if mace=1
+                bstab
+                endif
+                battle
+        case 4: mobd = mobd+1      
+                put "bs magma"
+                if mace=1
+                bstab
+                endif
+                battle
+        case 5: mobd= mobd+1
+                put "bs pyro"
+                if mace=1
+                bstab
+                endif
+                battle
+        case 6: mobd = mobd+1
+                put "bs fire"
+                if mace=1
+                bstab
+                endif          
+                battle              
+        case 19: mobd = mobd+1
+                put "bs flame"
+                if mace=1
+                bstab
+                endif 
+                battle              
+        case 20: mobd = mobd+1
+                put "bs plant"
+                if mace=1
+                bstab
+                endif 
+                battle  
+       case 21: mobd = mobd+1
+                put "bs archer"
+                if mace=1
+                bstab
+                endif 
+                battle              
+        case 7: sneaky=2
+                return
+        case 8,12,13,14,15,16,17,18: attacked=1
+                return
+        case 9: fought=1
+                return
+       case 10: mobtest
+                return
+       case 11: sneaky=2
+                mobtest
+                return
+ endswitch
+endproc
+;----------------------------------------------------------------------
+procedure sneak
+if mace=0
+put "wield mace"
+mace=1
+endif
+put "sn" 
+waitfor "you don't think","you may not",1 ;"sneak...",1
+    switch found 
+     case 1: ;sneak  ;changed on 7/31/97 to wait til sneaking
+             return ;removed repeat loop 7/31/97  
+     case 2: put
+             mobtest                               
+             return                                
+;     case 3: sneaky=0
+  otherwise: sneaky=0
+    endswitch
+endproc
+;---------------------------------------------------------------------
+procedure move
+;print "^Mmove proc"
+  substr path,room,1,mover
+     switch mover 
+        case "n","s","e","w","u","d": forward=mover
+        case "1": forward="nw"
+        case "2": forward="ne"
+        case "3": forward="se"
+        case "4": forward="sw"
+        case "l": forward="l"
+        case "z": forward="z"
+        case "a": forward="a"            
+        case "h": forward=""
+                  chkbls
+        case "5": forward=""
+                  bash "n"
+        case "6": forward=""
+                  bash "e"
+        case "7": forward=""
+                  bash "s"
+        case "8": forward=""
+                  bash "w"                          
+        case "m": forward=""
+                  gmon        
+        endswitch
+   if attacked = 1
+     runner
+   elseif forward="l"
+     xpstyle=2
+     chkexp        
+     room=room+1
+   elseif forward="a"
+     newloop
+     room=room+1
+   elseif forward="z"
+     room=1
+     return   
+   else
+     if needrest = 0
+     sneak
+     endif
+     put forward 
+     mobtest
+     if fought=1
+      getstats
+      health
+      if needrest=0
+      mana
+      endif
+      room=room+1
+      fought=0
+     else
+     room=room+1
+    endif
+   endif
+endproc
+;**********************************************************************
+;*             Things needing setting and stuff at startup            *
+;**********************************************************************
+iter=1
+attacked=0
+safe=0
+fought=0
+runme=1               
+sneaky=0
+;**********************************************************************
+;*                           Main Loop                                *
+;**********************************************************************
+;repeat
+;move
+;until not connected
+startup
+put "sn"
+repeat 
+move 
+until not connected
+
+
+
+
+
+
+
+

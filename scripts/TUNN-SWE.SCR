@@ -1,0 +1,96 @@
+Procedure M String Dir, Place
+  Integer OK, Xit
+    Xit = 0
+    OK = 0
+    Repeat
+      Print "Moving"
+      Put Dir 
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 9
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+           EndSwitch
+          If Xit = 1
+            Put "uh oh LOST!!!!!!"
+            Alarm "Lost."
+          EndIf
+    Until OK = 1
+EndProc
+;---------------------------------------------------
+When "In your hast, you trip","get all^M"
+When "in that direction.","x^Mx^M^*"
+When "lying on the floor.","get all^M"
+;----------------------------------------------------
+X = 1
+
+Repeat
+
+Print "Beginning Trip to Swelts"
+
+m "ne","floor."
+m "ne","floor."
+m "n","floor."
+m "ne","floor."
+m "nw","floor."
+m "ne","floor."
+m "ne","floor."
+m "ne","floor."
+m "se","floor."
+m "e","floor."
+m "se","floor." 
+m "e","floor."
+m "n","floor."
+m "n","floor."
+m "nw","floor."
+m "ne","floor." 
+m "up","floor."
+Print "We at the Ledges"
+m "se","floor."
+m "se","floor."
+m "se","floor."
+m "s","floor."
+m "s","floor."
+m "up","floor."
+m "n","floor."
+m "n","floor."
+m "nw","floor."
+m "nw","floor."
+m "nw","floor."
+m "w","floor."
+m "w","floor."
+m "w","floor."
+m "up","floor."
+m "w","floor."
+m "w","floor."
+m "sw","floor."
+m "sw","floor."
+m "up","floor."
+m "sw","floor."
+m "s","floor."
+m "up","floor."
+m "w","floor."
+m "sw","floor."
+m "down","floor."
+Print "Swelts baby!"
+m "nw","floor."
+m "n","floor."
+m "nw","floor."
+m "ne","floor."
+m "n","floor."
+m "ne","floor."
+m "n","floor."
+m "ne","floor."
+m "e","floor."
+m "ne","floor."
+m "nw","floor."
+m "n","floor."
+Alarm "We there."
+
+x = x + 1
+
+Until x = 2
+
+

@@ -1,0 +1,8 @@
+when "earth","get gold^M"
+when "mommy","get gold^M"
+when "lurches about","get gold^M"
+when "glowing mace","get gold^M"
+when "fists","get gold^M"
+while connected
+endwhile
+

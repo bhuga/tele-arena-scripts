@@ -1,0 +1,75 @@
+#include "toolbox2.scr"
+string int,know,phs,stam,agil,int2,know2,phs2,stam2,agil2
+integer inte,knowl,phsy,stami,agili,stat1,stat2,stat3,stat4,stat5,stat
+stat1=15
+stat2=15
+stat3=22
+stat4=23
+stat5=27
+reroll=1
+stat=0
+procedure compare
+  if inte>=stat1 
+    stat=stat+1
+  endif
+  if knowl>=stat2
+    stat=stat+1
+  endif      
+  if phsy>=stat3
+    stat=stat+1
+  endif
+  if stami>=stat4
+    stat=stat+1
+  endif
+  if agili>=stat5
+    stat=stat+1
+  endif
+  if stat>=5
+     print "yay, I have stats!"
+    repeat 
+     put "x"
+      waitfor "exit",2
+    until found
+stop   
+elseif stat<5
+stat=0
+endif
+endproc
+
+
+procedure stripstat 
+ substr int,5,3,int2
+ substr know,15,3,know2
+ substr phs,15,3,phs2
+ substr stam,15,3,stam2
+ substr agil,15,3,agil2
+ atoi int2,inte
+ atoi know2,knowl
+ atoi phs2,phsy
+ atoi stam2,stami
+ atoi agil2,agili
+compare
+endproc
+
+
+
+procedure getstats
+  put "reroll"
+   waitfor "you must rest","intellect:",1
+    switch found
+     case 1: delay 20
+             getstats
+     case 2:
+             getn int,81
+             getn know,81
+             getn phs,81
+             getn stam,81
+             getn agil,81
+             stripstat
+endswitch
+endproc
+                                                       
+while connected
+ getstats
+endwhile
+

@@ -1,0 +1,342 @@
+; BeavisSoft (c) December 26, 1996
+; 
+; This script RULES.  All other scripts suck.
+;
+;                           
+
+Integer Vit,Low,High
+String H1,H2,H3,H4,H5,H6,H7,H8,H9,H10,H11,H12,H13,H14,H15,H16,H17,H18,H19,H20,H21,H22,H23,H24,H25,H26,H27,H28,H29,H30,H31,H32,H33
+String skel,zom,Warr,Wol,Hel,Mage,Gian,Ske,Spir,Gol,Min,Tig,Guar,Wil,Cul,Mer,Cap,Sen,Bod,Pal,Spid,Pri,Cle,Wor,Gob,Sli,Sha,Abo,Ass,Tri,Warl,Ooz,Hor,Dog,Ele,Cub,Ser,Nom,Orc,Bat,Magm,Roc,Sla,Mou,Dem,Arc,Jel,Yet,Sor,Tre,bandi,Fle,thu,R1,R2,R3,R4,R5
+String N,S,W,E,SW,NE,NW,SE
+when "Dragnar bows deeply","+BMBM^M"
+when "go bye bye","^*^*^*^M"
+when "Dragnar has invited","fol drag^Mbackrank^M"
+When "You are now following","backrank^M"                        ; 
+
+when "[HP=15/","^*^m"                        ;
+when "[HP=14/","^*^m"                        ;
+when "[HP=13/","^*^m"                        ;
+when "[HP=12/","^*^m"                        ;
+when "[HP=11/","^*^m"                        ;
+when "[HP=10/","^*^m"                        ;
+when "[HP=9/","^*^m"                         ;
+when "[HP=8/","^*^m"                         ;
+when "[HP=7/","^*^m"                         ;
+when "[HP=6/","^*^m"                         ;
+when "[HP=5/","^*^m"                         ;
+when "[HP=4/","^*^m"                         ;
+when "[HP=3/","^*^m"                         ;
+when "[HP=2/","^*^m"                         ;
+when "[HP=1/","^*^m"                         ;
+when "[HP=0","^*^m"                          ;
+when "[HP=-","^*^m" 
+when "drop","get sil^M"  
+when "farthings here.","get cop^m"
+when "nobles here.","get sil^m"
+when "nobles,","get sil^m"
+
+Procedure Health
+Put "He"
+Waitfor H1,H2,H3,H4,H5,H6,H7,H8,H9,H10,H11,H12,H13,H14,H15,H16,H17,H18,H19,H20,H21,H22,H23,H24,H25,H26,H27,H28,H29,H30,H31,H32,H33
+Switch Found
+Case 1:  Vit=10
+Case 2:  Vit=20
+Case 3:  Vit=30
+Case 4:  Vit=40
+Case 5:  Vit=50
+Case 6:  Vit=60
+Case 7:  Vit=70
+Case 8:  Vit=80
+Case 9:  Vit=90
+Case 10: Vit=100
+Case 11: Vit=110
+Case 12: Vit=120
+Case 13: Vit=130
+Case 14: Vit=140
+Case 15: Vit=150
+Case 16: Vit=160
+Case 17: Vit=170
+Case 18: Vit=180
+Case 19: Vit=190
+Case 20: Vit=200
+Case 21: Vit=210
+Case 22: Vit=220
+Case 23: Vit=230
+Case 24: Vit=240
+Case 25: Vit=250
+Case 26: Vit=260
+Case 27: Vit=270
+Case 28: Vit=280
+Case 29: Vit=290
+Case 30: Vit=300  
+Case 31: Vit=310
+Case 32: Vit=320
+Case 33: Vit=330
+Endswitch           
+print "-------------> ",Vit
+If Vit <= REALLOW
+   hangup
+ElseIf Vit <= LOW   
+   put "mihe"
+Endif                
+Endproc
+
+Procedure Attack String Monster   
+repeat
+Health  
+Put "bs ",monster
+Waitfor "You gain","Your Command","you say ",12
+Until Found
+Endproc
+
+Procedure Montest
+Health 
+Put
+Waitfor Warr,Wol,Hel,Mage,Gian,Ske,Spir,Gol,Min,Tig,Guar,Wil,Cul,Mer,Cap,Sen,Bod,Pal,Spid,Pri,Cle,Wor,Gob,Sli,Sha,Abo,Ass,Tri,Warl,Ooz,Hor,Dog,Ele,Cub,Ser,Nom,Orc,Bat,Magm,Roc,Sla,Mou,Dem,Arc,Jel,Yet,Sor,Tre,Fle,bandi,thu,skel,zom,2
+  Switch Found                                                                                                                                                                                         
+       Case 1: Attack Warr
+       Case 2: Attack Wol
+       Case 3: Attack Hel
+       Case 4: Attack Mage
+       Case 5: Attack Gian
+       Case 6: Attack Ske
+       Case 7: Attack Spir
+       Case 8: Attack Gol
+       Case 9: Attack Min
+      Case 10: Attack Tig
+      Case 11: Attack Guar
+      Case 12: Attack Wil
+      Case 13: Attack Cul
+      Case 14: Attack Mer
+      Case 15: Attack Cap
+      Case 16: Attack Sen
+      Case 17: Attack Bod
+      Case 18: Attack Pal
+      Case 19: Attack Spid
+      Case 20: Attack Pri
+      Case 21: Attack Cle
+      Case 22: Attack Wor
+      Case 23: Attack Gob
+      Case 24: Attack Sli
+      Case 25: Attack Sha
+      Case 26: Attack Abo
+      Case 27: Attack Ass
+      Case 28: Attack Tri
+      Case 29: Attack Warl
+      Case 30: Attack Ooz
+      Case 31: Attack Hor
+      Case 32: Attack Dog
+      Case 33: Attack Ele
+      Case 34: Attack Cub
+      Case 35: Attack Ser
+      Case 36: Attack Nom
+      Case 37: Attack Orc
+      Case 38: Attack Bat
+      Case 39: Attack Magm
+      Case 40: Attack Roc
+      Case 41: Attack Sla
+      Case 42: Attack Mou 
+      Case 43: Attack Dem
+      Case 44: Attack Arc
+      Case 45: Attack Jel
+      Case 46: Attack Yet
+      Case 47: Attack Sor
+      case 48: Attack Tre              
+      Case 49: Attack Fle
+      Case 50: Attack Bandi
+      Case 51: Attack Thu
+      Case 52: attack skel
+      case 53: attack zom
+      case 54,55,56: Hangup 
+                        Script "Logon3"
+  Endswitch
+Endproc
+
+Procedure M String Dir
+Delay 2  
+put "sn"
+Put Dir                                
+Waitfor "Shop","Entrance","Crypt","Cave","Tunnel","Cavern","Passage","Slum","Laby","Forest","graveyard",10
+Montest
+Endproc               
+
+skel="skeleton"
+zom="zombie"
+Warr="Warrior"          ;
+Wol=" Wolf"             ;
+Hel="Hellhound"         ;
+Mage=" Plant"           ;     Mob Strings
+Gian=" Giant"           ;
+Ske="Animate"           ;
+Spir="Spirit"           ;
+Gol="Golem"             ;
+Min="Minotaur"          ;
+Tig="Rosebush"          ;
+Guar="Druid"            ;
+Wil="vampire"           ;
+Cul="cultist"           ;
+Mer="mercenary"         ;
+Cap="Captain"           ;
+Sen="Jalapeno"          ;
+Bandi="Bandit"          ;
+Bod="bodyguard"         ;                     
+Pal="paladin"           ;
+Spid="spider"           ;
+Pri="priest"            ;
+Cle="cleric"            ;
+Wor="worm"              ;
+Gob="Goblin"            ;
+Sli="Hellion"           ;
+Sha="Shaman"            ;
+Abo="Tentacled"         ;     
+Ass="Assass"            ;
+Tri="Tribe"             ;
+Warl="Warlock"          ;
+Ooz="Ooze"              ;
+Hor="Horror"            ;
+Dog="Dog"               ;
+Ele="Cyclops"         ;
+Cub="Cube"              ;
+Ser="Serpent"           ;
+Nom="Nomadic"           ;
+Orc="Orc"               ;
+Bat=" Bat"              ;
+Magm="Magma"            ;
+Roc=" Roc"              ;
+Sla="Slave"             ;
+Mou="Mound"             ;            
+Dem="Demon"             ;
+Arc="Archer"            ;
+Jel="Jelly"             ;
+Yet="Yeti"              ;
+Sor="Sorc"              ;
+tre=" tree"             ;
+Fle="Elemental"         ;
+Thu="thug"              ;
+H33="Health:   33"
+H32="Health:   32"
+H31="Health:   31"
+H30="Health:   30"
+H29="Health:   29"
+H28="Health:   28"                           ;
+H27="Health:   27"                           ;
+H26="Health:   26"                           ;
+H25="Health:   25"                           ;
+H24="Health:   24"                           ; 
+H23="Health:   23"                           ;
+H22="Health:   22"                           ;
+H21="Health:   21"                           ; 
+H20="Health:   20"                           ;
+H19="Health:   19"                           ;  Health Strings
+H18="Health:   18"                           ;
+H17="Health:   17"                           ;
+H16="Health:   16"                           ;
+H15="Health:   15"                           ;
+H14="Health:   14"                           ;
+H13="Health:   13"                           ;
+H12="Health:   12"                           ;
+H11="Health:   11"                           ;
+H10="Health:   10"                           ;
+H9="Health:    9"                            ;
+H8="Health:    8"                            ;
+H7="Health:    7"                            ;
+H6="Health:    6"                            ;
+H5="Health:    5"                            ;
+H4="Health:    4"                            ;
+H3="Health:    3"                            ;
+H2="Health:    2"                            ;
+H1="Health:    1"                            ;
+N="n"
+S="s"
+E="e"
+W="w"
+NE="ne"
+NW="nw"
+SE="se"
+SW="sw"
+REALLOW=40
+LOW=100
+procedure waiter
+put "exp"                                         
+put "rest"
+waitfor "hp=117/ma=26","you for","at you",200 ;лллл
+       switch found
+       case 1:
+       case 2: montest
+       case 3: montest
+      endswitch  
+endproc
+
+put "set warn on"
+While Connected
+waiter
+m n
+m n
+m n
+m n
+m w
+m w
+m s   
+m s
+m s
+m s
+m n
+m n
+m n
+m n   
+m e
+m e 
+m e
+m e
+m s
+m s
+m s
+m s
+m n   
+m n
+m n
+m n   
+m w
+m w
+m n
+m n
+m n
+m e
+m e
+m n
+m n
+m n
+m n
+m n
+waiter
+m w
+m w
+m s
+m s
+m s
+m s
+m s
+m w
+m w
+m n
+m n
+m n
+m n
+m n
+m e
+m e
+m s
+m s
+m s
+m s
+m s
+m s   
+m s
+m s
+m s
+m s
+m s
+m s
+Endwhile
+
+

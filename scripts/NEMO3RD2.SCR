@@ -1,0 +1,474 @@
+integer curexp,zar,yar,giant,dragon,nodice
+integer try,heal1,soul,exp,uhoh,oscript,ocheck,check4
+string n,s,e,w,ne,nw,sw,se,f,d,u
+
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup
+    Stop
+EndProc
+Procedure SoulCheck
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8  
+               If Soul = 2
+                GetOut "No Soulstone!"
+               EndIf  
+               Soulcheck
+      Case 2 : Print "Soulstone still here!" 
+                      uhoh=0
+                      Soul = 0               
+      otherwise:
+        uhoh=uhoh+1
+      EndSwitch 
+put "i"
+EndProc
+Procedure M String Dir, Place
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+        otherwise:
+        uhoh=uhoh+1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+EndProc
+Procedure Movetest
+   put "E"
+   Waitfor "can move.", "direction.","battle!","fall!",3
+   switch found
+     case 1,3,4: Delay 25   
+                 uhoh=0
+                 Print "ZZZZzzzzzzz...."
+                 Movetest
+     case 2: Print "" 
+otherwise:
+        uhoh=uhoh+1
+   endswitch
+endproc
+procedure buyyar
+  movetest
+  print "Uh-Oh! Time to buy more Yarrows!"
+  m sw,f
+  m se,f
+  m se,f
+  m se,f
+  put "b yarrow"
+  put "b yarrow"
+  waitfor "You can't afford an anemone potion.",5
+   if found 
+    script "stone3d.scr"
+   endif
+  yar=0 
+  delay 10
+  m nw,f
+  m nw,f
+  m nw,f
+  soulcheck
+  m ne,f   
+  soulcheck
+endproc
+procedure yarrow
+  put "drink yarrow"
+  waitfor "have one.","drinking the potion.",3
+  switch found
+    case 1: buyyar
+    case 2: yar=yar+1
+  endswitch
+endproc
+procedure currexp
+   integer getit,curexp2,gained,position
+   string curr1,curr2
+   curr1="none"
+   curr2="none"
+   position=0
+   getit=0
+   curexp2=0
+   put "ep"
+   waitfor "30","31","32","33",3
+   if found
+   get curr1
+   strpos curr1,": ",position
+   getit=(position+4)
+   substr curr1,getit,9,curr2
+   atoi curr2,curexp2
+   gained=(curexp2-curexp)
+   if gained < 0
+     try=try+1
+     put
+     put
+     put
+       if try = 3
+       print "Too many bad checks, giving up!"
+     elseif try < 3
+       print "Bad Experience Check #",try," <Stopping at 3>"
+       put
+       delay 15      
+       currexp 
+     endif
+   elseif gained >= 0
+     put "/nemo Experience Gained So Far: ",gained
+     delay 10
+   endif
+ endif
+ try=0
+endproc
+procedure startexp
+   integer getit,position
+   string startex1,startex2
+   startex1="none"
+   startex2="none"
+   position=0
+   getit=0
+   curexp=0
+   put "ep"
+   waitfor "30","31","32","33",3
+   if found
+   get startex1
+   strpos startex1,": ",position
+   getit=(position+4)
+   substr startex1,getit,9,startex2
+   atoi startex2,curexp
+   if curexp <= 0
+     try=try+1
+     put
+     put
+     put
+       if try = 3
+       print "Too Many Bad Checks, Giving Up!"
+     elseif try < 3 and try > 0
+       print "Bad Experience Check #",try," <Stopping at 3>"
+       delay 15
+       put
+       startexp   
+     endif                               
+   elseif curexp > 0
+     put "/nemo Starting Experience: ",curexp
+     delay 5
+   endif
+  endif   
+  try=0
+endproc
+procedure zary
+   integer drank
+   drank=0
+   repeat
+   put "drink zary"
+   waitfor "potion.",5
+   if not found
+     GetOut "No Zaryanthium!"
+   elseif found         
+     zar=zar+1
+     drank=drank+1
+   endif
+   until drank = 1
+endproc                
+procedure stats
+  movetest 
+  m sw,f   
+  m nw,f
+  put "buy meal"
+  put "b drink"
+  m se,f
+  m se,f       
+  m se,f
+  delay 10
+  m se,f
+  put "b rowan"
+  put "b hyssop"
+  waitfor "You can't afford an anemone potion.",5
+   if found 
+    script "stone3d.scr"
+   endif
+  m nw,f
+  m nw,f
+  m nw,f  
+  delay 10
+  soulcheck
+  put "dr rowan"
+  put "dr hyssop"
+  m ne,f 
+  soulcheck
+endproc    
+procedure check1                 
+ocheck=ocheck+1
+if ocheck>=3
+ocheck=0    
+ put 
+waitfor "is here","are here","nobody here",1
+ switch found
+  case 1,2: oscript=0
+  case 3: oscript=oscript+1
+ otherwise: uhoh=uhoh+1
+ocheck=0
+  endswitch
+endif
+  put "he"
+  waitfor "Thirsty","Hungry",1
+  switch found
+    case 1:    Put "WATER! WATER!"
+               uhoh=0
+               stats
+    case 2:    Put "I need a Rally Burger!"
+               stats
+        
+      endswitch                                                  
+endproc
+procedure buyzary
+  movetest
+  print "Uh-Oh! time to buy more Zarynthiums!"
+  m sw,f
+  m se,f
+  m se,f
+  m se,f
+  put "b zary"
+  put "b zary" 
+  waitfor "You can't afford an anemone potion.",5
+   if found 
+    script "stone3d.scr"
+   endif
+  zar=0
+  m nw,f
+  m nw,f
+  m nw,f
+  soulcheck
+  m ne,f   
+  soulcheck
+endproc
+procedure check3
+  if yar=2
+    Buyyar     
+   endif
+endproc
+procedure check2
+     if zar=2
+      buyzary
+     endif
+endproc
+procedure kusamotu
+  put "c kusamotu nemo"
+  waitfor "damage!","spell.","incantation!",2
+  switch found
+    case 1:  print ""
+    case 2:  Yarrow
+             Kusamotu
+    case 3: Print "Mentally exhausted...Try again later!"
+  endswitch
+endproc
+Procedure Health
+   integer vit3,back,pos
+   string vit1,vit2
+   vit1="none"
+   vit2="none"
+   vit3=0
+   pos=0
+   back=0
+   put "he"
+   waitfor "/ 10","/ 11","/ 12","/ 13",2
+     if found
+       get vit1
+       strpos vit1,"/",pos
+       back=(pos-5)
+       substr vit1,back,4,vit2
+       atoi vit2,vit3
+       if vit3 < 699 and vit3 > 0
+         print "Health: ",vit3
+         print "HEALTH EXTREMELY LOW!!!"
+         zary
+         heal1=1
+       elseif vit3 < 1640 and vit3 >= 700
+         print "Health: ",vit3
+         print "Health Low!"
+         Kusamotu    
+         heal1=0
+        elseif vit3 <= 0
+         print "Bad Health Check! <Retrying>"
+         clear com
+         delay 20
+         health
+       endif
+     endif
+Endproc
+procedure ring
+integer nodice
+         put "ri g"
+         waitfor "dragon appears","giant appears","giantess appears",1
+         switch found
+            case 1: dragon=1
+                    nodice=0
+            case 2,3: giant=1      
+                   nodice=0
+         otherwise: 
+
+               if nodice=10
+               put "^*"
+               endif
+               ring          
+
+         endswitch
+endproc
+procedure attacktest
+  put "a test"
+  waitfor "previous activities!","nearby.",2
+  switch found
+    case 1:  delay 10
+             uhoh=0
+             health
+             attacktest
+    case 2:  Print "" 
+             uhoh=0
+   otherwise:
+        uhoh=uhoh+1
+  endswitch
+endproc
+procedure montest
+if oscript=2
+script "ntami3d2.scr"
+endif
+        
+check4=check4+1
+if check4=15
+check1
+check4=0
+endif
+  health
+  put
+  waitfor "dragon","giant","nobody here","is here","are here",2
+  switch found
+  case 1 :  attacktest
+             put "a dragon^ma dragon^ma dragon^ma dragon^ma dragon"
+             dragon=1  
+             uhoh=0
+  case 2 :  attacktest
+                 put "a flame^ma flame^ma flame^ma flame^ma flame"
+                 giant=1
+                 uhoh=0
+  case 3,4,5 :    giant=0
+                 uhoh=0
+              dragon=0
+              exp=exp+1
+               if exp=10
+                currexp 
+                exp=0
+               endif
+              check1
+              check2
+              check3
+              if heal1=1
+              health
+              ring 
+              elseif heal1=0
+              ring
+              endif
+otherwise:
+        uhoh=uhoh+1
+endswitch
+endproc
+Procedure testmon
+if oscript=2
+script "ntami3d2.scr"
+endif
+
+  put  
+waitfor "dragon","giant","nobody here","is here","are here",2
+    switch found
+    case 1 : dragon=1
+             uhoh=0
+              montest
+    case 2 : giant=1 
+             uhoh=0
+                  montest
+    case 3,4,5 : dragon=0
+                  uhoh=0
+                 giant=0
+               exp=exp+1
+               if exp=10
+                currexp 
+                exp=0
+               endif
+              check1
+              check2
+              check3
+              if heal1=1
+              health
+              ring 
+              elseif heal1=0
+              ring
+              endif
+          otherwise:
+        uhoh=uhoh+1
+  endswitch
+endproc
+; ******* MAIN PROGRAM *******
+try=0
+zar=0
+yar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+uhoh=0
+u="u"
+d="d"
+f="floor."
+exp=0        
+put "Starting grouphealing script"
+startexp           
+When "in the act","^*"
+When "attacked you with a","^*"
+WhenIdle 15, "^*"
+When "run away run away", "^*"                  
+When "you're in the temple.","^*^*^*"     
+when "obi-wan would like","j obi^M"
+When "˜","^*"
+When "µ","^*"                
+when "red dog","disband^Mj slan^M"                                      
+when "wan is asking","add obi^m"
+when "kancer is ask","add kancer^M"
+when "kestrel-2 is asking","add kes^M"
+when "Slasher is asking","add slasher^m"
+when "strider (whispered): grin","c kusamotumaru ^M"
+when "mok (whispered): grin","c kusamotumaru^M"
+when "mok is asking","add darm^M"
+when "dodger is asking","add do^M"
+when "zor is asking","add zor^M"  
+when "kal is asking","add mys^M"
+when "strider is asking","add str^M"
+when "dodger would like","j dod^M"
+when "ame is asking","add shame^M"
+when "dusty is asking","add dust^M"
+when "lord is asking","add war^M"                     
+while connected    
+if  uhoh=15
+put "^*"
+endif
+ if heal1=1 
+health
+ endif
+ testmon 
+flame=0
+ dragon=0 
+endwhile
+

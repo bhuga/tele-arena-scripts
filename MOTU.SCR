@@ -1,0 +1,4 @@
+while connected
+delay 40
+put "c motu nemo"
+endwhile

@@ -1,0 +1,15 @@
+\@
+\D
+/
+/d1
+/C D/WASEA/24,<userid>
+/<password>
+/ATZ
+/@
+/SET? 1:0
+/CONT
+/ATDT9410317
+WAIT
+WAIT
+WAIT
+WAIT

@@ -1,0 +1,1148 @@
+integer round,count,travel,position,killed,gol4,yar,failed,start,new,g
+integer hmin,hsec,hours,minutes,seconds,begin,drank,buyyar
+string time1,time2,timebeg,s,n,w,e,sw,ne,nw,se,u,d,f
+    
+
+
+Procedure DiffTime string time1,time2,integer hours,minutes,seconds
+integer h1,m1,s1,h2,m2,s2     ; <time1> and <time2> in "HH:MM:SS" format
+string hh,mm,ss
+substr time1,1,2,hh           ; get hour part
+substr time1,4,2,mm           ; get minute part
+substr time1,7,2,ss           ; get second part
+atoi hh,h1                    ; convert to integer
+atoi mm,m1
+atoi ss,s1
+substr time2,1,2,hh           ; get hour,minute and second from <time2>
+substr time2,4,2,mm
+substr time2,7,2,ss
+atoi hh,h2
+atoi mm,m2
+atoi ss,s2
+ if h2 < h1            ; if <time2> pass mid-night
+   h2 = h2 + 24        ; then add 24 hours
+ endif                 ;
+ if s2 = s1            ; if seconds are the same, then add a minute
+  m2 = m2 + 1          ;
+ endif                 ;
+ if m2 = m1            ; if minutes are the same, then add an hour
+  if h2 <> h1
+   h2 = h2 + 1          ;
+  endif                 ;
+ endif
+ if s2 < s1            ; if seconds are less than 60 seconds apart
+  s2 = s2 + 60         ; then take one minute and break it down to
+  m2 = m2 - 1          ; seconds and add this to the 2nd seconds.
+ endif                 ;
+ if m2 < m1            ; if minutes are less than 60 min. apart, then
+   m2 = m2 + 60        ; take one hour, break it down to minutes, and
+   h2 = h2 - 1         ; add this to the 2nd minutes.
+ endif                 ;
+   seconds = s2 - s1   ; gets total # of seconds
+   minutes = m2 - m1   ; gets total # of minutes
+   hours = h2 - h1     ; gets total # of hours
+EndProc
+
+
+Procedure Timeon               ;time1 & timebeg are defined at the start
+   time time2                  ;gets current time
+   difftime timebeg,time2,hours,minutes,seconds
+    if hours >= 1
+     print " ",hours," Hour(s) ",minutes," Minute(s) and ",seconds," Second(s)."
+    elseif minutes >=1
+     print " ",minutes," Minute(s) and ",seconds," Second(s)."
+    else
+     print " ",seconds," Second(s)."
+    endif
+   difftime time1,time2,hours,minutes,seconds
+   delay 10
+Endproc
+
+
+procedure Timeinit
+   time time1
+   time timebeg
+Endproc
+ 
+
+procedure Stealth
+put "'s"
+waitfor "mode de-activated","mode activated",15
+switch found
+  case 1: put "'s"
+  case 2: print "Stealth On."
+endswitch
+put "'-"
+waitfor "won't be notified of future logons.","will be notified of future logons.",15
+switch found
+  case 1: print "Logon Notification Off."
+  case 2: put "'-"
+endswitch
+put ".off"
+Endproc
+  
+Procedure Goldread integer gold,place   ;returns the amount of gold
+ Procedure Goldstring       ; Procedure within to capture the first line
+                            ; of text from inventory containing the amount of
+  if place=17
+   put "i"
+   waitfor "gold crowns",10
+  endif
+  delay 2                   ; gold, then write it to a file, Gold.txt
+  keystroke "`3000"         ; alt-b
+  delay 1                   ;
+  keystroke "`4900"         ; page-up
+  delay 1                   ;
+  keystroke "`4900"         ; page-up
+  delay 1                   ;
+  keystroke "`3E00"         ; find (F4)
+  delay 1
+  if place=17
+   keystroke "You are carrying^m"    ; string to look for
+   delay 1
+  elseif place=10
+   keystroke "You found^m"
+   delay 1
+  endif
+  delay 1
+  keystroke "`4700"         ; home to left edge of screen
+  delay 1                   ;
+  keystroke "`4400"         ; begin to mark text (F10)
+  delay 1                   ;
+  keystroke "`5000"         ; mark text (Down)
+  delay 1                   ;
+  keystroke "`1E00"         ; Write marked text to a file (Alt-A)
+  delay 1                   ;
+  keystroke "gold.txt^M"    ; name of file to write text to
+  delay 5                   ;
+  keystroke "^["            ; escape from scroll back 
+g=0
+ Endproc
+;--------------------------------
+ integer pos,digits             ;
+ string crown,linestr           ;
+;------
+ delay 10
+ Goldstring                     ; calls procedure to write gold
+ open "gold.txt"                ; inventory to text
+ if not success                 ;
+  print "File not found"        ;
+  return                        ;
+ endif
+ read linestr                   ; reads gold in text file
+ while success
+  crowns=linestr                ; assigns goldstring read to crowns
+  read linestr                  ; continues reading till last entry
+ endwhile
+ strpos crowns," gold",pos      ; locates the end of the gold amount
+ digits=(pos-place)             ;
+ substr crowns,place,digits,money  ; extracts the gold amount
+ atoi money,gold                ; conversion to integer, returns gold in inventory
+ if gold >= 2000
+
+ ;PUT HERE WHAT AMOUNT YOU WANT THE SCRIPT TO RETURN WITH
+   print "MAX GOLD!"
+   yar=1
+ endif
+ if start=0       
+   begin=gold
+   print "You have ",begin," gold!"
+   start=1
+   delay 15
+ elseif start=1
+   new=(gold-begin)
+   print "You have made ",new," gold in:"
+   timeon
+   delay 10
+ endif
+ close
+Endproc
+
+
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+          
+
+Procedure Soulcheck
+
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8 
+      Case 2 : Print "Soulstone still here!" 
+                      Soul = 0
+     EndSwitch 
+
+  If Soul = 6
+   GetOut "No Soulstone!"
+  EndIf 
+    
+
+ 
+EndProc
+
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 5
+                     OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+    put "i"
+    waitfor "a soulstone",5
+    if not found
+      Print "NO SOULSTONE!"
+      GetOut "No Soulstone! <Hanging Up>"
+    endif
+EndProc
+
+
+procedure Yarrow
+put "drink yarrow"
+waitfor "potion.","one.",15
+switch found
+case 1: Yar=0
+        drank=drank+1                              
+        if drank=1
+        Print "Drank Yarrow! <",drank,"st>"                             
+        elseif drank=2
+        Print "Drank Yarrow! <",drank,"nd>"
+        elseif drank=3
+        Print "Drank Yarrow! <",drank,"rd>"
+        elseif drank>3
+        Print "Drank Yarrow! <",drank,"th>"
+        endif
+case 2: Print "Out Of Yarrows!"
+        Yar=1
+endswitch
+endproc
+
+
+procedure Kusateka string monster
+put "c kusatami ", monster
+waitfor "damage!","spell.","defenses!","fails!","nearby.","incantation!",15
+switch found
+case 1: Print "Casted Kusateka!"
+case 2: if yar=0
+          Print "Mana Low! <Drinking Yarrow>"
+          Yarrow
+          if yar=0
+            Kusateka "warlock"
+          endif
+        endif  
+case 3: Print "Spell Negated!"
+case 4: Print "Spell Failed!"
+case 5: Print "He's dead already!"
+case 6: Print "Mentally Exhausted! <Try Again Later>"
+endswitch
+endproc
+
+procedure kusatest
+put 
+waitfor "warlock",1
+if found 
+kusateka "warlock"
+endif
+endproc
+
+
+
+procedure Kusamotu
+put "C Kusamotu Nemo"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+case 2: if yar=0
+          print "Mana Low! <Drinking Yarrow>"
+          Yarrow
+          if yar=0
+            Kusamotu
+          endif
+        endif
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch
+endproc
+
+
+procedure Back
+m sw,f
+m u,f  ; up to level 3 flags
+m s,f
+m s,f
+m e,f
+m se,f
+m se,f
+m s,f
+m s,f
+m ne,f
+m nw,f
+m nw,f
+m nw,f
+m n,f
+m n,f
+m n,f
+m n,f
+m u,f  ; up to level 2 flags
+m n,f
+m ne,f
+m ne,f
+m nw,f
+m nw,f
+m n,f
+m n,f
+m n,f
+m n,f
+m w,f
+m sw,f
+m s,f  ; Stone Trap
+put "C Kusamotu Nemo"  ;HITS THE TRAP AND HEALS ONCE.
+delay 150
+m s,f  ; p11^
+m se,f
+m s,f
+m sw,f
+m sw,f
+m sw,f
+m w,f ; Stone Trap
+put "C Kusamotu Nemo"  ;HITS THE TRAP AND HEALS ONCE.
+delay 150
+m w,f
+m nw,f
+m nw,f
+m nw,f
+m n,f
+m n,f
+m n,f ; p8^
+m s,f
+m se,f
+m se,f
+m se,f
+m se,f
+m sw,f
+m sw,f
+m se,f
+m s,f
+m s,f ; p9^
+m s,f
+m se,f
+m s,f
+m s,f
+m s,f
+m w,f
+m sw,f
+m s,f
+m se,f
+m se,f
+m s,f
+m s,f
+m u,f ; Up to level 1 flags
+m e,f
+m se,f
+m se,f
+m e,f
+m se,f
+m ne,f
+m se,f
+m e,f
+m ne,f
+m e,f
+m ne,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m u,f ; Up to Elysian Forest
+m w,f
+m w,f
+m d,f ; Down to Catacombs
+m w,f
+m nw,f
+m nw,f
+m w,f
+m sw,f
+m se,f
+m s,f
+m sw,f
+m nw,f
+m w,f
+m u,f ; Up To Ancient Temple
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m sw,f
+m sw,f
+m sw,f
+m w,f
+m nw,f
+m nw,f
+m w,f
+m sw,f
+m sw,f
+m w,f
+m nw,f
+m nw,f
+m sw,f
+m sw,f
+m sw,f
+m sw,f
+m s,f
+m sw,f
+m sw,f
+m nw,f
+m nw,f
+m ne,f
+m n,f
+m nw,f
+m w,f
+m w,f
+m sw,f
+m s,f
+m sw,f
+m w,f
+m w,f
+m w,f
+m sw,f
+m nw,f
+m ne,f
+m nw,f
+m nw,f
+m nw,f
+m nw,f
+m ne,f
+m nw,f
+m ne,f
+m ne,f
+m n,f
+m n,f
+m ne,f
+m e,f
+m e,f
+m se,f
+m ne,f
+m ne,f
+m nw,f
+m ne,f
+m n,f
+m ne,f
+m ne,f
+m n,f ;North Plaza
+;m w,f
+;put "b healing"
+;m e,f
+m nw,f
+m se,f         
+m s,f
+m s,f
+repeat
+put "b yarrow"    
+waitfor "crowns.","else.","carry",15
+switch found
+  case 1: Print "Bought Yarrow!"
+  case 2,3: Print "Full Of Yarrows!"
+          buyyar=1        
+endswitch
+until buyyar=1
+drank=0
+buyyar=0
+m n,f
+m n,f   
+m ne,f
+put "b drink"
+put "b meal"
+m sw,f
+m n,f
+m d,f    
+put "de 3000"
+put "de 2000" 
+put "de 1000"
+put "de 500"
+delay 10
+put "de 400"
+put "de 300"
+put "de 200"
+put "de 100"           
+Start=0
+New=0
+Begin=0
+Alarm "Depositing Gold!"
+Delay 20
+put "st"
+put "st"
+put "st"
+Goldread Gold,17
+put "de ",begin                                     
+put "ba"
+Alarm "Gold In Vaults!"
+delay 30
+m u,f
+m s,f
+m s,f
+m sw,f
+m sw,f
+m s,f
+m sw,f
+m se,f
+m sw,f
+m sw,f
+m nw,f
+m w,f
+m w,f
+m sw,f
+m s,f
+m s,f
+m sw,f
+m sw,f
+m se,f
+m sw,f
+m se,f
+m se,f
+m se,f
+m se,f
+m sw,f
+m se,f
+m ne,f
+m e,f
+m e,f
+m e,f
+m ne,f
+m n,f
+m ne,f
+m e,f
+m e,f
+m se,f
+m s,f
+m sw,f
+m se,f
+m se,f
+m ne,f
+m ne,f
+m n,f
+m ne,f
+m ne,f
+m ne,f
+m ne,f
+m se,f
+m se,f
+m e,f
+m ne,f
+m ne,f
+m e,f
+m se,f
+m se,f
+m e,f
+m ne,f
+m ne,f
+m ne,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m d,f
+m e,f
+m se,f
+m ne,f
+m n,f
+m nw,f
+m ne,f
+m e,f
+m se,f
+m se,f
+m e,f
+m u,f
+m e,f
+m e,f
+m d,f ;Flagstone Entrance
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m sw,f
+m s,f
+m s,f
+m s,f
+m s,f
+m e,f
+m e,f
+m e,f
+m s,f
+m w,f
+m w,f
+m w,f
+m w,f
+m sw,f
+m s,f
+m sw,f
+m nw,f
+m w,f
+m nw,f
+m nw,f
+m w,f
+m d,f ; Flagstones Level 2
+m n,f
+m n,f
+m nw,f
+m nw,f
+m n,f
+m ne,f
+m e,f
+m n,f
+m n,f
+m n,f
+m ne,f
+m e,f
+m n,f
+m s,f
+m e,f
+m se,f
+m se,f
+put "C Kusamotu Nemo" ;HITS THE TRAP AND HEALS ONCE.
+delay 150
+m sw,f
+m sw,f
+m se,f
+m e,f
+m e,f
+m se,f
+m se,f
+m sw,f
+m n,f
+m ne,f
+m nw,f
+m nw,f
+m ne,f
+m ne,f
+m ne,f
+m nw,f
+m n,f
+m n,f
+m nw,f
+m nw,f
+m ne,f
+m e,f
+put "C Kusamotu Nemo"  ;HITS THE TRAP AND HEALS ONCE.
+delay 150
+m e,f
+m ne,f
+m ne,f
+m ne,f
+m n,f
+m nw,f
+m n,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m se,f
+m se,f
+m sw,f
+m sw,f
+m s,f
+m d,f ; Level 3 Flagstones
+m s,f
+m s,f
+m s,f
+m s,f
+m sw,f
+m sw,f
+m sw,f
+m se,f
+m n,f
+m ne,f
+m se,f
+m se,f
+m se,f
+m se,f
+m ne,f
+m ne,f
+m nw,f
+m nw,f
+m ne,f
+m ne,f
+m e,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m d,f ; Level 4 Flagstones
+m ne,f
+Print "Whew! Made it back!"
+Delay 20
+yar=0    
+Timeinit
+New=0
+Begin=0
+Start=0         
+Goldread Gold,17
+endproc
+
+
+procedure Healthcheck
+        integer getit,vit
+        string vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          put "he"
+          waitfor "/ 10",3 ;CURRENT MANA PUT HERE
+          if found
+          get vital
+          strpos vital,"/",position
+          getit=(position-5)
+          substr vital,getit,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 1400 and vit >= 800  ;RANGE OF HEALTH TO HEAL
+            kusamotu
+          elseif vit >= 1401          ;RANGE OF HEALTH TO NOT HEAL
+                      kusatest
+          elseif vit <= 799 and vit > 0   ;HANGUP IF HEALTH IS BELOW THIS
+            GetOut "Health Exremely Low!"
+          elseif vit <= 0                ;REMEMBER: ALL NUMBERS NEED TO MATCH
+            print "Bad Healthcheck!"     
+          endif
+        endif
+endproc
+
+
+Procedure Travel1
+if yar=1
+  back
+endif   
+m e,f
+m e,f
+m e,f
+soulcheck
+endproc
+procedure travel2
+m se,f
+m e,f
+m e,f
+soulcheck
+endproc
+procedure travel3
+m nw,f
+m nw,f
+m nw,f
+soulcheck
+endproc
+procedure travel4
+m w,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel5
+m sw,f
+m sw,f
+m sw,f
+soulcheck
+endproc
+procedure travel6
+m se,f
+m e,f
+m e,f
+endproc           
+procedure travel7
+m e,f
+soulcheck
+endproc
+procedure travel8
+m e,f
+soulcheck
+endproc
+procedure travel9
+m e,f
+soulcheck
+endproc          
+procedure travel10
+m e,f
+soulcheck
+endproc
+procedure travel11
+m e,f 
+m e,f
+m se,f
+soulcheck
+endproc
+procedure travel12
+m sw,f
+m sw,f
+m sw,f
+soulcheck
+endproc
+procedure travel13
+m w,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel14 
+m nw,f
+m nw,f
+m nw,f
+soulcheck
+endproc
+procedure travel15
+m e,f
+m e,f
+m se,f
+soulcheck
+endproc
+procedure travel16
+m nw,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel17
+m se,f
+m se,f
+m se,f
+soulcheck
+endproc
+procedure travel18
+m e,f
+m e,f 
+m e,f
+soulcheck
+endproc
+procedure travel19
+m ne,f
+m ne,f 
+m ne,f
+soulcheck
+endproc
+procedure travel20
+m nw,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel21
+m w,f
+soulcheck
+endproc 
+procedure travel22
+m w,f
+soulcheck
+endproc
+procedure travel23
+m w,f
+soulcheck
+endproc           
+procedure travel24
+m w,f
+soulcheck
+endproc
+procedure travel25
+m w,f
+m w,f
+m nw,f
+soulcheck
+endproc
+procedure travel26 
+m ne,f
+m ne,f
+m ne,f
+soulcheck
+endproc
+procedure travel27
+m e,f
+m e,f
+m e,f
+soulcheck
+endproc
+procedure travel28
+m se,f
+m se,f
+m se,f
+soulcheck
+endproc
+procedure travel29
+m w,f
+m w,f
+m nw,f
+soulcheck
+endproc
+procedure travel30
+m w,f
+m w,f
+m w,f
+soulcheck
+travel=0
+endproc
+
+
+procedure Movement
+     if travel=1
+     travel1
+     elseif travel=2
+     travel2
+     elseif travel=3
+     travel3
+     elseif travel=4
+     travel4
+     elseif travel=5
+     travel5
+     elseif travel=6
+     travel6
+     elseif travel=7
+     travel7
+     elseif travel=8
+     travel8
+     elseif travel=9
+     travel9
+     elseif travel=10
+     travel10
+     elseif travel=11
+     travel11
+     elseif travel=12
+     travel12
+     elseif travel=13
+     travel13
+     elseif travel=14
+     travel14
+     elseif travel=15
+     travel15
+     elseif travel=16
+     travel16
+     elseif travel=17
+     travel17
+     elseif travel=18
+     travel18
+     elseif travel=19
+     travel19
+     elseif travel=20
+     travel20
+     elseif travel=21
+     travel21
+     elseif travel=22
+     travel22
+     elseif travel=23
+     travel23
+     elseif travel=24
+     travel24
+     elseif travel=25
+     travel25
+     elseif travel=26
+     travel26  
+     elseif travel=27
+     travel27
+     elseif travel=28
+     travel28
+     elseif travel=29
+     travel29
+     elseif travel=30
+     travel30
+     endif
+endproc
+
+
+Procedure Go
+  Travel=travel+1
+  Movement
+endproc
+
+
+Procedure Movetest
+   Print "Testing Physical Exhaustion"
+   put "gr"
+   Waitfor "Resting","Ready",25
+   switch found
+     case 1: Delay 3
+             Movetest
+     case 2: Go
+   endswitch
+endproc
+
+Procedure Attack String Monster
+                
+  Integer Pyre
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                        
+
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+  
+
+       If Found = 1 
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0
+       EndIf
+  
+
+EndProc                 
+
+procedure waitgold
+g=g+1
+if g=5
+goldread gold,17
+endif
+endproc
+
+Procedure Montest
+  
+  Put
+  Waitfor "Warlock","Minotaur","Giant","Mage","Chimera","Lord","Troll","tttttttttttttttttttttttttttttttt",2
+   Switch Found
+    Case 1 : Attack "Warlock"     
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest   
+    Case 2 : Attack "Minotaur"
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest   
+    Case 3 : Attack "Giant"
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest   
+    Case 4 : Attack "Mage" 
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest 
+    Case 5 : Attack "Chimera" 
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest   
+    Case 6 : Attack "Lord"
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest   
+    Case 7 : Attack "Troll"
+             Healthcheck
+             soulcheck
+             delay 5
+             Montest                         
+    Case 8 : Put "k blade^Mk blade^Mk blade^Mk blade^Mk blade^M"
+             Delay 5
+             healthcheck
+             Montest                
+    Otherwise : waitgold
+                movetest                                
+                Healthcheck             
+                   
+                
+                    
+   EndSwitch     
+
+EndProc
+
+; **** When Statements ****
+
+When "in the act of trying to rob you","Nice try ya douchebag!^m"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+When "tumble out of the room to the southwest!","~~~~~ne^m"
+When "tumble out of the room to the northwest!","~~~~~se^m"
+When "tumble out of the room to the southeast!","~~~~~nw^m"
+When "tumble out of the room to the northeast!","~~~~~se^m"
+When "tumble out of the room to the east!","~~~~~w^m"
+When "tumble out of the room to the west!","~~~~~e^m"
+When "tumble out of the room to the south!","~~~~n^m"
+When "tumble out of the room to the north!","~~~~s^m"
+when "the temple","^*"
+when "slasher has","^*"
+when "slanter-2 has","^*"
+when "slanter has","^*"
+when "turbo has","^*"
+when "maelstrom","^*"
+when "downpour","^*"
+when "stone shards","^*"
+whenIdle 20, "^*"
+When "˜","^*"
+When "µ","^*"
+When "attacked you with a","^*"
+
+; **** MAIN PROGRAM ****
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+g=0
+Stealth
+Timeinit
+Goldread Gold,17
+
+; **** Loop ****
+
+While Connected
+montest 
+Endwhile
+whenidle 30, "^*~~~^*~~~^*~~~^*"
+; **** END PROGRAM ****
+while not connected
+stop
+endwhile 

@@ -1,0 +1,24 @@
+#include "toolbox2.scr"
+while connected       
+integer pos
+pos=0
+waitfor ">>> ","***"
+ switch found
+  case 1:
+getN pstring,50
+strpos pstring,"(",pos
+pos=pos-1
+substr pstring,1,pos,name
+if name <> "nemo" and name<>""
+put "./",name," afk right now, try again later"
+endif    
+  case 2: waitfor "^M",5
+getN pstring,50
+strpos pstring," is",pos
+pos=pos-1
+substr pstring,1,pos,name 
+if name <> "nemo" and name<>""
+put "/p ",name," afk right now, try again later"
+endif
+endswitch
+endwhile

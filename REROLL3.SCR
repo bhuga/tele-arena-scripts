@@ -1,0 +1,200 @@
+when "RLogin: ...Au revoir...","/go arena^M"
+;******************************************************************************
+;!                  This is where the script initializes its variables        !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+string Int,Know,Phys,Stam,Agi,Cha,wait
+integer sv1,sv2,sv3,sv4,sv5,sv6,reroll
+
+;******************************************************************************
+;!                  This is the procedure the script uses to get variables    !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Procedure CatchEm string s,target1,target2,target3,integer choice,wait
+integer found,going,then2,now2,end
+string then,now,holder
+holder=""
+going = 1
+found = 0
+string ch
+then=""
+now=""
+s = ""
+end = 0
+
+TIME then
+While going = 1
+   s=""
+   TIME now
+   repeat
+     repeat 
+        Getch holder
+     until success
+     if holder <> "^M"
+        concat s,holder
+   endif
+   until holder = "^M"
+   strpos s,target1,found
+   if found = 0 and target2 <> ""
+      strpos s,target2,found
+      if found = 0 and target3 <> ""
+         strpos s,target3,found
+       endif
+   endif 
+   if found <> 0 
+      going = 0
+   endif
+   substr now,6,2,now
+   substr then,6,2,then
+   atoi then,then2
+   atoi now,now2
+   end=now2-then2
+   if end > wait
+      s = "NOT FOUND"
+      going = 0
+    endif            
+EndWhile
+strpos s,target1,found
+if found
+   choice = 1
+else
+ strpos s,target2,found
+   if found
+      choice = 2
+   else
+      strpos s,target3,found
+      if found
+         choice = 3
+      endif
+   endif
+endif
+EndProc
+
+;******************************************************************************
+;!                  This is where the script does the math.                   !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+procedure Checks
+   Integer work,forward,pos
+   String s1
+   s1="none"
+   work=0
+   Pos=0
+   forward=0
+; ****** Intellect ******
+   Strpos int,":",pos
+   forward=(pos + 2)
+   Substr int,forward,10,s1
+   Atoi s1,work     
+   if work < sv1
+      reroll=1
+   endif
+; ****** Knowledge ******
+   Strpos know,":",pos
+   forward=(pos + 2)
+   Substr know,forward,10,s1
+   Atoi s1,work     
+   if work < sv2
+      reroll=1
+   endif
+; ****** Physique ******
+   Strpos phys,":",pos
+   forward=(pos + 2)
+   Substr phys,forward,10,s1
+   Atoi s1,work     
+   if work < sv3
+      reroll=1
+   endif
+; ****** Stamina ******
+   Strpos stam,":",pos
+   forward=(pos + 2)
+   Substr stam,forward,10,s1
+   Atoi s1,work     
+   if work < sv4
+      reroll=1
+   endif
+; ****** Agility ******
+   Strpos agi,":",pos
+   forward=(pos + 2)
+   Substr agi,forward,10,s1
+   Atoi s1,work     
+   if work < sv5
+      reroll=1
+   endif
+; ****** Charisma ******
+   Strpos cha,":",pos
+   forward=(pos + 2)
+   Substr cha,forward,10,s1
+   Atoi s1,work     
+   if work < sv6
+      reroll=1
+   endif
+endproc
+
+;******************************************************************************
+;!                  This is where the script gets the numbers.                !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+procedure rolling
+integer pick
+choice=0
+repeat
+reroll = 0
+clear com
+put "reroll"
+catchem wait,"rest a moment","llect","",pick,4
+if pick = 1
+   delay 20
+else
+  int=wait
+  catchem know,"edge:","","",pick,4
+  catchem phys,"que:","","",pick,4
+  catchem stam,"ina:","","",pick,4
+  catchem agi,"ity:","","",pick,4
+  catchem cha,"isma:","","",pick,4
+  checks
+  if reroll = 0
+    repeat
+     put "x^M"
+     waitfor "exiting Tele",9
+     put "^m/go exit^m"
+     waitfor "Words of Not Necessarily",9
+     if found
+       put "y"
+       hangup
+       stop
+       endif
+     until found
+   endif
+endif
+until not connected
+endproc
+
+
+;******************************************************************************
+;!                  This is where you set everything.                         !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wait ="none"   ;For the "must rest a moment" thing.
+int  ="none"   ;Don't worry with changing this.
+know ="none"   ;Don't worry with changing this.
+phys ="none"   ;Don't worry with changing this.
+stam ="none"   ;Don't worry with changing this.
+agi  ="none"   ;Don't worry with changing this.
+cha  ="none"   ;Don't worry with changing this.
+;>>> Obi-Wan: dwarf would be 20 22 23 25 18 5?
+
+sv1 = 22     ;This is the minium Intellect you will except.
+sv2 = 25      ;This is the minium Knowledge you will except.
+sv3 = 15      ;This is the minium Physique you will except.
+sv4 = 15      ;This is the minium Stamina you will except.
+sv5 = 15      ;This is the minium Agility you will except.
+sv6 = 1        ;This is the minium Charima you will except.
+reroll = 0     ;This tells it when it has found your stats.
+;******************************************************************************
+;!                  This is where the script starts.                          !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+rolling
+alarm "GOT THEM!"
+;******************************************************************************
+;!                  This is where I take credit for my script.                !
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;                       ษออออออออออออออออออออออออออป
+;                       บThis is a Decimator scriptบ       
+;                       ศออออออออออออออออออออออออออผ
+

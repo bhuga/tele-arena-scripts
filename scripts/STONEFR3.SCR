@@ -1,0 +1,378 @@
+#include "toolbox2.scr"
+integer position,move,room,xit,health,ld,heal,trip,sget,itsk,uhoh
+string s,n,w,e,sw,ne,nw,se,u,d,f
+room=0
+sget=0                                                      
+itsk=0
+heal=0
+ld=0                            
+procedure ohoh
+if uhoh> 9
+hangup
+put "rlogin froze"
+stop
+endif
+endproc
+    Procedure GetOut String What
+    Repeat
+ohoh
+uhoh=uhoh+1
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+Procedure SoulCheck
+ohoh
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+              If Soul = 2
+                GetOut "No Soulstone!"
+               EndIf  
+               Soulcheck
+      Case 2 : Print "Soulstone still here!" 
+                      Soul = 0
+uhoh=0
+     EndSwitch 
+
+EndProc                   
+procedure gimotu
+ohoh
+put "C gimotu nemo"
+waitfor "damage!","spell.","incantation!",1
+switch found
+case 1: print "Casted Kusamotu!"
+uhoh=0
+case 2: print "mana low"
+uhoh=0
+case 3: print "Mentally Exhausted <Try Again Later>"
+uhoh=0
+endswitch            
+move=1
+endproc
+                  
+procedure Healthcheck
+ohoh
+        integer getit,vit
+        string vital,endvital
+        vital="none"
+        endvital="none"
+        position=0   
+        move=1     
+        health=0
+        getit=0
+        vit=0
+          put "he"
+          waitfor "vitality:",2;CURRENT MANA PUT HERE
+          if found
+uhoh=0
+          getN vital,10
+;          strpos vital,"/",position
+;          getit=(position-5)
+strdel vital, 1,5
+         substr vital,1,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 465 and vit >= 200 ;RANGE OF HEALTH TO HEAL
+                 gimotu    
+             health=0
+;          elseif vit >=1600 
+;          itsk=1
+          elseif vit <= 199 and vit > 0   ;HANGUP IF HEALTH IS BELOW THIS
+             health=health+1
+              if health=3
+              getout "health low"
+              endif
+          elseif vit <= 0                ;REMEMBER: ALL NUMBERS NEED TO MATCH
+            print "Bad Healthcheck!"     
+          endif
+        endif        
+health=0
+endproc
+       
+Procedure movetest
+ohoh
+uhoh=uhoh+1
+put "gr"
+waitfor "ST:Ready",1
+if not found
+movetest
+endif
+move=0
+endproc
+
+Procedure Attack String Monster
+ohoh
+   Integer Pyre
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                         
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+       If Found = 1 
+uhoh=0
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0   
+       EndIf         
+     if itsk =1
+      put "c kusatami ",monster   
+      itsk=0
+     endif
+endproc
+
+Procedure Montest
+ohoh
+  put "" 
+waitfor "troll","ogre","warlock","chimera","giant","lord","chieftain","gargoyle","dragon",1 
+switch found
+  case 1: attack "troll"
+uhoh=0
+          healthcheck
+          soulcheck
+          montest
+  case 2: attack "ogre"
+uhoh=0
+          healthcheck
+          soulcheck 
+          montest
+  case 3: attack "warlock"
+uhoh=0
+          healthcheck
+          soulcheck
+          montest
+  case 4: attack "chimera"
+uhoh=0
+          healthcheck
+          soulcheck
+          montest
+  case 5: attack "giant"
+uhoh=0
+          healthcheck
+          soulcheck
+          montest
+  case 6: attack "skeleton"  
+uhoh=0
+           healthcheck
+           soulcheck
+           montest
+  case 7: attack "minotaur"
+uhoh=0
+           healthcheck
+           soulcheck
+           montest
+  case 8: attack "gargoyle"
+uhoh=0
+          healthchech
+          soulcheck          
+           montest                              
+  case 9: attack "dragon"
+uhoh=0
+            healthcheck
+           soulcheck
+           montest
+  otherwise: if move=1
+              movetest
+             endif
+Endswitch
+Endproc
+
+procedure M String Dir, Place
+ohoh
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+ohoh
+uhoh=uhoh+1
+      Put Dir
+        Waitfor Place, "fall!","no exit",2
+          Switch Found
+            Case 1 : OK = 1
+uhoh=0
+            Case 2 : delay 10
+uhoh=0
+                     OK = 0
+            Case 3 : xit=1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+   heal=heal+1                            
+   soulcheck
+   if heal=5
+   healthcheck
+   heal=0
+   endif
+     montest
+EndProc
+
+procedure getthere                   
+m nw,f
+m nw,f
+m e,f   
+m e,f
+m e,f 
+m e,f           
+sget=1
+endproc
+
+procedure back
+m w,f
+m w,f
+m w,f
+m w,f
+m nw,f
+soulcheck
+healthcheck
+m ne,f           
+put "c kusamotu nemo"
+movetest
+soulcheck        
+script "nemogr3.scr"
+endproc
+
+procedure travel
+m e,f ;1st stone
+m e,f
+m e,f           
+m n,f
+m n,f
+m e,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m n,f
+m e,f ;2nd stone
+m w,f
+m s,f
+m s,f
+m s,f
+m w,f
+m w,f ;3rd stone
+m w,f
+m w,f
+m w,f
+m w,f
+m n,f
+m n,f
+m e,f
+m n,f
+m n,f
+m e,f
+m e,f
+m e,f
+m e,f           
+m n,f
+m n,f  ;4th stone
+m n,f
+m e,f
+m e,f            
+m n,f
+m n,f
+m n,f
+m n,f
+m w,f
+m w,f
+m w,f ;5th stone, going back
+m e,f
+m e,f
+m e,f
+m s,f
+m s,f
+m s,f
+m s,f
+m w,f
+m w,s
+m s,f ;4th again
+m s,f
+m s,f
+m w,f
+m w,f 
+m w,f
+m w,f ;3rd again
+m s,f
+m s,f
+m w,f
+m s,f
+m s,f
+m e,f
+m e,f
+m e,f
+m e,f ;2nd again
+m e,f
+m e,f
+m n,f
+m n,f
+m n,f
+m e,f ;;again
+m w,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m s,f
+m w,f
+m s,f
+m s,f
+m w,f
+m w,f
+m w,f  
+trip=trip+1
+if trip=1
+; back
+endif
+endproc
+; **** When Statements ****
+When "in the act ","^*"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+when "temple","^*"
+;when "discharged","^*"
+when "maelstrom","dr zar^Mdr zar^Mdr zar^M^*"
+when "downpour","dr zar^Mdr zar^Mdr zar^M^*"
+when "stone shards","dr zar^Mdr zar^Mdr zar^M^*"
+when "poison","dr zar^M^*"
+whenIdle 20, "^*"
+When "attacked you with a","dr zar^M^*"
+
+; **** MAIN PROGRAM ****
+start=0
+trip=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+move=0
+
+; **** Loop ****
+getthere
+While Connected
+travel
+endwhile
+
+;**** END PROGRAM ****
+

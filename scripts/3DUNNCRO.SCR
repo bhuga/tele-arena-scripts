@@ -1,0 +1,346 @@
+ld=0                            
+xit=0                             
+check=0
+integer position,move,xit,ld,check,yil
+string s,n,w,e,sw,ne,nw,se,u,d,f
+    
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",1
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+                         
+Procedure Soulcheck
+
+Put "use soul"
+    Waitfor "sorry, that object","sorry, but ",1
+        switch Found                              
+    case 1: print "woo woo"
+    case 2:  Soul = 2
+        endswitch         
+      If Soul = 2
+   GetOut "No Soulstone!"
+  EndIf 
+    
+EndProc
+
+                   
+procedure anemone
+  put "dr anem" 
+   waitfor "sorry, but",3
+    if found
+     getout "no anemones"
+    endif
+endproc
+
+procedure yilazi string monster
+put "C yilazi ",monster
+waitfor "damage!","spell.","incantation!",1
+switch found
+case 1: print "Casted Kusamotu!"
+yil=0
+case 2: print "mana low"
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch            
+move=1
+endproc
+                  
+procedure Healthcheck
+        integer getit,vit
+        string vital,endvital
+        vital="none"
+        endvital="none"
+        position=0   
+        move=1
+        getit=0
+        vit=0
+          put "he"
+          waitfor "/ 24","/ 26",2 ;CURRENT MANA PUT HERE
+          if found
+          get vital
+          strpos vital,"/",position
+          getit=(position-5)
+          substr vital,getit,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 190 and vit >= 81  ;RANGE OF HEALTH TO HEAL
+                 yil=1
+          elseif vit > 189
+          yil=0
+          elseif vit <= 80 and vit > 0   ;HANGUP IF HEALTH IS BELOW THIS
+            yil=1
+          anemone
+            ;GetOut "Health Exremely Low!"
+          elseif vit <= 0                ;REMEMBER: ALL NUMBERS NEED TO MATCH
+            print "Bad Healthcheck!"     
+          endif
+        endif
+endproc
+       
+Procedure movetest
+put "gr"
+waitfor "ST:Ready",1
+if not found
+movetest
+endif
+move=0
+endproc
+
+Procedure Attack String Monster
+                
+  Integer Pyre
+
+     Attacks = 4
+     Atks = Attacks - 1       
+if yil=1
+     yilazi monster                                    
+endif
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+ 
+
+       If Found = 1 
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0   
+       EndIf
+endproc
+
+Procedure Montest
+  put
+  waitfor "troll","ogre","warlock","chimera","giant","lord","chieftain","gargoyle","dragon",1
+  switch found
+  case 1: attack "troll"
+          healthcheck
+          soulcheck
+          montest
+  case 2: attack "ogre"
+          healthcheck
+          soulcheck 
+          montest
+  case 3: attack "warlock"
+          healthcheck
+          soulcheck
+          montest
+  case 4: attack "chimera"
+          healthcheck
+          soulcheck
+          montest
+  case 5: attack "giant"
+          healthcheck
+          soulcheck
+          montest
+  case 6: attack "skeleton"  
+           healthcheck
+           soulcheck
+           montest
+  case 7: attack "minotaur"
+           healthcheck
+           soulcheck
+           montest
+  case 8: attack "gargoyle"
+          healthchech
+          soulcheck          
+           montest
+  case 9: attack "dragon"
+          healthchech
+          soulcheck          
+           montest
+  otherwise: if move=1
+              movetest
+             endif
+Endswitch
+Endproc
+
+
+procedure findme
+  put ".tumble nemo"
+   waitfor "you n","you s","you e","you w"," you ne","you se","you nw","you sw",3
+    switch found   
+     case 1: put "south"
+             delay 10
+     case 2: put "north"
+             delay 10
+     case 3: put "west"
+             delay 10
+     case 4: put "east"
+             delay 10
+     case 5: put "southwest"
+             delay 10
+     case 6: put "northwest"
+             delay 10
+     case 7: put "southeast"
+             delay 10
+     case 8: put "northeast"
+             delay 10
+    endswitch
+endproc
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",1
+          Switch Found
+            Case 1 : 
+                     OK = 1  
+                     check=check+1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : ok=0
+                     Xit =xit+1
+                     findme
+          EndSwitch
+          If Xit = 4
+            GetOut "You're Lost! <Hanging Up>"
+          endif
+          until OK = 1
+       soulcheck                     
+    if check=5
+    healthcheck                    
+    check=0    
+    endif
+    montest                   
+
+EndProc
+
+
+Procedure Travel
+ montest 
+ m se,f 
+ m d,f   
+ m n,f
+ m n,f       
+ m nw,f 
+ m nw,f 
+ m ne,f  
+ m ne,f  
+ m e,f        
+ m e,f  
+ m se,f
+ m e,f 
+ m e,f      
+ m e,f 
+ m se,f
+ m se,f
+ m se,f     
+ m nw,f
+ m nw,f
+ m nw,f
+ m w,f  
+ m w,f      
+ m w,f      
+ m nw,f 
+ m w,f  
+ m w,f     
+ m sw,f 
+ m sw,f
+ m w,f 
+ m w,f      
+ m w,f 
+ m n,f 
+ m nw,f
+ m ne,f     
+ m ne,f
+ m ne,f
+ m e,f 
+ m e,f      
+;m e,f
+;m e,f
+;m e,f
+;m n,f
+;m n,f
+;m n,f
+;m e,f
+;m e,f
+;m ne,f ;looks fer dragon
+;m ne,f
+;ld=1
+;m e,f
+;m w,f
+;m sw,f
+;m sw,f
+;m sw,f
+;m w,f
+;m w,f
+;m s,f
+;m s,f
+;m s,f
+;m w,f
+;m w,f
+;m w,f
+ m w,f
+ m w,f
+ m sw,f
+ m sw,f
+ m sw,f
+ m se,f
+ m s,f
+ m e,f  
+ m e,f 
+ m e,f  
+ m se,f 
+ m se,f
+ m s,f     
+ m s,f  
+ m u,f  
+ m nw,f 
+endproc     
+
+; **** When Statements ****
+When "in the act ","^*"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+When "tumble out of the room to the southwest!",".ca3 %s tumbled you sw^m"
+When "tumble out of the room to the northwest!",".ca3 %s tumbled you nw^m"
+When "tumble out of the room to the southeast!",".ca3 %s tumbled you se^m"
+When "tumble out of the room to the northeast!",".ca3 %s tumbled you ne^m"
+When "tumble out of the room to the east!",".ca3 %s tumbled you e^m"
+When "tumble out of the room to the west!",".ca3 %s tumbled you w^m"
+When "tumble out of the room to the south!",".ca3 %s tumbled you s^m"
+When "tumble out of the room to the north!",".ca3 %s tumbled you n^m"
+when "temple","^*"
+;when "discharged","^*"
+when "maelstrom","^*"
+when "downpour","^*"
+when "stone shards","^*"
+whenIdle 20, "^*"
+When "attacked you with a","^*"
+
+; **** MAIN PROGRAM ****
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+move=0
+
+; **** Loop ****
+
+While Connected
+travel
+Endwhile
+
+;**** END PROGRAM ****
+
+

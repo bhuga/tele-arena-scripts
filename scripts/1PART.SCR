@@ -1,0 +1,44 @@
+Procedure Health
+   Integer vit3,back,pos
+   String vit1,vit2
+   Vit1="none"
+   Vit2="none"
+   Vit3=0
+   Pos=0
+   Back=0
+   Put "Hea"
+   Waitfor "health:",7
+     If found
+       Get vit1
+       Strpos vit1,"h:",pos
+       Back=(pos)
+       Substr vit1,back,10,vit2
+       Atoi vit2,vit3     
+print vit3 ," <---- what vonvert"
+print vit2," <----- what got"  
+    ; If vit3 < vlh and vit3 > 0   
+;         heal
+     ;  elseif vit3 < seth and vit3 >=vlh
+ ;             counter=0
+  ;            heal
+    ;   Elseif vit3 >= seth
+   ;           counter=0
+    ;          delay 2
+   ;           Print "Health: ",vit3
+     ;  Elseif vit3 <= 0
+      ;   Delay 20                            
+       ;  Clear Com 
+      ;   counter=counter+1
+       ;  if counter > 3
+       ;     alarm "RLOGIN FAILURE!"
+       ;     hangup
+       ;     put ".couldn't get health right,rlogin failure."
+       ;     stop 
+       ;  endif            
+delay 50       
+  Health
+       Endif
+;     Endif
+ ;    temp=vit3
+Endproc
+health

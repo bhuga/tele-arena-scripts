@@ -1,0 +1,939 @@
+integer uhoh
+integer position,move
+string s,n,w,e,sw,ne,nw,se,u,d,f
+    
+Procedure Check1
+  put "He"
+  waitfor "Healthy","Thirsty","Hungry","poisoned",5
+  switch found
+    case 1:    Print "I'm Healthy! <YAY!>"
+    case 2:    Print "<Cough> <Gasp> WATER! WATER!"
+               put "Eat Ration"
+               move=1
+    case 3:    Print "I need a Rally Burger!"    
+               put "Drink Water"
+               move=1
+    case 4:    put "dr verb"
+  endswitch
+ if not found 
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+ endif
+Endproc
+
+Procedure GetOut String What
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+          
+
+Procedure Soulcheck
+ put "use soul"
+   waitfor "sorry, but","sorry, that",2 
+    switch found
+     case 1: getout "no soul"
+     case 2: Delay 5
+             print "Woo Woo, soul still here."
+    endswitch
+
+EndProc
+
+
+Procedure M String Dir, Place
+  Integer OK, Xit
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor "floor.","fall!","no exit",1
+          Switch Found
+            Case 1 : OK = 1
+                      Xit=0
+            Case 2 : delay 30
+                     OK = 0
+                     put "g all"
+            Case 3 : Xit = Xit+1
+          EndSwitch
+ if not found
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+ endif
+          If Xit = 1
+            put ".tumble dusty"
+Waitfor " you E."," you W."," you N."," you S."," you NE."," you NW."," you SW."," you SE.",1
+Switch found
+case 1: m w, f
+        put ".ca1 %s UNTUMBLED."
+case 2: m e, f
+        put ".ca1 %s UNTUMBLED."
+case 3: m s, f
+        put ".ca1 %s UNTUMBLED."
+case 4: m n, f
+        put ".ca1 %s UNTUMBLED."
+case 5: m sw, f
+        put ".ca1 %s UNTUMBLED."
+case 6: m se, f
+        put ".ca1 %s UNTUMBLED."
+case 7: m ne, f
+        put ".ca1 %s UNTUMBLED."
+case 8: m nw, f
+        put ".ca1 %s UNTUMBLED."
+endswitch     
+        ElseIf Xit=2
+        Getout "LOST!"
+        endif
+    until OK = 1
+        Soulcheck
+Delay 05
+EndProc
+                   
+procedure anemone
+  put "dr ane" 
+   waitfor "sorry, but",3
+    if found
+     getout "no anemones"
+    endif
+endproc
+
+Procedure Kusa
+put "Cast Kusamotu Dusty"
+waitfor "Damage!","spell.","incantation!",1
+switch found
+case 1: print "Casted Fadi!"
+case 2: print "mana low"
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch            
+if not found
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+endif
+move=1
+endproc
+
+Procedure gimotu
+put "Cast gimotu Dusty"
+waitfor "Damage!","spell.","incantation!",1
+switch found
+case 1: print "Casted Fadi!"
+case 2: print "mana low"
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch            
+if not found
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+endif
+move=1
+endproc
+                  
+procedure Healthcheck
+        integer getit,vit
+        string vital,endvital
+        vital="none"
+        endvital="none"
+        position=0   
+        getit=0
+        vit=0
+          put "he"
+          waitfor "/ 23","/ 24","/ 25",3 ;CURRENT MANA PUT HERE
+          if found
+          uhoh=0
+          get vital
+          strpos vital,"/",position
+          getit=(position-4)
+          substr vital,getit,3,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit < 480 and vit >= 415  ;RANGE OF HEALTH TO HEAL
+           gimotu                
+          elseif vit <= 414 and vit > 200   ;HANGUP IF HEALTH IS BELOW THIS
+           kusa
+          elseif vit <= 199 and vit > 1
+           anemone
+           GetOut "Health Exremely Low!"
+          elseif vit <= 0                ;REMEMBER: ALL NUMBERS NEED TO MATCH
+            print "Bad Healthcheck!"     
+          endif
+ elseif not found
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+ endif       
+endproc
+      
+
+Procedure movetest
+put "gr"
+waitfor "ST:Ready",1
+if not found
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+movetest
+endif
+move=0
+endproc
+
+
+Procedure Attack String Monster
+                
+  Integer Pyre
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                         
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+ 
+
+       If Found = 1 
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0   
+       EndIf
+endproc
+
+Procedure Dragtest
+  put
+  waitfor "affreet","giant","warlock","hydra","troll","skeleton","minotaur","gargoyle","ogre","chimera","elysian","stygian","floor.",1
+  switch found
+  case 1: attack "aff"
+          Delay 10
+          healthcheck
+          dragtest
+  case 2: attack "giant"
+          Delay 10
+          healthcheck
+          dragtest
+  case 3: attack "war"
+          Delay 10
+          healthcheck
+          dragtest
+  case 4: attack "hydra"
+          Delay 10
+          healthcheck
+          dragtest
+  case 5: attack "troll"
+          Delay 10
+          healthcheck
+          dragtest
+  case 6: attack "skeleton"  
+           Delay 10
+           healthcheck
+           dragtest
+  case 7: attack "minotaur"
+           Delay 10
+           healthcheck
+           dragtest
+  case 8: attack "gargoyle"
+          Delay 10
+          healthchech
+           dragtest
+  case 9: attack "ogre"
+          Delay 10
+          healthcheck
+          dragtest   
+  case 10: attack "chimera"
+           Delay 10
+           healthcheck
+           dragtest
+  case 11: attack "elys"
+           Delay 10
+           healthcheck
+           dragtest
+  case 12: attack "styg"
+           Delay 10
+           healthcheck
+           dragtest
+  case 13: if move=1
+              movetest
+             endif
+Endswitch
+if not found
+ uhoh=uhoh+1
+  if uhoh>=15
+   put "x^M^*"
+    Stop
+  endif
+endif
+Endproc
+
+Procedure Montest
+  put
+  waitfor "affreet","giant","warlock","hydra","troll","skeleton","minotaur","gargoyle","ogre","chimera","elysian",1
+  switch found
+  case 1: attack "aff"
+          healthcheck
+          montest   
+  case 2: attack "giant"
+          healthcheck
+          montest
+  case 3: attack "war"
+          healthcheck
+          montest
+  case 4: attack "hydra"
+          healthcheck
+          montest
+  case 5: attack "troll"
+          healthcheck
+          montest
+  case 6: attack "skeleton"  
+           healthcheck
+           montest
+  case 7: attack "minotaur"
+           healthcheck
+           montest
+  case 8: attack "gargoyle"
+          healthchech
+           montest
+  case 9: attack "ogre"
+          healthcheck
+          montest   
+  case 10: attack "chimera"
+           healthcheck
+           montest
+  case 11: attack "elys"
+           healthcheck
+           montest
+  otherwise: if move=1
+              movetest
+             endif
+Endswitch
+Endproc
+ 
+
+
+
+Procedure Tummy
+Put ".tumble dusty"
+Waitfor "dusty TUMBLED you W.","dusty TUMBLED you S.","dusty TUMBLED you E.","dusty UNTUMBLED.",1
+Switch found
+Case 1: put ".ca1 %s UNTUMBLED."
+        m e,f
+        healthcheck
+        dragtest
+        Tummy
+case 2: put ".ca1 %s UNTUMBLED."
+Case 3: put ".ca1 %s UNTUMBLED."
+        m w,f
+        healthcheck
+        dragtest
+        Tummy
+case 4: m s,f
+endswitch
+
+endproc
+       
+Procedure Walk1
+;STARTS IN AFFREET CHAMBER, CIRCLES AROUND FOR ICE GIANTS
+ healthcheck
+ dragtest 
+ m e,f 
+ healthcheck
+ dragtest
+ m ne,f  
+ healthcheck
+ dragtest
+ m e,f
+ healthcheck
+ dragtest
+ m ne,f      
+ healthcheck
+ dragtest
+ m ne,f
+ healthcheck
+ dragtest
+ m n,f
+ healthcheck
+ dragtest
+ m n,f          ;EASTERN ICE GIANT
+ healthcheck
+ dragtest
+ m n,f 
+ healthcheck
+ dragtest
+ m n,f      
+ healthcheck
+ dragtest
+ m nw,f  
+ healthcheck
+ dragtest
+ m nw,f
+ healthcheck
+ dragtest
+ m w,f 
+ healthcheck
+ dragtest
+ m nw,f      
+ healthcheck
+ dragtest
+ m w,f 
+ healthcheck
+ dragtest
+ m sw,f
+ healthcheck
+ dragtest  
+ m w,f
+ healthcheck
+ dragtest
+ m sw,f     
+ healthcheck
+ dragtest
+ m sw,f
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck
+ dragtest
+ m s,f          ;WESTERN ICE GIANT
+ healthcheck
+ dragtest
+ m s,f  
+ healthcheck
+ dragtest
+ m s,f      
+ healthcheck
+ dragtest
+ m se,f  
+ healthcheck
+ dragtest
+ m se,f 
+ healthcheck
+ dragtest
+ m e,f  
+ healthcheck
+ dragtest
+ m se,f     
+ healthcheck
+ dragtest
+ m e,f          ;BACK IN AFFREET CHAMBER
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk2
+;STARTS IN AFFREET CHAMBER, CIRCLES SE TO STYGIANS
+;ENDS 8 NORTHS OF AFFREET CHAMBER
+ m s,f
+ healthcheck
+ dragtest
+ m se,f 
+ healthcheck
+ dragtest
+ m s,f      
+ healthcheck
+ dragtest
+ m s,f 
+ healthcheck
+ dragtest
+ m s,f 
+ healthcheck
+ dragtest
+ m s,f          ;WARLOCKS BY EASTERN STYGIANS
+ healthcheck
+ dragtest
+ m w,f     
+ healthcheck
+ dragtest
+ m w,f
+ healthcheck
+ dragtest
+ m w,f          ;EASTERN STYGIANS
+ healthcheck
+ dragtest
+ Tummy   
+ healthcheck
+ dragtest
+endproc
+ 
+Procedure Walk3
+;GOES FROM 8 NORTHS OF AFFREET TO AFFREET
+ m s,f  
+ healthcheck
+ dragtest
+ m s,f 
+ healthcheck
+ dragtest
+ m s,f 
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck
+ dragtest
+ m s,f     
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck
+ dragtest
+ m s,f  
+ healthcheck
+ dragtest 
+ m s,f          ;BACK IN AFFREET CHAMBER
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk4
+;STARTS IN AFFREET CHAMBER, GOES THROUGH WESTERN STYGIANS
+;ENDS IN ROOM PORTAL SOUTH OF WESTERN STYGIANS LEAVES
+;YOU AT
+ m s,f  
+ healthcheck
+ dragtest
+ m sw,f 
+ healthcheck
+ dragtest
+ m s,f  
+ healthcheck
+ dragtest
+ m s,f 
+ healthcheck
+ dragtest
+ m s,f
+ healthcheck 
+ dragtest
+ m s,f          ;WARLOCKS BY WESTERN STYGIANS
+ healthcheck
+ dragtest
+ m e,f  
+ healthcheck
+ dragtest
+ m e,f  
+ healthcheck
+ dragtest
+ m e,f
+ healthcheck
+ dragtest
+ Tummy
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk5
+;GOES FROM WESTERN STYGIAN PORTAL EXIT
+;TO ICE GIANTESSES
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m sw,f         ;ICE GIANTESSES
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk6
+;GOES FROM ICE GIANTESSES TO MAIN ROOM OF HYDRA LEVEL
+;(ROOM S SE S S S OF HYDRAS)
+ m s,f    
+ healthcheck
+ dragtest
+ m sw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m d,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk7
+;CIRCLES FROM MAIN ROOM ON HYDRA LEVEL TO HYDRAS, 
+;THEN TO WARLOCKS, BACK TO HYDRAS, AND TO MAIN ROOM
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m n,f          ;HYDRAS
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+ m e,f          ;WARLOCKS BY HYDRAS                  
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m sw,f    
+ healthcheck
+ dragtest
+ m nw,f    
+ healthcheck
+ dragtest
+ m n,f          ;BACK TO HYDRAS
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk8
+;GOES FROM MAIN ROOM ON HYDRA LEVEL
+;TO ROOM S OF ICE GIANTESSES
+ m w,f    
+ healthcheck
+ dragtest
+ m sw,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m u,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk9
+;MOVES FROM S OF ICE GIANTESSES
+;TO PORTAL TO ROOM 8 NORTHS OF AFFREET
+ 
+ m se,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+endproc
+
+Procedure Walk0
+;GOES FROM ICE GIANTESSES TO PORTAL
+ m ne,f    
+ healthcheck
+ dragtest
+ m se,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m ne,f    
+ healthcheck
+ dragtest
+endproc
+
+Procedure WalkA
+;GOES FROM ROOM 8 NORTHS OF AFFREET TO ELYSIANS
+;AND BACK
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m n,f    
+ healthcheck
+ dragtest
+ m u,f    
+ healthcheck
+ dragtest
+ m w,f    
+ healthcheck
+ dragtest
+ m e,f    
+ healthcheck
+ dragtest
+ m d,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+ m s,f    
+ healthcheck
+ dragtest
+endproc
+
+
+Procedure Travel  
+Check1  
+healthcheck
+dragtest
+Walk2   ;TO EAST STYGS
+Check1
+Walk3   ;TO AFFREET
+Check1
+Walk4   ;WESTERN STYGS
+Check1
+Walk5   ;ICE GIANTESSES
+Walk6   ;ROOM ON HYDRA LEVEL  
+Check1
+Walk7   ;CIRCLES HYDRAS, BACK TO SAME ROOM
+Check1
+Walk8   ;BACK TO ROOM S OF ICE GIANTESSES
+Check1
+Walk9
+Check1
+WalkA   
+Check1
+Walk3   ;TO AFFREET
+Check1
+Walk1   ;CIRCLES ICE GIANTS
+endproc     
+
+; **** When Statements ****
+When "in the act ","^*"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+When "tumble out of the room to the north!","^m.ca1 %s TUMBLED %s N.^m"
+When "tumble out of the room to the south!","^m.ca1 %s TUMBLED %s S.^m"
+When "tumble out of the room to the east!","^m.ca1 %s TUMBLED %s E.^m"
+When "tumble out of the room to the west!","^m.ca1 %s TUMBLED %s W.^m"
+When "tumble out of the room to the northeast!","^m.ca1 %s TUMBLED %s NE.^m"
+When "tumble out of the room to the southeast!","^m.ca1 %s TUMBLED %s SE.^m"
+When "tumble out of the room to the northwest!","^m.ca1 %s TUMBLED %s NW.^m"
+When "tumble out of the room to the southwest!","^m.ca1 %s TUMBLED %s SW.^m"
+When "Sorry to interrupt here, but the BBS will be shutting","/recent^M"
+When "(N)onstop, (Q)uit, or (C)ontinue?","N^M"
+When ">>> Kestrel-2 has invited you to his channel.","./j kes^M. Scripting.^M./j^M./j^M" 
+When ">>> Dodger has invited you to his channel.","./j dod^M. Scripting.^M./j^M./j^M"
+When "as the final blow strikes your body","^*"
+When "the damage was more than you could withstand","^*"
+When "temple","^*"
+When "Wraith","^*"
+;When "discharged","^*"
+When "drained","^*"
+When "Paralyzed","^*"
+When "maelstrom","^*"
+When "downpour","^*"
+When "stone shards","^*"
+When "attacked you with a dagger for","^*"
+When "attacked you with a staff for","^*"
+When "attacked you with a pyrehammer for","^*"
+When "attacked you with a rimeax for","^*"
+When "attacked you with a greatsword for","^*"
+When "attacked you with a levinblade for","^*"
+When "attacked you with a flail for","^*"
+When "attacked you with a warhammer for","^*"
+When "attacked you with a halberd for","^*"
+When "attacked you with a broadsword for","^*"
+WhenIdle 20, "^*"
+When "Slanter","^*"
+When "Slanter-2","^*"
+When "Jock","^*"
+When "Turbo","^*"
+When "Slasher","^*"
+When "Whittaker","^*"
+When "Pariah","^*"
+When "Iago","^*"
+When "Tical would like","Join tical^M"
+When "Tical is asking","Add Tical^M"
+When "Strider would like","Join Strider^M"
+When "Strider is asking","Add Strider^M"
+When "Dodger would like","Join Dodger^M"
+When "Dodger is asking","Add Dodger^M"
+When "Decimator is asking","Add Decimator^M"
+When "Decimator would like","Join Decimator^M"
+When "you're poisoned","^*"
+When "You're Thirsty.","Cast Kotari dusty^M"
+When "You're Hungry.","Cast Kotari dusty^M"
+When "run away run away","^*"                  
+When "blast of frost at you from a rimeax","^*"
+When "blast of flame at you from a pyrehammer","^*"
+When "blast of lightning at you from a levinblade","^*"
+When "There is a soulstone","g soul^M"
+;When "There is an anemone","g ane^M"
+
+; **** MAIN PROGRAM ****
+uhoh=0
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+move=0
+put ".ca1 %s UNTUMBLED."
+
+; **** Loop ****
+
+
+While Connected
+travel
+Endwhile
+
+;**** END PROGRAM ****
+
+

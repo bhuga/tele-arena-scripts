@@ -1,0 +1,11 @@
+while connected
+when ";grin","^H^H^H^H^Haction is grinning rather slyly.^M"
+when ";lol","^H^H^H^Haction is laughing out loud.^M"
+when  ";laugh","^H^H^H^H^H^Haction is laughing his fool head off.^M"
+when ";agree","^H^H^H^H^H^Haction agrees wholeheartedly.^M"
+when ";nod","^H^H^H^Haction is nodding in agreement.^M"
+when ";shake","^H^H^H^H^H^Haction shakes his head in a negative.^M"
+when ";giggle","^H^H^H^H^H^H^Haction is giggling in a fit of uncontrollable mirth.^M"
+when ";rofl","^H^H^H^H^Haction is rolling on the floor laughing.^M"                  
+when ";kick","^H^H^H^H^Haction is kicking you to all hell and back!^M"
+endwhile

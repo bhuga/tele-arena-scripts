@@ -1,0 +1,4 @@
+while connected
+put "c gimotu n"
+delay 20
+endwhile

@@ -1,0 +1,56 @@
+#include "toolbox2.scr"
+integer curq2,lasq2,hvlstq
+string lastq
+procedure getcurqn
+put "q"
+waitfor "current question: number:",3
+if found
+getN curq,6
+endif
+atoi curq,curq2
+delay 10
+print curq2
+endproc
+
+procedure getlasqn
+put "q"
+waitfor " question:    number:",3
+if found
+getN lasq,6
+endif
+atoi lasq,lasq2
+delay 10
+concat dum,lasq2
+print lasq2
+endproc
+        
+procedure getanswr
+waitfor "answer was:",500
+waitfor "^M"
+getN lastq,50
+delay 10
+print lastq
+hvlstq=1
+endproc            
+
+
+procedure wrtfl
+getlasqn
+append "answer.txt"
+write lasq2,"->",lastq   
+close
+endproc
+
+while connected
+getlasqn        
+delay 20
+getanswr
+delay 20
+if hvlstq=1
+wrtfl
+hvlstq=0
+endif
+endwhile
+
+
+

@@ -1,0 +1,3 @@
+while connected
+whenidle 100,"^M"
+endwhile

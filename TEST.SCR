@@ -1,0 +1,13 @@
+
+
+
+procedure chkln
+if not connected
+alarm "ack!"
+stop
+endif
+endproc
+
+repeat
+chkln
+until x=999

@@ -1,0 +1,141 @@
+
+mana = "body"
+vlh=36
+seth=36
+counter=0
+
+       
+Procedure Leave
+  put "s"
+  waitfor "haven","ground",10
+   switch found
+   case 1: print "goody"
+   case 2: delay 10
+           leave
+   endswitch
+endproc
+
+
+Procedure Roomtest
+  put "y"
+  delay 20
+  put "l"
+   waitfor "gentle","official","clerk","shopkeeper","crafts","turf",999
+    switch found
+    case 1: put "rob ge"
+            leave
+    case 2: put "ro of"
+            leave
+    case 3: put "ro cl"
+            leave
+    case 4: put "ro sh"
+            leave
+    case 5: put "ro cr"
+            leave     
+    case 6:  waitfor "gentle","official","clerk","shopkeeper","crafts","turf",999
+               switch found
+                    case 1: put "rob ge"
+                            leave
+                    case 2: put "ro of"
+                            leave
+                    case 3: put "ro cl"
+                            leave
+                    case 4: put "ro sh"
+                            leave
+                    case 5: put "ro cr"
+                            leave     
+                    case 6: leave
+               endswitch
+    endswitch
+endproc
+
+Procedure Rob
+ put "out"
+  roomtest
+endproc
+  
+
+Procedure Heal
+ put "out^mw"
+ delay 10
+ put "e^ms"
+endproc
+
+
+Procedure Health
+   Integer vit3,back,pos
+   String vit1,vit2
+   Vit1="none"
+   Vit2="none"
+   Vit3=0
+   Pos=0
+   Back=0
+   Put "Hea"
+   Waitfor "body",7
+     If found
+       Get vit1
+       Strpos vit1,"/",pos
+       Back=(pos-2)
+       Substr vit1,back,5,vit2
+       Atoi vit2,vit3     
+       If vit3 < vlh and vit3 > 0   
+          heal
+       elseif vit3 < seth and vit3 >=vlh
+              counter=0
+              heal
+       Elseif vit3 >= seth
+              counter=0
+              delay 2
+              Print "Health: ",vit3
+       Elseif vit3 <= 0
+         Delay 20                            
+         Clear Com 
+         counter=counter+1
+         if counter > 3
+            alarm "RLOGIN FAILURE!"
+            hangup
+            put ".couldn't get health right,rlogin failure."
+            stop 
+         endif            
+         Health
+       Endif
+     Endif
+     temp=vit3
+Endproc
+
+Procedure quest
+  put "exp"
+  waitfor "thief",">",10
+   switch found
+   case 1: print "sigh...more ep, always more ep!"
+   case 2: put "out^me^mgo aca^mtrain 6"
+           delay 40
+           put "out^mw^ms"
+   endswitch
+endproc
+
+
+
+Procedure Sell
+put "sell 3"
+   waitfor "y/n","don't have",10
+    switch found
+    case 1: put "y"
+            sell
+    case 2: print "yay"
+   endswitch
+endproc
+
+Procedure Central
+  sell
+  health
+  rob
+;  quest
+endproc
+
+
+repeat
+central
+delay 10
+until not connected
+

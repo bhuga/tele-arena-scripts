@@ -1,0 +1,193 @@
+procedure getout string what
+repeat
+put "x"
+waitfor "exit",2
+until found
+alarm what
+endproc
+
+procedure m string dir,place 
+put dir
+waitfor place,"there is no",2
+switch found
+ case 1: delay 10
+ case 2: getout "you are lost"
+endswitch
+endproc
+
+procedure soulcheck
+put "i"
+waitfor "a soulstone",2
+if not found
+getout "no soul"
+endif
+endproc
+
+procedure movetest
+put "gr"
+waitfor "ready",2
+if not found
+movetest
+endif
+endproc
+
+procedure lookz
+put "i"
+waitfor "zary",3
+if not found
+put "buy zary"
+put "buy zary"
+endif
+endproc
+
+
+procedure yary
+movetest
+m sw,f
+m se,f
+m se,f
+m se,f
+put "buy yarrow"
+put "buy yarrow"
+m nw,f
+m nw,f
+m nw,f
+soulcheck
+m ne,f
+soulcheck
+endproc
+
+procedure stats
+movetest
+m sw,f
+m nw,f
+put "buy meal"
+put "buy drink"
+delay 10
+m se,f
+m se,f
+m se,f
+m se,f           
+lookz
+put "b rowan"
+put "b hys"
+delay 10
+put "dr hys"
+put "dr Rowa"
+delay 10
+m nw,f
+m nw,f
+m nw,f
+soulcheck
+m ne,f
+soulcheck
+endproc
+
+
+procedure yarrow
+put "dr yarr"
+ waitfor "you drank","sorry, but",3
+  switch found
+   case 1: Print "drank yarrow"
+   case 2: yary
+  endswitch
+endproc
+
+Procedure kusatami
+put 
+waitfor "giant","dragon",2
+ switch found
+  case 1: put "c kusatami giant"
+  case 2: put "c kusatami dragon"
+ endswitch
+endproc
+
+procedure kusamotu
+put "c kusamotu shame"
+ waitfor "intoned","spell.",3
+  switch found
+   case 1: Print "Casted Kusamotu"
+   case 2: yarrow
+  endswitch
+endproc
+
+procedure zary
+put "dr zar"
+waitfor "sorry, but"
+if found
+put "c kusamotu shame"
+hangup
+endif
+endproc
+     
+
+procedure healthcheck
+integer getit,vit
+string vital,endvital
+getit=0
+vit=0
+vital="none"
+endvital="none"
+put "he"
+ waitfor "/ 24",3
+  if found 
+  get vital
+  strpos vital,"/",position
+  getit=(position-4)
+  substr vital,getit,5,endvital
+  atoi endvital,vit
+  Print "health is: ",vit
+  If Vit <= 1681 and vit >= 1400
+  kusatami
+  elseif vit < 1399 and vit >= 401
+  kusamotu
+  elseif vit <= 400 and vit > 1
+  zary
+  healthcheck                                                 
+  elseif vit <= 0 
+  print "Bad healthcheck"
+  endif                  
+ endif
+endproc
+
+
+
+procedure attack string monster
+
+pyre = 5
+
+
+put "a " monster
+ waitfor "your attack ","you are still","dodged your",2
+   switch found
+    case 1,3: repeat
+               put "a" monster
+               pyre=pyre-1
+              until pyre=1
+    case 2:
+   endswitch        
+
+procedure checkstats
+put "he" 
+ waitfor "healthy","thirsty","hungry",1
+switch found
+ case 1:
+ case 2,3: stats
+endswitch
+endproc
+procedure montest
+put
+  waitfor "dragon","giant","nobody here",3
+    switch found
+     case 1: attack "dragon"
+     healthcheck
+     case 2: attack "giant"
+     healthcheck
+     case 3: checkstats
+             ring
+    endswitch
+endproc            
+
+while connected
+montest
+endwhile

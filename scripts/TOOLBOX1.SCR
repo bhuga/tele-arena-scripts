@@ -1,0 +1,330 @@
+;
+; TOOLBOX1.SCR (c) Copyright 1990-1992 by White River Software.
+; All right reserved.
+;
+; Date written: 10 May 1990
+;
+;
+; This toolbox defines video color, ANSI color code and a set of
+; video procedures which output to local screen and/or remote
+; system.
+;
+; To use this toolbox, you should add the line
+;    #include "toolbox1.scr"
+; at the beginning of your script file.  This will increase the file
+; size of the compiled script file .TMS by about 4K.  To minimum the
+; overhead, you should cut and paste the procedures that you used into
+; your script file.  For example, the <EchoBox> and <EchoBlock>
+; procedures may be excluded.
+;
+; The <EchoToLocol> and <EchoToRemote> variables tell the Echo
+; procedures where the output is to be sent.  If <EchoToLocal>
+; is TRUE, the output is sent to the local screen.  If <EchoToRemote>
+; is TRUE, the output is sent to the remote system.  These variable
+; can both be TRUE.
+;
+; The BLACK, BLUE, GREEN, CYAN, RED, YELLOW and WHITE contains the
+; color value used by IBM PC.  This order is not the same as that
+; of ANSI.  The ANSI color codes with FG prefix denote the foreground
+; color codes while the BK prefix denote the background ones.
+;
+; Summary:
+;
+;   Echo s            ; output <s> to local screen and/or remote system
+;   EchoInt i         ; output integer <i>
+;   EchoColor color   ; set foreground color
+;   EchoBkColor color ; set background color
+;   EchoNormal        ; normal attribute, white on black
+;   EchoHiLite        ; set high intensity
+;   EchoBlink         ; set blink attribute
+;   EchoReverse       ; set reverse attribute
+;   EchoClearScreen   ; clear screen
+;   EchoGotoXY x,y    ; position cursor to (x,y)
+;   EchoBox   left,top,right,bottom,style,hollow   ; draw a box
+;   EchoBlock left,top,right,bottom,style,fillchar ; draw a block
+;
+;
+
+integer EchoToLocal,EchoToRemote
+
+integer BLACK,BLUE,GREEN,CYAN,RED,YELLOW,WHITE
+string  FGBLACK,FGBLUE,FGGREEN,FGCYAN,FGRED,FGYELLOW,FGWHITE
+string  BKBLACK,BKBLUE,BKGREEN,BKCYAN,BKRED,BKYELLOW,BKWHITE
+
+EchoToLocal = 1               ; TRUE to print string to local screen
+EchoToRemote = 1              ; TRUE to send string to remote system
+
+BLACK   = 0                   ; define color number in IBM PC order
+BLUE    = 1
+GREEN   = 2
+RED     = 3
+CYAN    = 4
+MAGENTA = 5
+YELLOW  = 6
+WHITE   = 7
+
+FGBLACK   = "^[[30m"          ; define foreground color code in ANSI order
+FGRED     = "^[[31m"
+FGGREEN   = "^[[32m"
+FGYELLOW  = "^[[33m"
+FGBLUE    = "^[[34m"
+FGMAGENTA = "^[[35m"
+FGCYAN    = "^[[36m"
+FGWHITE   = "^[[37m"
+
+BKBLACK   = "^[[40m"          ; define background color code in ANSI order
+BKRED     = "^[[41m"
+BKGREEN   = "^[[42m"
+BKYELLOW  = "^[[43m"
+BKBLUE    = "^[[44m"
+BKMAGENTA = "^[[45m"
+BKCYAN    = "^[[46m"
+BKWHITE   = "^[[47m"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Echo s
+; function:  print the string <s> to local screen if <EchoToLocal> is TRUE
+;            and send <s> to remote system if <EchoToRemote> is TRUE
+;
+Procedure Echo string s
+if EchoToLocal
+   print s,                   ; print to local screen
+endif
+if EchoToRemote
+   put s,                     ; put to remote system
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoInt i
+; funcdtion: print the integer <i> to local screen if <EchoToLocal> is TRUE
+;            and send <i> to remote system if <EchoToRemote> is TRUE
+;
+Procedure EchoInt integer i
+if EchoToLocal
+   print i,                   ; print to local screen
+endif
+if EchoToRemote
+   put i,                     ; put to remote system
+endif
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoColor color
+; function: set foreground color
+;
+Procedure EchoColor integer color
+string code
+Switch color
+   case 0: code = FGBLACK     ; ANSI code <esc>[3<x>m
+   case 1: code = FGBLUE
+   case 2: code = FGGREEN     ; Note: IBM PC attribute is not
+   case 3: code = FGRED       ;  in the same order of the ANSI
+   case 4: code = FGCYAN      ;  color code.
+   case 5: code = FGMAGENTA
+   case 6: code = FGYELLOW
+   otherwise:
+           code = FGWHITE
+EndSwitch
+Echo code
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoBkColor bkcolor
+; function: set background color
+;
+Procedure EchoBkColor integer bkcolor
+string code
+Switch bkcolor
+   case 1: code = BKBLUE      ; ANSI code <esc>[4<x>m
+   case 2: code = BKGREEN
+   case 3: code = BKRED
+   case 4: code = BKCYAN
+   case 5: code = BKMAGENTA
+   case 6: code = BKYELLOW
+   case 7: code = BKWHITE
+   otherwise:
+           code = BKBLACK
+EndSwitch
+Echo code
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoNormal
+; function: set normal intensity and reset color to white on black
+; remark:   to turn off high intensity only, you must use three
+;           statements, where <foreground> and <background> are
+;           foreground and background colors, because there is
+;           no ANSI code to turn off high intensity.
+;       EchoNomal
+;       EchoColor   foreground
+;       EchoBkColor background
+;
+Procedure EchoNormal
+Echo "^[[0m"                  ; ANSI code <esc>[0m
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoHiLite
+; function: set high intensity
+;
+Procedure EchoHiLite
+Echo "^[[1m"                  ; ANSI code <esc>[1m
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoBlink
+; function: set blink attribute
+;
+Procedure EchoBlink
+Echo "^[[5m"                  ; ANSI code <esc>[5m
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoReverse
+; function: set reverse attribute
+;
+Procedure EchoReverse
+Echo "^[[7m"                  ; ANSI code <esc>[7m
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoClearScreen
+; function: clear screen and home cursor
+;
+Procedure EchoClearScreen
+Echo "^[[2J"                  ; ANSI code <esc>[2J
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoGotoXY column,row
+; function: set cursor position
+; remark:   top-left corner is (0,0)
+;
+Procedure EchoGotoXY integer column,row
+string code,subcode
+code = "^[["                  ; ANSI code <esc>[<row+1>;<column+1>H
+itoa row+1,subcode
+concat code,subcode           ; Note: internal commands are used
+concat code,";"               ;  to preventint call the procedures
+itoa column+1,subcode         ;  Echo and EchoInt many times.  This
+concat code,subcode           ;  will speed up the process.
+concat code,"H"
+Echo code
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoBox left,top,right,bottom,style,fillchar,hollow
+; function: draw a box
+; remark:   top-left corner is (0,0)
+;           <style> selects the border
+;               0   spaces
+;               1   single lines
+;               2   double lines
+;               3   single vertical lines, double horizontal lines
+;               4   double vertical lines, single horizontal lines
+;               5   user-define fill character <fillchar>
+;           if <hollow> is TRUE, the inside of the box is cleared
+;
+Procedure EchoBox integer left,top,right,bottom,style,string fillchar,integer hollow
+string border,ch,line,space
+integer row
+EchoGotoXY left,top
+Switch style                  ; define border
+   case 1: border = "ÚÄ¿³ÀÙ"  ; single lines
+   case 2: border = "ÉÍ»ºÈ¼"  ; double lines
+   case 3: border = "ÕÍ¸³Ô¾"  ; single vertical lines, double horizontal lines
+   case 4: border = "ÖÄ·ºÓ½"  ; double vertical lines, single horizontal lines
+   case 5: strset border,fillchar,1,6 ; user-defined fill character
+   otherwise:
+           border = "      "  ; space
+EndSwitch
+substr border,1,1,ch          ; top-left corner
+Echo ch
+substr border,2,1,ch          ; top border
+strset line,ch,1,right-left-1
+Echo line
+substr border,3,1,ch          ; top-right corner
+Echo ch
+if hollow                     ; clear inside of the box if <hollow> is non-zero
+   strset space," ",1,right-left-1
+endif
+substr border,4,1,ch          ; vertical border
+row = top+1
+While row<=bottom-1
+   EchoGotoXY left,row        ; goto left border
+   Echo ch                    ; vertical border
+   if hollow
+      Echo space              ; fill inside of border
+   elseif right<>left+1
+      EchoGotoXY right,row    ; goto right border
+   endif
+   Echo ch                    ; vertical border
+   row = row+1
+EndWhile
+EchoGotoXY left,bottom
+substr border,5,1,ch          ; bottom-left corner
+Echo ch
+Echo line                     ; bottom border
+substr border,6,1,ch
+Echo ch                       ; bottom-right corner
+EndProc
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; EchoBlock left,top,right,bottom,style,fillchar
+; function: draw a block of character
+; remark:   top-left corner is (0,0)
+;           <style> selects the type of the block
+;               0   space                  ' '
+;               1   widely spaced block    '°'
+;               2   spaced block           '±'
+;               3   closely spaced block   '²'
+;               4   solid block            'Û'
+;               5   user-defined fill character <fillchar>
+;
+Procedure EchoBlock integer left,top,right,bottom,style,string fillchar
+string ch,line
+integer row
+EchoGotoXY left,top
+Switch style
+   case 1: ch = "°"           ; widely spaced block
+   case 2: ch = "±"           ; spaced block
+   case 3: ch = "²"           ; closely spaced block
+   case 4: ch = "Û"           ; solid block
+   case 5: ch = fillchar      ; user-defined fill character
+   otherwise:
+           ch = " "           ; space
+EndSwitch
+strset line,ch,1,right-left+1 ; set line to selected fill char
+row = top
+While row<=bottom
+   EchoGotoXY left,row
+   Echo line                  ; one line at a time
+   row = row+1
+EndWhile
+EndProc
+

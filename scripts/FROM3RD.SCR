@@ -1,0 +1,313 @@
+
+whenidle 15,"^*^*^*HUNG UP^M"                           
+integer life,temp,curexp,ama,more,cast,skel,giant,warlock,chimera,row,ane,ane2
+integer hmin,hsec,hours,minutes,seconds,troll,ogre,mino,temp,try,morerow1
+string time1,time2,timebeg,answer,d,u,s,n,e,w,nw,ne,sw,se,f,potion
+
+
+Procedure GetOut String What ; Curtesy Jacqueline
+    Repeat
+      Put "X"
+        Waitfor "Exiting T",2
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+
+
+Procedure M String Dir, Place  ; Curtesy Jacqueline
+  whenidle 15,"^*^*^*HUNG UP^M"
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : OK = 1
+            Case 2 : delay 10
+                     OK = 0
+            Case 3 : Xit = 1
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+    delay 10
+EndProc
+;-----------------
+Procedure Level6
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m n,"floor"
+m n,"floor"
+m e,"floor"
+m n,"floor"
+m n,"floor"
+m n,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m n,"floor"
+m n,"floor"
+m e,"floor"
+m n,"floor"
+m n,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m n,"floor"
+m n,"floor"
+m n,"floor"
+m e,"floor"
+m e,"floor"
+m n,"floor"
+m n,"floor"
+m n,"floor"
+m n,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m n,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m u,"floor"
+put "Level 5!"
+delay 10
+m s,"floor"
+m s,"floor"
+m se,"floor"
+m se,"floor"
+m sw,"floor"
+m w,"floor"
+m sw,"floor"
+m nw,"floor"
+m sw,"floor"
+m sw,"floor"
+m w,"floor"
+m sw,"floor"
+m sw,"floor"
+m u,"floor"
+put "Level 4!"
+delay 10
+m n,"floor"
+m nw,"floor"
+m nw,"floor"
+m n,"floor"
+m e,"floor"
+m ne,"floor"
+m ne,"floor"
+m ne,"floor"
+m nw,"floor"
+m nw,"floor"
+m n,"floor"
+m nw,"floor"
+m u,"floor"
+put "Level 3!"
+m s,"floor"
+m se,"floor"
+m se,"floor"
+m s,"floor"
+m e,"floor"
+m se,"floor"
+m ne,"floor"
+m e,"floor"
+m n,"floor"
+m ne,"floor"
+m e,"floor"
+m u,"floor"
+put "Level 2!"
+delay 10
+m s,"floor"
+m s,"floor"
+m sw,"floor"
+m w,"floor"
+m sw,"floor"
+m sw,"floor"
+m se,"floor"
+m s,"floor"
+m se,"floor"
+m e,"floor"
+m ne,"floor"
+m e,"floor"
+m u,"floor"
+put "Level 1!"
+delay 10
+m w,"floor"
+m w,"floor"
+m w,"floor"
+put "Type push stone soon!"
+delay 20
+put "push stone"
+delay 50
+m sw,"floor"
+m w,"floor"
+m sw,"floor"
+m s,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m w,"floor"
+m n,"floor"
+m ne,"floor"
+m ne,"floor"
+m n,"floor"
+m nw,"floor"
+m w,"floor"
+m nw,"floor"
+m w,"floor"
+m w,"floor"
+m n,"floor"
+m ne,"floor"
+m nw,"floor"
+m n,"floor"
+m n,"floor"
+m n,"floor"
+put "Desert!"
+delay 10
+m nw,"floor"
+m ne,"floor"
+m nw,"floor"
+m nw,"floor"
+m nw,"floor"
+m n,"floor"
+m w,"floor"
+m nw,"floor"
+m n,"floor"
+m nw,"floor"
+m nw,"floor"
+m nw,"floor"
+m n,"floor"
+m ne,"floor"
+m n,"floor"
+m e,"floor"
+m ne,"floor"
+m ne,"floor"
+m ne,"floor"
+m ne,"floor"
+m n,"floor"
+m e,"floor"
+m e,"floor"
+m e,"floor"
+m n,"floor"
+m n,"floor"
+m n,"floor"
+m w,"floor"
+m w,"floor"
+m d,"floor"
+m d,"floor"
+m d,"floor"
+put "Sewers Level 3!"
+delay 10
+m e,"floor"
+m e,"floor"
+m s,"floor"
+m se,"floor"
+m se,"floor"
+m se,"floor"
+m sw,"floor"
+m s,"floor"
+m e,"floor"
+m se,"floor"
+m s,"floor"
+m sw,"floor"
+m sw,"floor"
+m se,"floor"
+m s,"floor"
+m sw,"floor"
+m w,"floor"
+m nw,"floor"
+m nw,"floor"
+m w,"floor"
+m u,"floor"
+m sw,"floor"
+m sw,"floor"
+m u,"floor"
+put "Sewers Level 2!"
+delay 10
+m n,"floor"
+m u,"floor"
+put "Sewers Level 1!"
+delay 10
+m n,"floor"
+m w,"floor"
+m nw,"floor"
+m nw,"floor"
+m nw,"floor"
+m sw,"floor"
+m sw,"floor"
+m nw,"floor"
+m nw,"floor"
+m ne,"floor"
+m nw,"floor"
+m nw,"floor"
+m n,"floor"
+m ne,"floor"
+m nw,"floor"
+m u,"floor"
+m ne,"floor"
+m e,"floor"
+m e,"floor"
+m s,"floor"
+m s,"floor"
+put "b curing"
+delay 10
+put "b healing"
+delay 10
+put "Done!"
+put "'-"
+put "'s"
+put ".on"
+stop
+endproc
+
+;---------------------------------
+Procedure Locate
+put "'-"
+put ".off"
+put "'s"
+put "^m"
+ waitfor "square",3
+  if found
+    level6
+  else
+   stop
+    Print "Must be in town square!"
+  endif
+endproc
+;----MAIN PROGRAM----------
+n="n"
+s="s"
+w="w"
+e="e"
+sw="sw"
+se="se"
+nw="nw"
+ne="ne"
+u="u"
+d="d"
+
+when "You're hungry","eat ration^m"
+when "You're thirsty","dr water^m"
+when "Several large stones fall on you","^*^*^*"
+
+while connected
+locate
+endwhile
+

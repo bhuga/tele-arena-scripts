@@ -1,0 +1,92 @@
+;
+;Telemate Learn Script generated on 12-11-97
+;
+
+
+Waitfor 0          ; wait until string matched
+
+Set AutoStop,On
+put "w"
+
+Waitfor " or ENTER for ""Sysop"": "
+Put "dr. anthrax^M",
+
+Waitfor "様様様様様様様様様様様夕"
+Put "you suck nads^M",
+
+Waitfor "                        "
+Put "you sucks ma^H^Hnads man^M^[[A^[[B^[[C^[[Dyou sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "you sucks nads man"
+
+Waitfor "you sucks nads man"
+Put "/s^M^M",
+repeat
+until not connected

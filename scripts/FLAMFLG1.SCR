@@ -1,0 +1,578 @@
+#include "toolbox2.scr"
+integer round,count,travel,position,killed,gol4,yar,failed,start,new
+integer uhoh,drank,buyyar
+string s,n,w,e,sw,ne,nw,se,u,d,f
+    
+procedure Stealth
+put "'s"
+waitfor "mode de-activated","mode activated",15
+switch found
+  case 1: put "'s"
+  case 2: print "Stealth On."
+endswitch
+put "'-"
+waitfor "won't be notified of future logons.","will be notified of future logons.",15
+switch found
+  case 1: print "Logon Notification Off."
+  case 2: put "'-"
+endswitch
+put ".off"
+Endproc
+
+procedure ohoh
+uhoh=uhoh+1
+if uhoh>=10
+hangup
+print "rlogin froze"
+stop
+endif
+endproc
+  
+Procedure GetOut String What
+    Repeat               
+ohoh
+      Put "X"
+        Waitfor "Exiting T",1
+    Until Found
+    Alarm What
+    Put "Hanging Up In 10 Seconds!"
+    Delay 100
+    Hangup    
+    Stop
+EndProc
+          
+
+Procedure Soulcheck
+ohoh
+Put "u soul"
+    Waitfor "Sorry, but you don't seem to have one.","Sorry, that object cannot be used in that manner.",2
+     Switch Found                              
+      Case 1 : Soul = Soul + 1
+               Delay 8 
+      Case 2 : Print "Soulstone still here!" 
+uhoh=0
+                      Soul = 0
+     EndSwitch 
+
+  If Soul = 2
+   GetOut "No Soulstone!"
+  EndIf 
+    
+
+ 
+EndProc
+
+
+Procedure M String Dir, Place
+ohoh
+  Integer OK, Xit
+    xit = 0
+    ok = 0
+    Repeat
+ohoh
+      Put Dir
+        Waitfor Place, "fall!","no exit",4
+          Switch Found
+            Case 1 : delay 5
+uhoh=0
+                     OK = 1
+            Case 2 : delay 10
+uhoh=0
+                     OK = 0
+            Case 3 : Xit = 1
+uhoh=0
+          EndSwitch
+          If Xit = 1
+            GetOut "You're Lost! <Hanging Up>"
+          EndIf
+    until OK = 1
+    put "i"
+    waitfor "soulstone",50
+    if not found
+      Print "NO SOULSTONE!"
+      GetOut "No Soulstone! <Hanging Up>"
+    endif
+EndProc
+
+procedure Kusateka
+ohoh
+put "c kusatami warlock"
+waitfor "damage!","spell.","defenses!","fails!","nearby.","incantation!",15
+switch found
+case 1: Print "Casted Kusateka!"
+uhoh=0
+case 2: ;if yar=0
+        ;  Print "Mana Low! <Drinking Yarrow>"
+        ;  Yarrow
+        ;  if yar=0
+        ;    Kusateka
+        ;  endif
+        ;endif  
+case 3: Print "Spell Negated!"
+case 4: Print "Spell Failed!"
+case 5: Print "He's dead already!"
+case 6: Print "Mentally Exhausted! <Try Again Later>"
+endswitch
+endproc
+
+
+procedure Kusamotu
+ohoh
+put "C kusamotu Nemo"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"         
+uhoh=0
+case 2: ;if yar=0
+        ;  print "Mana Low! <Drinking Yarrow>"
+        ;  if yar=0
+        ;    Kusamotu
+        ;  endif
+        ;endif
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch
+endproc
+procedure kamotu
+ohoh
+put "C kusamotu Nemo"
+waitfor "damage!","spell.","incantation!"
+switch found
+case 1: print "Casted Kusamotu!"
+uhoh=0
+case 2: ;if yar=0
+        ;  print "Mana Low! <Drinking Yarrow>"
+        ;  if yar=0
+        ;    Kusamotu
+        ;  endif
+        ;endif
+case 3: print "Mentally Exhausted <Try Again Later>"
+endswitch
+endproc
+       
+procedure travel1
+m n,f
+m n,f
+m d,f
+m ne,f
+soulcheck
+endproc      
+Procedure Travel2
+m e,f
+m e,f
+m e,f
+soulcheck
+endproc
+procedure travel3
+m se,f
+m e,f
+m e,f
+soulcheck
+endproc
+procedure travel4
+m nw,f
+m nw,f
+m nw,f
+soulcheck
+endproc
+procedure travel5
+m w,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel6
+m sw,f
+m sw,f
+m sw,f
+soulcheck
+endproc
+procedure travel7
+m se,f
+m e,f
+m e,f
+endproc           
+procedure travel8
+m e,f
+soulcheck
+endproc
+procedure travel9
+m e,f
+soulcheck
+endproc
+procedure travel10
+m e,f
+soulcheck
+endproc          
+procedure travel11
+m e,f
+soulcheck
+endproc
+procedure travel12
+m e,f 
+m e,f
+m se,f
+soulcheck
+endproc
+procedure travel13
+m sw,f
+m sw,f
+m sw,f
+soulcheck
+endproc
+procedure travel14
+m w,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel15 
+m nw,f
+m nw,f
+m nw,f
+soulcheck
+endproc
+procedure travel16
+m e,f
+m e,f
+m se,f
+soulcheck
+endproc
+procedure travel17
+m nw,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel18
+m se,f
+m se,f
+m se,f
+soulcheck
+endproc
+procedure travel19
+m e,f
+m e,f 
+m e,f
+soulcheck
+endproc
+procedure travel20
+m ne,f
+m ne,f 
+m ne,f
+soulcheck
+endproc
+procedure travel21
+m nw,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel22
+m w,f
+soulcheck
+endproc 
+procedure travel23
+m w,f
+soulcheck
+endproc
+procedure travel24
+m w,f
+soulcheck
+endproc           
+procedure travel25
+m w,f
+soulcheck
+endproc
+procedure travel26
+m w,f
+m w,f
+m nw,f
+soulcheck
+endproc
+procedure travel27 
+m ne,f
+m ne,f
+m ne,f
+soulcheck
+endproc
+procedure travel28
+m e,f
+m e,f
+m e,f
+soulcheck
+endproc
+procedure travel29
+m se,f
+m se,f
+m se,f
+soulcheck
+endproc
+procedure travel30
+m w,f
+m w,f
+m nw,f
+soulcheck
+endproc
+procedure travel31
+m w,f
+m w,f
+m w,f
+soulcheck
+endproc
+procedure travel32
+m sw,f
+m u,f
+m s,f
+m s,f
+soulcheck
+travel=0
+endproc
+
+procedure Movement
+     if travel=1
+     travel1
+     elseif travel=2
+     travel2
+     elseif travel=3
+     travel3
+     elseif travel=4
+     travel4
+     elseif travel=5
+     travel5
+     elseif travel=6
+     travel6
+     elseif travel=7
+     travel7
+     elseif travel=8
+     travel8
+     elseif travel=9
+     travel9
+     elseif travel=10
+     travel10
+     elseif travel=11
+     travel11
+     elseif travel=12
+     travel12
+     elseif travel=13
+     travel13
+     elseif travel=14
+     travel14
+     elseif travel=15
+     travel15
+     elseif travel=16
+     travel16
+     elseif travel=17
+     travel17
+     elseif travel=18
+     travel18
+     elseif travel=19
+     travel19
+     elseif travel=20
+     travel20
+     elseif travel=21
+     travel21
+     elseif travel=22
+     travel22
+     elseif travel=23
+     travel23
+     elseif travel=24
+     travel24
+     elseif travel=25
+     travel25
+     elseif travel=26
+     travel26
+     elseif travel=27
+     travel27
+     elseif travel=28
+     travel28
+     elseif travel=29
+     travel29
+     elseif travel=30
+     travel30
+     elseif travel=31
+     travel31
+     elseif travel=32
+     travel32
+     endif
+endproc
+
+Procedure Healthcheck
+     ohoh
+        Integer getit,vit
+        String vital,endvital
+        vital="none"
+        endvital="none"
+        position=0
+        getit=0
+        vit=0
+          Put "He"
+          Waitfor "vitality:",3 ;RENT MANA PUT HERE
+          If Found
+uhoh=0
+          getn vital,10
+strdel vital, 1,5                 
+         ; strpos vital,"/",position
+         ; getit=(position-5)
+          substr vital,1,4,endvital
+          atoi endvital,vit
+          print "Health is: ", vit
+          if vit <=1300 and vit >= 401
+                 kamotu          
+;          elseif vit < 550 and vit > 200
+;             kusamotu    
+          elseif vit > 1300
+;          kusatest       
+          elseif vit < 401 and vit > 0
+          put "drink zar"
+          getout "low health"
+          elseif vit <= 0                
+            Print "Bad Healthcheck!"     
+          EndIf
+        EndIf
+                               
+EndProc
+
+Procedure Go
+ohoh
+healthcheck
+  Travel=travel+1
+  Movement
+endproc
+
+Procedure Movetest                    
+ohoh
+   Print "Testing Physical Exhaustion"
+   put "gr"
+   Waitfor "Resting","Ready",2
+   switch found
+     case 1: Delay 3 
+uhoh=0
+             Movetest
+     case 2: uhoh=0
+             Go
+   endswitch
+endproc
+
+Procedure Attack String Monster
+     ohoh           
+  Integer Pyre
+
+     Attacks = 5
+     Atks = Attacks - 1
+                                        
+
+     Put "a ", Monster
+      WaitFor "Your attack","don't see",1
+  
+
+       If Found = 1 
+uhoh=0
+        Repeat
+          Put "a ", Monster
+          Atks = Atks - 1
+        Until Atks = 0
+       EndIf
+  EndProc
+      
+
+Procedure Montest
+ohoh
+  put
+  waitfor "roll here","rolls here","mage here","locks here","himera here","giant here","giants here","tess here","tesses here","lord","chieftain","warlock here","ogress","nobody here",2
+  switch found
+  case 1,2: uhoh=0
+          attack "troll"
+          healthcheck
+          soulcheck
+          montest
+  case 3,13: uhoh=0
+        attack "ogre"
+        healthcheck
+          soulcheck
+          montest
+  case 4,12: uhoh=0
+         attack "warlock"
+          healthcheck
+          soulcheck
+          montest
+  case 5: uhoh=0 
+          attack "chimera"
+          healthcheck
+          soulcheck
+          montest
+  case 6,7,8,9: uhoh=0
+          attack "giant"
+          healthcheck
+          soulcheck
+          montest
+  case 10: uhoh=0
+           attack "sk"
+           healthcheck
+           soulcheck
+           delay 80
+           montest
+  case 11: uhoh=0
+           attack "min"
+           healthcheck
+           soulcheck
+           delay 80
+           montest
+  case 14: movetest
+  otherwise:  uhoh=uhoh+1
+            Movetest
+Endswitch
+Endproc
+
+; **** When Statements ****
+
+When "in the act of trying to rob you","Nice try ya douchebag!^m"
+When "huge stone","x^m~~x^m~~x^m~~x^m~~x^m^*^*^*"
+when "temple","^*"
+when "slasher has","^*"
+when "slanter-2 has","^*"
+when "slanter has","^*"
+when "turbo has","^*"
+when "maelstrom","^*"
+when "downpour","^*"
+when "stone shards","^*"
+whenIdle 10, "^*"
+When "˜","^*"
+When "µ","^*"
+When "attacked you with a","^*"
+
+; **** MAIN PROGRAM ****
+start=0
+begin=0
+new=0
+yar=0               
+drank=0
+buyyar=0
+s="s"
+n="n"
+e="e"
+w="w"
+ne="ne"
+nw="nw"
+sw="sw"
+se="se"
+u="u"
+d="d"
+f="floor."
+
+Stealth
+; **** Loop ****
+
+While Connected
+Put
+Waitfor  "warlock","chief","chimera","giant","skel","ogre","nobody here","with you","you're thirsty",2
+Switch found
+  case 1,2,3,4,5,6: Montest
+uhoh=0
+  case 7,8:       Movetest  
+uhoh=0
+  case 9:         Healthcheck
+uhoh=0
+Endswitch 
+Endwhile
+; **** END PROGRAM ****
+

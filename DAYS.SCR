@@ -1,0 +1,93 @@
+integer numb,mud,int,answer,scrib
+string daytype,typeto,num
+mud=(15*100)/10
+int=(12*100)/10  
+scrib=(2*100)/10                      
+
+procedure goscr 
+integer dollar
+dollar=numb/2*100
+if typeto="mudder"
+newday=(dollar * mud)/100
+answer=newday/100
+put ".number of days in the mudder class is --> ",answer," <--"
+elseif typeto="internet" 
+newday=(dollar * int)/100                                              
+answer=newday/100
+put ".number of days in the internet class is --> ",answer," <--"
+endif  
+newday=0
+daytype=""
+dayto=""
+numb=0
+num=""
+endproc                          
+
+procedure gomud
+integer dollar 
+dumb=(15*100)/10        
+dumb2=(12*100)/10
+dollar1=(numb*100)/dumb
+dollar2=(numb*100)/dumb
+if typeto="scribe"
+newday=(dollar1 * scrib)/10
+answer=newday
+put ".number of days in the scribe class is --> ",answer," <--"
+elseif typeto="internet" 
+newday=(dollar2 * int)/100                                              
+answer=newday
+put ".number of days in the internet class is --> ",answer," <--"
+endif  
+newday=0
+daytype=""
+dayto=""
+numb=0
+num=""
+endproc      
+
+procedure gointer 
+integer dollar
+dollar1=(numb*100)/int
+dollar2=(numb*100)/mud
+if typeto="scribe"
+newday=(dollar1 * scrib)/10
+answer=newday
+put ".number of days in the scribe class is --> ",answer," <--"
+elseif typeto="mudder" 
+newday=(dollar1 * mud)/100                                              
+answer=newday
+put ".number of days in the mudder class is --> ",answer," <--"
+endif  
+newday=0
+daytype=""
+dayto=""
+numb=0
+num=""
+endproc
+
+procedure getvars
+put ".input type of day you are changing from  ",
+input daytype            
+put
+put ".input type of day changing to  ",
+input typeto
+put                                
+put ".number of days to be changed  ",
+input num
+put
+atoi num,numb            
+if daytype = "scribe"
+goscr
+elseif daytype = "mudder"
+gomud
+elseif daytype = "internet"
+gointer
+endif
+endproc
+
+while not connected
+getvars
+endwhile
+while connected
+getvars
+endwhile

@@ -1,0 +1,17 @@
+; LOGILBLK.LST - List of Node-IDs which are blocked from linking.
+;
+; If you wish to prevent a certain node or nodes from linking up with your BBS,
+; you can list the Node-IDs in this file.  Each Node-ID you specify must be
+; separated by white space or listed on a new line.
+;
+; Example:
+;
+; DMA
+; LAP
+; DEMO ; Don't want any demo linkups!
+;
+; Since anything to the right of the ; character is considered a comment, the
+; Node-IDs shown in the example above will not really be blocked.  You can
+; use comments anywhere you like in this file.  Comments are useful for noting
+; reasons why a certain node is being blocked.
+
