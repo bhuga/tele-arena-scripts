@@ -3,7 +3,8 @@
 15 years ago, 1995-ish, I cut my teeth on programming by editing and creating
 scripts for Tele-Arena, a MajorBBS game involving reading about goblins
 appearing, then typing instructions to attack them, and then reading about their
-deaths.  This was a pretty profound experience on me, though I didn't know it
+deaths. The runtime was Telemate, a DOS COM program that was very dear to us.
+This was a pretty profound experience on me, though I didn't know it
 at the time.  
 
 It turns out that a friend kept a copy of those scripts on a moldy floppy
